@@ -54,7 +54,6 @@ public class MTLog extends EntityBase {
 	private int count;
 	
 	private MOLog moLog;
-	private Keyword keyword;
 	
 
 	/**
@@ -170,20 +169,6 @@ public class MTLog extends EntityBase {
 	 */
 	public void setMoLog(MOLog moLog) {
 		this.moLog = moLog;
-	}
-
-	/**
-	 * @return the keyword
-	 */
-	public Keyword getKeyword() {
-		return keyword;
-	}
-
-	/**
-	 * @param keyword the keyword to set
-	 */
-	public void setKeyword(Keyword keyword) {
-		this.keyword = keyword;
 	}
 
 	/**
