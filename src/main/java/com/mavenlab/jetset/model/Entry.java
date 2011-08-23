@@ -8,10 +8,17 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "entries")
+@SequenceGenerator(
+		name = "SEQ_ENTRY",
+		sequenceName = "sequence_entry",
+		initialValue = 1,
+		allocationSize = 1
+)
 public class Entry extends EntityBase{
 
 	/**
