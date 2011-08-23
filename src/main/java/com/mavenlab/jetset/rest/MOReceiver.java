@@ -36,15 +36,6 @@ public class MOReceiver {
 	@Inject
 	private EntityManager em;
 	
-	@QueryParam("moId") 
-	private String moId;
-	
-	@QueryParam("msisdn") 
-	private String msisdn; 
-	
-	@QueryParam("message") 
-	private String message;
-	
 	public static Lock lock = new ReentrantLock();
 	private String timestamp;
 	private String keywordChecked = "SHELL";
@@ -59,7 +50,8 @@ public class MOReceiver {
 	
 	@GET
 	@Produces("text/plain")
-	public String receive(String id, String msisdn, String message) {
+	public String receive(@QueryParam("moId") String moId, 
+			@QueryParam("msisdn") String msisdn, @QueryParam("message") String message) {
 		try {
 			MOReceiver.lock.tryLock(900, TimeUnit.SECONDS);
 			
