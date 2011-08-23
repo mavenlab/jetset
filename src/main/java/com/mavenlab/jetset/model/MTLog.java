@@ -38,7 +38,7 @@ public class MTLog extends EntityBase {
 	@Column(name = "outrouteId", nullable = false)
 	private int outrouteId;
 	
-	@Column(name = "orga", nullable = false)
+	@Column(name = "originator", nullable = false)
 	private String originator;
 	
 	@Column(name = "destination", nullable = false)
@@ -50,8 +50,12 @@ public class MTLog extends EntityBase {
 	@Column(name = "statusId", nullable = false)
 	private String statusId;
 	
+	@Column(name = "mt_count", nullable = false)
+	private int count;
+	
 	private MOLog moLog;
-//	private Keyword keyword;
+	private Keyword keyword;
+	
 
 	/**
 	 * @return the id
@@ -166,6 +170,34 @@ public class MTLog extends EntityBase {
 	 */
 	public void setMoLog(MOLog moLog) {
 		this.moLog = moLog;
+	}
+
+	/**
+	 * @return the keyword
+	 */
+	public Keyword getKeyword() {
+		return keyword;
+	}
+
+	/**
+	 * @param keyword the keyword to set
+	 */
+	public void setKeyword(Keyword keyword) {
+		this.keyword = keyword;
+	}
+
+	/**
+	 * @return the count
+	 */
+	public int getCount() {
+		return count;
+	}
+
+	/**
+	 * @param count the count to set
+	 */
+	public void setCount(int count) {
+		this.count = count;
 	}
 	
 }

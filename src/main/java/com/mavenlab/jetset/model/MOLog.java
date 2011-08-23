@@ -1,5 +1,7 @@
 package com.mavenlab.jetset.model;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -41,7 +43,7 @@ public class MOLog extends EntityBase {
 	private String msisdn;
 	
 	@Column(name = "date_received", nullable = false)
-	private String timestamp;
+	private Date dateReceived;
 
 	public MOLog() {
 	}
@@ -103,16 +105,17 @@ public class MOLog extends EntityBase {
 	}
 
 	/**
-	 * @return the timestamp
+	 * @return the dateReceived
 	 */
-	public String getTimestamp() {
-		return timestamp;
+	public Date getDateReceived() {
+		return dateReceived;
 	}
 
 	/**
-	 * @param timestamp the timestamp to set
+	 * @param dateReceived the dateReceived to set
 	 */
-	public void setTimestamp(String timestamp) {
-		this.timestamp = timestamp;
+	public void setDateReceived(Date dateReceived) {
+		this.dateReceived = dateReceived;
 	}
+
 }
