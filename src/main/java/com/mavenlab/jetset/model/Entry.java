@@ -10,10 +10,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.mavenlab.jetset.model.Keyword;
-import com.mavenlab.jetset.model.MOLog;
-import com.mavenlab.jetset.model.MTLog;
-
 @Entity
 @Table(name = "entries")
 public class Entry extends EntityBase{
@@ -27,17 +23,28 @@ public class Entry extends EntityBase{
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_ENTRY")
 	private int id;
 	
-	@Column(name = "entry", nullable = true)
-	private String entry;
+	@Column(name = "msisdn", nullable = false)
+	private String msisdn;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "keyword", nullable = false)
-	private Keyword keyword;
+	@Column(name = "name", nullable = true)
+	private String name;
+	
+	@Column(name = "nric", nullable = true)
+	private String nric;
+	
+	@Column(name = "receipt", nullable = true)
+	private String receipt;
+	
+	@Column(name = "station", nullable = true)
+	private String station;
+	
+	@Column(name = "uob_member", nullable = true)
+	private boolean uobMember;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "mo_log_id", nullable = false)
 	private MOLog moLog;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "mt_log_id", nullable = false)
 	private MTLog mtLog;
@@ -56,32 +63,52 @@ public class Entry extends EntityBase{
 		this.id = id;
 	}
 
-	/**
-	 * @return the entry
-	 */
-	public String getEntry() {
-		return entry;
+	public String getMsisdn() {
+		return msisdn;
 	}
 
-	/**
-	 * @param entry the entry to set
-	 */
-	public void setEntry(String entry) {
-		this.entry = entry;
+	public void setMsisdn(String msisdn) {
+		this.msisdn = msisdn;
 	}
 
-	/**
-	 * @return the keyword
-	 */
-	public Keyword getKeyword() {
-		return keyword;
+	public String getName() {
+		return name;
 	}
 
-	/**
-	 * @param keyword the keyword to set
-	 */
-	public void setKeyword(Keyword keyword) {
-		this.keyword = keyword;
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getNric() {
+		return nric;
+	}
+
+	public void setNric(String nric) {
+		this.nric = nric;
+	}
+
+	public String getReceipt() {
+		return receipt;
+	}
+
+	public void setReceipt(String receipt) {
+		this.receipt = receipt;
+	}
+
+	public String getStation() {
+		return station;
+	}
+
+	public void setStation(String station) {
+		this.station = station;
+	}
+
+	public boolean isUobMember() {
+		return uobMember;
+	}
+
+	public void setUobMember(boolean uobMember) {
+		this.uobMember = uobMember;
 	}
 
 	/**

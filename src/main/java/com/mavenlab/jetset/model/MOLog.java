@@ -23,16 +23,13 @@ public class MOLog extends EntityBase {
 	 */
 	private static final long serialVersionUID = -6762281060523505632L;
 
-	public final static String STATUS_PENDING = "0";
-	public final static String STATUS_SUCCESS = "101";
-	public final static String STATUS_FAILED = "100";
+	public final static String STATUS_PENDING = "PENDING";
+	public final static String STATUS_SUCCESS = "SUCCESS";
+	public final static String STATUS_FAILED = "FAILED";
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_MO")
 	private int id;
-	
-	@Column(name = "keyword", nullable = false)
-	private String keyword;
 	
 	@Column(name = "message", nullable = false)
 	private String message;
@@ -46,11 +43,7 @@ public class MOLog extends EntityBase {
 	@Column(name = "date_received", nullable = false)
 	private String timestamp;
 
-	@Column(name = "route_status", length = 5, nullable = false)
-	private String routeStatus;
-	
 	public MOLog() {
-		routeStatus = STATUS_PENDING;
 	}
 
 	/**
@@ -65,20 +58,6 @@ public class MOLog extends EntityBase {
 	 */
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	/**
-	 * @return the keyword
-	 */
-	public String getKeyword() {
-		return keyword;
-	}
-
-	/**
-	 * @param keyword the keyword to set
-	 */
-	public void setKeyword(String keyword) {
-		this.keyword = keyword;
 	}
 
 	/**
@@ -135,19 +114,5 @@ public class MOLog extends EntityBase {
 	 */
 	public void setTimestamp(String timestamp) {
 		this.timestamp = timestamp;
-	}
-
-	/**
-	 * @return the routeStatus
-	 */
-	public String getRouteStatus() {
-		return routeStatus;
-	}
-
-	/**
-	 * @param routeStatus the routeStatus to set
-	 */
-	public void setRouteStatus(String routeStatus) {
-		this.routeStatus = routeStatus;
 	}
 }
