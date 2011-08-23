@@ -31,7 +31,7 @@ public class Keyword extends EntityBase{
 	private static final long serialVersionUID = -5383192300763112245L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_MO")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_KEY")
 	private int id;
 	
 	@Column(name = "keyword", nullable = false)

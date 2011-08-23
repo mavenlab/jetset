@@ -29,7 +29,7 @@ public class MTLog extends EntityBase {
 	private static final long serialVersionUID = -2378033160872931826L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_MO")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_MT")
 	private int id;
 	
 	@Column(name = "message", nullable = false)
