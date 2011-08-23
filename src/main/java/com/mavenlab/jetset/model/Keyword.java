@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.mavenlab.jetset.model.ReplyMessage;
@@ -22,7 +23,12 @@ import com.mavenlab.jetset.model.ReplyMessage;
 })
 @Entity
 @Table(name = "keywords")
-	
+@SequenceGenerator(
+		name = "SEQ_KEY",
+		sequenceName = "sequence_key",
+		initialValue = 1,
+		allocationSize = 1
+)
 public class Keyword extends EntityBase{
 
 	/**

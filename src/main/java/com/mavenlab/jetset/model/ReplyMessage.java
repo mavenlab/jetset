@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @NamedQueries({
@@ -17,6 +18,12 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "reply_messages")
+@SequenceGenerator(
+		name = "SEQ_REPLY",
+		sequenceName = "sequence_reply",
+		initialValue = 1,
+		allocationSize = 1
+)
 public class ReplyMessage extends EntityBase{
 
 	/**

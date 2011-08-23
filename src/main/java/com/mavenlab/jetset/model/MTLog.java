@@ -16,8 +16,8 @@ import com.mavenlab.jetset.model.MOLog;
 @Entity
 @Table(name = "mt_logs")
 @SequenceGenerator(
-		name = "SEQ_MO",
-		sequenceName = "sequence_mo",
+		name = "SEQ_MT",
+		sequenceName = "sequence_mt",
 		initialValue = 1,
 		allocationSize = 1
 )
