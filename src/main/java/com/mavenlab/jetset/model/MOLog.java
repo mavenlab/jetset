@@ -33,7 +33,7 @@ public class MOLog extends EntityBase {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_MO")
 	private int id;
 	
-	@Column(name = "message", nullable = false)
+	@Column(name = "message", nullable = false, length = 250)
 	private String message;
 	
 	@Column(name = "mo_id", nullable = false)

@@ -1,6 +1,8 @@
 package com.mavenlab.jetset.rest;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -48,16 +50,27 @@ public class MOReceiver {
 	
 	public static AtomicInteger countPrize;
 	
+	private String name;
+	private String nric;
+	private String receipt;
+	private String station;
+	private boolean member;
+	private int chance = 0;
+	
 	@GET
 	@Produces("text/plain")
 	public String receive(@QueryParam("moId") String moId, 
 			@QueryParam("msisdn") String msisdn, @QueryParam("message") String message) {
+		
+		timestamp = SDF_MO_TIMESTAMP.format(new Date());
+		
 		try {
 			MOReceiver.lock.tryLock(900, TimeUnit.SECONDS);
-			
+			timestamp = SDF_MO_TIMESTAMP.format(new Date());
 			log.info("Message: " + message);
 			log.info("MSISDN: " + msisdn);
 			log.info("moId: " + moId);
+			log.info("timestamp: " + timestamp);
 			
 			MOLog moLog = new MOLog();
 			moLog.setMoId(moId);
@@ -70,15 +83,23 @@ public class MOReceiver {
 //			mtLog.setDestination(msisdn);
 //			mtLog.setOriginator(destination);
 //			mtLog.setOutrouteId(outrouteID);
-//			mtLog.setKeyword(keyword);
 //			mtLog.setMoLog(moLog);
 //			mtLog.setMessage("");
+//			em.persist(mtLog);
 //			
-//			Entry entry = new Entry();
-//			entry.setEntry(message);
-//			entry.setKeyword(keyword);
-//			entry.setMoLog(moLog);
-//			HashMap<String, String> mapEntryFields = this.parseMessage(entry, keyword, mtLog);
+			Entry entry = new Entry();
+			entry.setMsisdn(msisdn);
+			entry.setMoLog(moLog);
+			parseMessage(message, entry);
+			
+			entry.setName(name);
+			entry.setNric(nric);
+			entry.setReceipt(receipt);
+			entry.setStation(station);
+			entry.setUobMember(member);
+			entry.setChance(chance);
+			
+			em.persist(entry);
 //			
 ////			if(entry.getStatus().getStatus().equals("active") && this.checkDuplicate(mapEntryFields, keyword, mtLog))
 ////				entry.getStatus().setStatus("duplicate");
@@ -107,62 +128,122 @@ public class MOReceiver {
 		return "OK";
 	}
 	
-//	public HashMap<String,String> parseMessage(Entry entry,Keyword keyword, MTLog mtLog) {
-//		String[] messages = message.split("[\\s]+");
-//		int lastIndexMessages = messages.length-1;
-//		int beginIndexMessages = 1;
-//		
-//		List<KeywordField> keywordFields = keywordFieldsListing(keyword);
-//		HashMap<String, String> mapEntryFields = new HashMap<String, String>();
-//		
-//		String keyword2 = messages[0];
-//		
-//		if(!message.toUpperCase().matches(keyword.getPattern())) {
-//			
-//			entry.getStatus().setStatus("invalid");
-//			
-//			mapEntryFields.put("keyword", keyword2.trim());
-//			mapEntryFields.put("name", "");
-//			mapEntryFields.put("nric", "");
-//			mapEntryFields.put("receipt", "");
-//			
-//			return mapEntryFields;
-//		}		
-//		
-//		int i=beginIndexMessages;
-//		int l=lastIndexMessages;
-//		
-//		String receipt = "";
-//		receipt = messages[l];
-//		l--;
-//		if(receipt.equals("")){
-//			entry.getStatus().setStatus("invalid");
-//		}
-//		
-//		String nric = "";
-//		if(!messages[l].toUpperCase().matches(keywordFields.get(1).getPattern())) {
-//			nric = "";
-//			entry.getStatus().setStatus("invalid");
-//		}else{
-//			nric = messages[l];
-//			l--;
-//		}
-//		
-//		String name = "";
-//		while(i<=l) {
-//			name = name + " " + messages[i];
-//			i++;
-//		}
-//		if(name.equals("")) {
-//			entry.getStatus().setStatus("invalid");
-//		}
-//		
-//		mapEntryFields.put("keyword", keyword2.trim());
-//		mapEntryFields.put("name", name.trim());
-//		mapEntryFields.put("nric", nric.trim());
-//		mapEntryFields.put("receipt", receipt.trim());
-//		
-//		return mapEntryFields;
-//	
-//	}
+	public String parseMessage(String message, Entry entry) {
+		String[] messages = message.split("[\\s]+");
+		int lastIndexMessages = messages.length-1;
+		int beginIndexMessages = 1;
+		
+		List <String> listStation = new ArrayList<String>();
+		listStation.add("1");
+		listStation.add("2");
+		listStation.add("3");
+		listStation.add("4");
+		listStation.add("9");
+		
+		String keyword2 = messages[0];
+		entry.setStatus("active");
+		
+		if(!keyword2.toUpperCase().matches("SHELL")) {
+			
+			entry.setStatus("invalid");
+			
+			return "INVALID";
+		}		
+		
+		int i=beginIndexMessages;
+		int l=lastIndexMessages;
+		
+		String patternNRIC = "[A-Z]?[0-9]{7}[A-Z]?";
+		String patternReceipt = "([123][-\\s])?[0-9]{1,7}";
+		
+		log.info("MEMBER XXXXXXXXXX " + messages[l]);
+		member = false;
+		if (messages[l].toUpperCase().equals("Y")) 
+			member = true;
+		else if (messages[l].toUpperCase().equals("N")) 
+			member = false;
+		l--;
+		
+		log.info("STATION XXXXXXXXXX " + messages[l]);
+		station = "";
+		if (listStation.contains(messages[l]))
+			station = messages[l];
+		else
+			entry.setStatus("invalid");
+		l--;
+		log.info("POSISI TRAKHIR XXXXXXXXXX " + messages[l]);
+		
+		name = "";
+		while(!messages[i].toUpperCase().matches(patternNRIC)) {
+			name = name + " " + messages[i];
+			i++;
+		}
+		if(name.equals("")) {
+			entry.setStatus("invalid");
+		}
+		
+		nric = "";
+		if(!messages[i].toUpperCase().matches(patternNRIC)) {
+			nric = "";
+			entry.setStatus("invalid");
+		}else{
+			nric = messages[i];
+			i++;
+		}
+
+		receipt = "";
+		log.info("RECEIPT XXXXXXXXXX " + messages[i]);
+		String[] receipt2;
+		if(i==l) {
+		
+			if(!messages[i].matches(patternReceipt)) {
+				entry.setStatus("invalid");
+			} else {
+				receipt = messages[i];
+				receipt2 = receipt.split("");
+				
+				if(receipt2[2].matches("-") || receipt2[2].matches(" ")) {
+					for(int x=3;x<=receipt2.length;x++) {
+						if(Integer.parseInt(receipt2[x]) > 0)
+							break;
+						else
+							entry.setStatus("invalid");
+					}				
+				} else {
+					for(int x=1;x<=receipt2.length;x++) {
+						if(Integer.parseInt(receipt2[x]) > 0)
+							break;
+						else
+							entry.setStatus("invalid");
+					}				
+				}
+			}
+		} else {
+			String temp = messages[i] + " " + messages[l];
+			if(!temp.matches(patternReceipt)) {
+				entry.setStatus("invalid");
+			} else {
+				receipt = temp;
+				receipt2 = receipt.split("");
+				
+				if(receipt2[2].matches("-") || receipt2[2].matches(" ")) {
+					for(int x=3;x<=receipt2.length;x++) {
+						if(Integer.parseInt(receipt2[x]) > 0)
+							break;
+						else
+							entry.setStatus("invalid");
+					}				
+				} else {
+					for(int x=1;x<=receipt2.length;x++) {
+						if(Integer.parseInt(receipt2[x]) > 0)
+							break;
+						else
+							entry.setStatus("invalid");
+					}				
+				}
+			}
+		}
+		return "OK";
+	
+	}
 }
