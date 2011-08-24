@@ -164,6 +164,11 @@ public class MOReceiver {
 			member = false;
 		l--;
 		
+		if(member==true)
+			chance = 2;
+		else
+			chance = 1;
+		
 		log.info("STATION XXXXXXXXXX " + messages[l]);
 		station = "";
 		if (listStation.contains(messages[l]))

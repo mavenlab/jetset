@@ -48,13 +48,16 @@ public class Entry extends EntityBase{
 	@Column(name = "uob_member", nullable = true)
 	private boolean uobMember;
 	
+	@Column(name = "chances", nullable = true)
+	private int chance;
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "mo_log_id", nullable = false)
 	private MOLog moLog;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "mt_log_id", nullable = false)
-	private MTLog mtLog;
+//	@ManyToOne(fetch = FetchType.LAZY)
+//	@JoinColumn(name = "mt_log_id", nullable = false)
+//	private MTLog mtLog;
 
 	/**
 	 * @return the id
@@ -135,14 +138,28 @@ public class Entry extends EntityBase{
 	/**
 	 * @return the mtLog
 	 */
-	public MTLog getMtLog() {
-		return mtLog;
+//	public MTLog getMtLog() {
+//		return mtLog;
+//	}
+//
+//	/**
+//	 * @param mtLog the mtLog to set
+//	 */
+//	public void setMtLog(MTLog mtLog) {
+//		this.mtLog = mtLog;
+//	}
+
+	/**
+	 * @return the chance
+	 */
+	public int isChance() {
+		return chance;
 	}
 
 	/**
-	 * @param mtLog the mtLog to set
+	 * @param chance the chance to set
 	 */
-	public void setMtLog(MTLog mtLog) {
-		this.mtLog = mtLog;
+	public void setChance(int chance) {
+		this.chance = chance;
 	}
 }
