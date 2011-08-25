@@ -22,7 +22,6 @@
 			<property name="hibernate.cache.use_second_level_cache"
 				value="true" />
 			<property name="hibernate.cache.use_query_cache" value="true" />
-			<property name="hibernate.cache.use_minimal_puts" value="true" />
 		</properties>
 	</persistence-unit>
 </persistence>
