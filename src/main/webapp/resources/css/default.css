@@ -73,6 +73,8 @@ div.commentMaginL250 {
 
 .clearBoth { clear: both; }
 
+.hidden { display: none; }
+
 .marginL10 { margin-left: 10px; }
 .marginT10 { margin-top: 10px; }
 .marginT20 { margin-top: 20px; }
