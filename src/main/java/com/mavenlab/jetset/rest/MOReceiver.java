@@ -50,13 +50,6 @@ public class MOReceiver {
 	
 	public static AtomicInteger countPrize;
 	
-	private String name;
-	private String nric;
-	private String receipt;
-	private String station;
-	private boolean member;
-	private int chance = 0;
-	
 	@GET
 	@Produces("text/plain")
 	public String receive(@QueryParam("moId") String moId, 
@@ -92,12 +85,6 @@ public class MOReceiver {
 			entry.setMoLog(moLog);
 			parseMessage(message, entry);
 			
-			entry.setName(name);
-			entry.setNric(nric);
-			entry.setReceipt(receipt);
-			entry.setStation(station);
-			entry.setUobMember(member);
-			entry.setChance(chance);
 			
 			em.persist(entry);
 //			
@@ -128,10 +115,18 @@ public class MOReceiver {
 		return "OK";
 	}
 	
-	public String parseMessage(String message, Entry entry) {
+	public Entry parseMessage(String message, Entry entry) {
 		String[] messages = message.split("[\\s]+");
+		
 		int lastIndexMessages = messages.length-1;
 		int beginIndexMessages = 1;
+		
+		String name;
+		String nric;
+		String receipt;
+		String station;
+		boolean member;
+		int chance = 0;
 		
 		List <String> listStation = new ArrayList<String>();
 		listStation.add("1");
@@ -147,7 +142,7 @@ public class MOReceiver {
 			
 			entry.setStatus("invalid");
 			
-			return "INVALID";
+			return entry;
 		}		
 		
 		int i=beginIndexMessages;
@@ -199,11 +194,12 @@ public class MOReceiver {
 		receipt = "";
 		log.info("RECEIPT XXXXXXXXXX " + messages[i]);
 		String[] receipt2;
-		if(i==l) {
+		// started to check if the receipt only contain 000 or not
+		if(!messages[i].matches(patternReceipt)) // check if invalid
+			entry.setStatus("invalid");
+		else {
 		
-			if(!messages[i].matches(patternReceipt)) {
-				entry.setStatus("invalid");
-			} else {
+			if(i==l) { //check if the digit is x-xxxx
 				receipt = messages[i];
 				receipt2 = receipt.split("");
 				
@@ -222,12 +218,8 @@ public class MOReceiver {
 							entry.setStatus("invalid");
 					}				
 				}
-			}
-		} else {
-			String temp = messages[i] + " " + messages[l];
-			if(!temp.matches(patternReceipt)) {
-				entry.setStatus("invalid");
 			} else {
+				String temp = messages[i] + " " + messages[l];
 				receipt = temp;
 				receipt2 = receipt.split("");
 				
@@ -248,7 +240,15 @@ public class MOReceiver {
 				}
 			}
 		}
-		return "OK";
+		
+		entry.setName(name);
+		entry.setNric(nric);
+		entry.setReceipt(receipt);
+		entry.setStation(station);
+		entry.setUobMember(member);
+		entry.setChance(chance);
+		
+		return entry;
 	
 	}
 }
