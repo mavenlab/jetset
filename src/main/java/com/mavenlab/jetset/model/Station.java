@@ -15,8 +15,8 @@ import javax.persistence.Table;
 	@NamedQuery(name = "jetset.query.Station.findActive", 
 			query = "FROM Station WHERE status = 'active' " +
 					"ORDER BY name ASC",
-			hints = {  
-				@QueryHint( name = "org.hibernate.cacheable", value = "true")
+			hints = {
+					@QueryHint(name = "org.hibernate.cacheable", value = "true")
 			}),
 	@NamedQuery(name = "jetset.query.Station.findById", 
 			query = "FROM Station WHERE id = :id " +
