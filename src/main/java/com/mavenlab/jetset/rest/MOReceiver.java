@@ -170,8 +170,11 @@ public class MOReceiver {
 		try {
 			int stationId = Integer.parseInt(messages[l]);
 			station = (Station) em.createNamedQuery("jetset.query.Station.findById")
-					.setParameter("stationChecked", messages[l])
+					.setParameter("id", stationId)
 					.getSingleResult();
+			if (station == null) 
+				entry.setStatus("invalid");
+			log.info("STATION QUERY XXXXXXX" + station);
 		} catch(NumberFormatException e) {
 			log.info("Invalid Station Number " + e.getMessage());
 			entry.setStatus("invalid");
