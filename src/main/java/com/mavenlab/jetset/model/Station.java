@@ -16,7 +16,7 @@ public class Station extends EntityBase{
 
 	@Id
 	@Column(name = "id", nullable = false)
-	private String id;
+	private int id;
 	
 	@Column(name = "name", nullable = false)
 	private String name;
@@ -24,14 +24,14 @@ public class Station extends EntityBase{
 	/**
 	 * @return the id
 	 */
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 
 	/**
 	 * @param id the id to set
 	 */
-	public void setId(String number) {
+	public void setId(int number) {
 		this.id = number;
 	}
 
