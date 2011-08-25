@@ -132,7 +132,7 @@ public class MOReceiver {
 		Station station = null;
 		boolean member;
 		int chance = 0;
-		int duplicate;
+		Long duplicate;
 		
 		String keyword2 = messages[0];
 		smsEntry.setStatus("active");
@@ -257,7 +257,7 @@ public class MOReceiver {
 		
 		if(!smsEntry.getStatus().matches("invalid")){
 			try{
-				duplicate = (Integer) em.createNamedQuery("jetset.query.Entry.duplicateCheck")
+				duplicate = (Long) em.createNamedQuery("jetset.query.Entry.duplicateCheck")
 						.setParameter("stationId", station)
 						.setParameter("receipt", receipt)
 						.getSingleResult();

@@ -34,8 +34,7 @@ import javax.persistence.Table;
 					"ORDER BY id ASC"),
 	@NamedQuery(name = "jetset.query.Entry.duplicateCheck", 
 				query = "SELECT COUNT(id) FROM Entry " +
-						"WHERE receipt = :receipt AND station_id = :stationId " + 
-						"AND WEEK(createdAt) = WEEK(curdate())")
+						"WHERE receipt = :receipt AND station_id = :stationId ")
 })
 public class Entry extends EntityBase{
 
