@@ -5,15 +5,15 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.QueryHint;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "stations")
 
 @NamedQueries({
-	@NamedQuery(name = "jetset.query.Station.findStation", 
-			query = "FROM Station WHERE id = :stationChecked " +
+	@NamedQuery(name = "jetset.query.Station.findById", 
+			query = "FROM Station WHERE id = :id " +
+					"AND status = 'active' " +
 					"ORDER BY id ASC")
 })
 public class Station extends EntityBase{

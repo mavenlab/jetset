@@ -42,9 +42,6 @@ public class Entry extends EntityBase{
 	@Column(name = "receipt", nullable = true)
 	private String receipt;
 	
-	@Column(name = "station", nullable = true)
-	private String station;
-	
 	@Column(name = "uob_member", nullable = true)
 	private boolean uobMember;
 	
@@ -58,6 +55,10 @@ public class Entry extends EntityBase{
 //	@ManyToOne(fetch = FetchType.LAZY)
 //	@JoinColumn(name = "mt_log_id", nullable = false)
 //	private MTLog mtLog;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "station_id", nullable = false)
+	private Station station;
 
 	/**
 	 * @return the id
@@ -105,20 +106,40 @@ public class Entry extends EntityBase{
 		this.receipt = receipt;
 	}
 
-	public String getStation() {
-		return station;
-	}
-
-	public void setStation(String station) {
-		this.station = station;
-	}
-
 	public boolean isUobMember() {
 		return uobMember;
 	}
 
 	public void setUobMember(boolean uobMember) {
 		this.uobMember = uobMember;
+	}
+
+	/**
+		 * @return the mtLog
+		 */
+	//	public MTLog getMtLog() {
+	//		return mtLog;
+	//	}
+	//
+	//	/**
+	//	 * @param mtLog the mtLog to set
+	//	 */
+	//	public void setMtLog(MTLog mtLog) {
+	//		this.mtLog = mtLog;
+	//	}
+	
+		/**
+		 * @return the chance
+		 */
+		public int isChance() {
+			return chance;
+		}
+
+	/**
+	 * @param chance the chance to set
+	 */
+	public void setChance(int chance) {
+		this.chance = chance;
 	}
 
 	/**
@@ -136,30 +157,16 @@ public class Entry extends EntityBase{
 	}
 
 	/**
-	 * @return the mtLog
+	 * @return
 	 */
-//	public MTLog getMtLog() {
-//		return mtLog;
-//	}
-//
-//	/**
-//	 * @param mtLog the mtLog to set
-//	 */
-//	public void setMtLog(MTLog mtLog) {
-//		this.mtLog = mtLog;
-//	}
-
-	/**
-	 * @return the chance
-	 */
-	public int isChance() {
-		return chance;
+	public Station getStation() {
+		return station;
 	}
 
 	/**
-	 * @param chance the chance to set
+	 * @param station
 	 */
-	public void setChance(int chance) {
-		this.chance = chance;
+	public void setStation(Station station) {
+		this.station = station;
 	}
 }

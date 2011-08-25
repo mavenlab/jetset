@@ -1,0 +1,19 @@
+body {
+	margin: 0;
+}
+div#menuWrapper {
+	margin-top: 10px;
+}
+
+div#menuWrapper ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+div#menuWrapper ul li {
+}
+
+div#contentWrapper {
+	border: 3px solid #D7251C;
+}

@@ -13,6 +13,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -125,7 +126,7 @@ public class MOReceiver {
 		String name;
 		String nric;
 		String receipt;
-		String station;
+		Station station = null;
 		boolean member;
 		int chance = 0;
 		
@@ -166,15 +167,19 @@ public class MOReceiver {
 			chance = 1;
 		
 		log.info("STATION XXXXXXXXXX " + messages[l]);
-		station = "";
-		Station checkStation = (Station) em.createNamedQuery("jetset.query.Station.findStation")
-				.setParameter("stationChecked", messages[l])
-				.getSingleResult();
-		log.info("XXXXXXX CHECKSTATION XXXXXXXXXX " + messages[l]);
-		if (listStation.contains(messages[l]))
-			station = messages[l];
-		else
+		try {
+			int stationId = Integer.parseInt(messages[l]);
+			station = (Station) em.createNamedQuery("jetset.query.Station.findById")
+					.setParameter("stationChecked", messages[l])
+					.getSingleResult();
+		} catch(NumberFormatException e) {
+			log.info("Invalid Station Number " + e.getMessage());
 			entry.setStatus("invalid");
+		} catch(NoResultException e) {
+			log.info("Station Number cannot be found " + e.getMessage());
+			entry.setStatus("invalid");
+		}
+
 		l--;
 		
 		name = "";
