@@ -132,7 +132,6 @@ public class MOReceiver {
 		Station station = null;
 		boolean member;
 		int chance = 0;
-		Long duplicate;
 		
 		String keyword2 = messages[0];
 		smsEntry.setStatus("active");
@@ -256,21 +255,13 @@ public class MOReceiver {
 		}
 		
 		if(!smsEntry.getStatus().matches("invalid")){
-			try{
-				duplicate = (Long) em.createNamedQuery("jetset.query.Entry.duplicateCheck")
-						.setParameter("stationId", station)
-						.setParameter("receipt", receipt)
-						.getSingleResult();
-				log.info(duplicate);
-				if(duplicate != 0){
-					smsEntry.setStatus("duplicate");
-				}
-			} catch(NumberFormatException e) {
-				log.info("Invalid date " + e.getMessage());
-			} catch(NoResultException e) {
-				log.info("No result " + e.getMessage());
+			long duplicate = (Long) em.createNamedQuery("jetset.query.Entry.duplicateCheck")
+					.setParameter("stationId", station)
+					.setParameter("receipt", receipt)
+					.getSingleResult();
+			if(duplicate != 0){
+				smsEntry.setStatus("duplicate");
 			}
-			
 		}
 		
 		smsEntry.setName(name);
