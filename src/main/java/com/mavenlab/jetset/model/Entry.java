@@ -60,9 +60,9 @@ public class Entry extends EntityBase{
 	@JoinColumn(name = "mo_log_id", nullable = false)
 	private MOLog moLog;
 
-//	@ManyToOne(fetch = FetchType.LAZY)
-//	@JoinColumn(name = "mt_log_id", nullable = false)
-//	private MTLog mtLog;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "mt_log_id", nullable = false)
+	private MTLog mtLog;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "station_id", nullable = true)
@@ -123,25 +123,25 @@ public class Entry extends EntityBase{
 	}
 
 	/**
-		 * @return the mtLog
-		 */
-	//	public MTLog getMtLog() {
-	//		return mtLog;
-	//	}
-	//
-	//	/**
-	//	 * @param mtLog the mtLog to set
-	//	 */
-	//	public void setMtLog(MTLog mtLog) {
-	//		this.mtLog = mtLog;
-	//	}
-	
-		/**
-		 * @return the chance
-		 */
-		public int isChance() {
-			return chance;
-		}
+	 * @return the mtLog
+	 */
+	public MTLog getMtLog() {
+		return mtLog;
+	}
+
+	/**
+	 * @param mtLog the mtLog to set
+	 */
+	public void setMtLog(MTLog mtLog) {
+		this.mtLog = mtLog;
+	}
+
+	/**
+	 * @return the chance
+	 */
+	public int isChance() {
+		return chance;
+	}
 
 	/**
 	 * @param chance the chance to set
