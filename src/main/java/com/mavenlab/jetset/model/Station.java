@@ -5,12 +5,19 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.QueryHint;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "stations")
 
 @NamedQueries({
+	@NamedQuery(name = "jetset.query.Station.findActive", 
+			query = "FROM Station WHERE status = 'active' " +
+					"ORDER BY name ASC",
+			hints = {  
+				@QueryHint( name = "org.hibernate.cacheable", value = "true")
+			}),
 	@NamedQuery(name = "jetset.query.Station.findById", 
 			query = "FROM Station WHERE id = :id " +
 					"AND status = 'active' " +

@@ -1,79 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-   xmlns:ui="http://java.sun.com/jsf/facelets"
-   xmlns:f="http://java.sun.com/jsf/core"
-   xmlns:h="http://java.sun.com/jsf/html"
-   template="/WEB-INF/templates/default.xhtml">
-   <ui:define name="content">
-      <h1>Welcome to JBoss AS 7!</h1>
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	template="/WEB-INF/templates/default.xhtml">
+	
+<ui:param name="activeMenu" value="home"/>
 
-      <p>You have successfully deployed a Java EE 6 web application
-         on JBoss AS 7.</p>
+<ui:define name="content">
+	<div class="redTitle">
+		Pump at Shell and you may just win a private holiday to 1 of 4 exciting destinations
+	</div>
+	<div class="marginT20">
+		<p>
+			Win a private holiday for 2 to Korea, Australia or Italy when you pump $50 worth of any Shell fuel!
+			There are new draws every week and a change of holiday destination every month. Additionally,
+			each qualifying entry automatically puts you into the draw for the Grand Prize trip to the United
+			States! With tickets, accommodation and a personal guide all cared for, you can sit back, relax
+			and enjoy your exclusive holiday. 	
+		</p>
+		<p>
+			What's more, get double the chance to win and save up to 17.6% when you pay with your UOB card!
+		</p>
+	</div>
+	<div class="alignCenter marginT20">
+		<img src="img/country.jpg"/>
+	</div>
+	<div class="alignCenter marginT20">
+		<a href="form"><img src="img/enternow.png"/></a>
+	</div>
+	<div class="marginT50">
+		<img src="img/bottom_logos.jpg"/>
+	</div>
+	
+</ui:define>
 
-      <h:form id="reg">
-         <h2>Register (Bean Validation example)</h2>
-         <p>Enforces annotation-based constraints defined on the
-            model class.</p>
-         <table>
-            <tr>
-               <th style="text-align: right;"><h:outputLabel
-                     for="name" value="Name:" /></th>
-               <td><h:inputText id="name" value="#{newMember.name}" />
-                  <h:message for="name" errorClass="invalid" /></td>
-            </tr>
-            <tr>
-               <th style="text-align: right;"><h:outputLabel
-                     for="email" value="Email:" /></th>
-               <td><h:inputText id="email"
-                     value="#{newMember.email}" /> <h:message
-                     for="email" errorClass="invalid" /></td>
-            </tr>
-            <tr>
-               <th style="text-align: right;"><h:outputLabel
-                     for="phoneNumber" value="Phone #:" /></th>
-               <td><h:inputText id="phoneNumber"
-                     value="#{newMember.phoneNumber}" /> <h:message
-                     for="phoneNumber" errorClass="invalid" /></td>
-            </tr>
-         </table>
-         <p>
-            <h:commandButton id="register"
-               action="#{memberRegistration.register}" value="Register" />
-            <h:outputText value=" Registered!"
-               rendered="#{facesContext.postback and empty facesContext.messageList}"
-               style="color: green;" />
-         </p>
-      </h:form>
-      <h2>Members</h2>
-      <h:panelGroup rendered="#{empty members}">
-         <em>No registered members.</em>
-      </h:panelGroup>
-      <h:dataTable var="_member" value="#{members}"
-         rendered="#{not empty members}">
-         <h:column>
-            <f:facet name="header">Id</f:facet>
-                #{_member.id}
-            </h:column>
-         <h:column>
-            <f:facet name="header">Name</f:facet>
-                #{_member.name}
-            </h:column>
-         <h:column>
-            <f:facet name="header">Email</f:facet>
-                #{_member.email}
-            </h:column>
-         <h:column>
-            <f:facet name="header">Phone #</f:facet>
-                #{_member.phoneNumber}
-            </h:column>
-         <h:column>
-            <f:facet name="header">REST URL</f:facet>
-            <a href="#{request.contextPath}/rest/members/#{_member.id}">/rest/members/#{_member.id}</a>
-         </h:column>
-         <f:facet name="footer">
-                REST URL for all members: <a
-               href="#{request.contextPath}/rest/members">/rest/members</a>
-         </f:facet>
-      </h:dataTable>
-   </ui:define>
 </ui:composition>

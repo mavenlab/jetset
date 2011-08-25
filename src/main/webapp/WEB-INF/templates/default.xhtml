@@ -12,13 +12,13 @@
 <h:body>
 <div id="menuWrapper">
 	<ul>
-		<li>Enter Now</li>
-		<li>Prizes</li>
-		<li>Winner</li>
+		<li class="mainMenu#{activeMenu == 'home' ? ' active' : ''}" ref="home">Enter Now</li>
+		<li class="mainMenu#{activeMenu == 'prizes' ? ' active' : ''}" ref="prizes">Prizes</li>
+		<li class="mainMenu#{activeMenu == 'winner' ? ' active' : ''}" ref="winner">Winner</li>
 	</ul>
 </div>
 <div id="contentWrapper">
-test
+	<ui:insert name="content"/>
 </div>
 </h:body>
 </html>

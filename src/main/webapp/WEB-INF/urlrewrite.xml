@@ -3,6 +3,14 @@
 	PUBLIC "-//tuckey.org//DTD UrlRewrite 3.0//EN"
 	"http://tuckey.org/res/dtds/urlrewrite3.0.dtd">
 <urlrewrite>
+	<rule>
+		<from>^/$</from>
+		<to type="forward">/index.mvn</to>
+	</rule>
+	<rule>
+		<from>^/form$</from>
+		<to type="forward">/form.mvn</to>
+	</rule>
 <!-- 
 	<rule>
 		<from>^/login$</from>

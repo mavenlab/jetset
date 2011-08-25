@@ -1,6 +1,9 @@
 body {
 	margin: 0;
+	font-size: 14px;
+	font-family: Verdana, Arial;
 }
+
 div#menuWrapper {
 	margin-top: 10px;
 }
@@ -12,8 +15,64 @@ div#menuWrapper ul {
 }
 
 div#menuWrapper ul li {
+	margin: 0;
+	padding: 20px;
+	display: inline-block;
+	width: 130px;
+	background-color: #F7D046;
+	color: #000;
+	text-align: center;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+div#menuWrapper ul li.active {
+	background-color: #D7251C;
+	color: #FFF;
+	cursor: default;
 }
 
 div#contentWrapper {
 	border: 3px solid #D7251C;
+	padding: 10px;
 }
+
+div.redTitle {
+	color: #D7251C;
+	font-size: 17px;
+	font-weight: bold;
+}
+
+div.note {
+	color: #777;
+	font-size: 0.9em;
+	font-style: italic;
+}
+
+div.formLabel1 {
+	clear: left;
+	width: 250px;
+	float: left;
+	margin-top: 7px;
+}
+
+.formField1 {
+	width: 350px;
+	font-size: 16px;
+	padding: 3px;
+}
+
+div.commentMaginL250 {
+	clear: left;
+	font-size: 12px;
+	color: #838383;
+	margin: 5px 0 5px 250px ;
+}
+
+.alignCenter {
+	text-align: center;
+}
+
+.marginT10 { margin-top: 10px; }
+.marginT20 { margin-top: 20px; }
+.marginT50 { margin-top: 50px; }
