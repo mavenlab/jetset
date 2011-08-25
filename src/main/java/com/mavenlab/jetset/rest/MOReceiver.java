@@ -24,6 +24,7 @@ import org.jboss.seam.solder.logging.Category;
 import com.mavenlab.jetset.model.Entry;
 import com.mavenlab.jetset.model.MTLog;
 import com.mavenlab.jetset.model.MOLog;
+import com.mavenlab.jetset.model.Station;
 
 @Path("/mo")
 @Stateless
@@ -166,12 +167,15 @@ public class MOReceiver {
 		
 		log.info("STATION XXXXXXXXXX " + messages[l]);
 		station = "";
+		Station checkStation = (Station) em.createNamedQuery("jetset.query.Station.findStation")
+				.setParameter("stationChecked", messages[l])
+				.getSingleResult();
+		log.info("XXXXXXX CHECKSTATION XXXXXXXXXX " + messages[l]);
 		if (listStation.contains(messages[l]))
 			station = messages[l];
 		else
 			entry.setStatus("invalid");
 		l--;
-		log.info("POSISI TRAKHIR XXXXXXXXXX " + messages[l]);
 		
 		name = "";
 		while(!messages[i].toUpperCase().matches(patternNRIC)) {
