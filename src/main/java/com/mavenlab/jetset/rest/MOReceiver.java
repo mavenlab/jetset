@@ -169,13 +169,14 @@ public class MOReceiver {
 			station = (Station) em.createNamedQuery("jetset.query.Station.findById")
 					.setParameter("id", stationId)
 					.getSingleResult();
-			log.info("STATION QUERY XXXXXXX" + station);
+			log.info("STATION QUERY: " + station.getId() + " ---- " + station.getName());
 		} catch(NumberFormatException e) {
 			log.info("Invalid Station Number " + e.getMessage());
 			entry.setStatus("invalidstation1");
 		} catch(NoResultException e) {
 			log.info("Station Number cannot be found " + e.getMessage());
 			entry.setStatus("invalidstation2");
+			e.printStackTrace();
 		}
 
 		l--;

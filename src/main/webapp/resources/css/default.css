@@ -69,10 +69,11 @@ div.commentMaginL250 {
 	margin: 5px 0 5px 250px ;
 }
 
-.alignCenter {
-	text-align: center;
-}
+.alignCenter { text-align: center; }
 
+.clearBoth { clear: both; }
+
+.marginL10 { margin-left: 10px; }
 .marginT10 { margin-top: 10px; }
 .marginT20 { margin-top: 20px; }
 .marginT50 { margin-top: 50px; }

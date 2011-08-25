@@ -4,7 +4,8 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	template="/WEB-INF/templates/default.xhtml">
-	
+
+<ui:param name="pageTitle" value="Entry Form"/>	
 <ui:param name="activeMenu" value="home"/>
 
 <ui:define name="content">
@@ -56,11 +57,30 @@
 					<a href="#">How to find the receipt number?</a>
 				</div>
 			</div>
+			<div class="marginT10">
+				<div class="formLabel1"><label>Fuel Grade:</label></div>
+				<select class="formField1">
+				</select>
+			</div>
+			<div class="marginT10">
+				<div class="formLabel1"><label>Shell Escape Member:</label></div>
+				<input type="radio" name="memberRB" value="yes" class="marginT10"/> Yes
+				<input type="radio" name="memberRB" value="no" class="marginL10 marginT10"/> No
+			</div>
+			<div class="marginT20 clearBoth">
+				<input type="checkbox" value=""/> <label>Yes, I would like to receive communicatioons and offers from Shell</label>
+			</div>
+			<div class="marginT10">
+				<input type="checkbox" value=""/> <label>I have read and agree to <a href="#">terms and conditions</a></label>
+			</div>
 			<div class="marginT20">
 				<div class="formLabel1">&#160;</div>
 				<a href="form"><img src="img/submit.png"/></a>
 			</div>
 		</form>
+	</div>
+	<div class="marginT20">
+		<a href="form">Click here to view more on contest date</a>
 	</div>
 	<div class="marginT50">
 		<img src="img/bottom_logos.jpg"/>

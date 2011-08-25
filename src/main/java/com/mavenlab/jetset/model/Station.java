@@ -8,9 +8,12 @@ import javax.persistence.NamedQuery;
 import javax.persistence.QueryHint;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 @Entity
 @Table(name = "stations")
-
 @NamedQueries({
 	@NamedQuery(name = "jetset.query.Station.findActive", 
 			query = "FROM Station WHERE status = 'active' " +
