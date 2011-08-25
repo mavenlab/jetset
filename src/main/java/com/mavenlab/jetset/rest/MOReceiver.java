@@ -129,13 +129,10 @@ public class MOReceiver {
 		Station station = null;
 		boolean member;
 		int chance = 0;
+		String timeNow = SDF_MO_TIMESTAMP.format(new Date());
+		Date duplicate;
 		
-		List <String> listStation = new ArrayList<String>();
-		listStation.add("1");
-		listStation.add("2");
-		listStation.add("3");
-		listStation.add("4");
-		listStation.add("9");
+		log.info("TIME NOW " + timeNow);
 		
 		String keyword2 = messages[0];
 		entry.setStatus("active");
@@ -172,15 +169,13 @@ public class MOReceiver {
 			station = (Station) em.createNamedQuery("jetset.query.Station.findById")
 					.setParameter("id", stationId)
 					.getSingleResult();
-			if (station == null) 
-				entry.setStatus("invalid");
 			log.info("STATION QUERY XXXXXXX" + station);
 		} catch(NumberFormatException e) {
 			log.info("Invalid Station Number " + e.getMessage());
-			entry.setStatus("invalid");
+			entry.setStatus("invalidstation1");
 		} catch(NoResultException e) {
 			log.info("Station Number cannot be found " + e.getMessage());
-			entry.setStatus("invalid");
+			entry.setStatus("invalidstation2");
 		}
 
 		l--;
@@ -191,13 +186,13 @@ public class MOReceiver {
 			i++;
 		}
 		if(name.equals("")) {
-			entry.setStatus("invalid");
+			entry.setStatus("invalidname");
 		}
 		
 		nric = "";
 		if(!messages[i].toUpperCase().matches(patternNRIC)) {
 			nric = "";
-			entry.setStatus("invalid");
+			entry.setStatus("invalidnric");
 		}else{
 			nric = messages[i];
 			i++;
@@ -208,7 +203,7 @@ public class MOReceiver {
 		String[] receipt2;
 		// started to check if the receipt only contain 000 or not
 		if(!messages[i].matches(patternReceipt)) // check if invalid
-			entry.setStatus("invalid");
+			entry.setStatus("invalidRRRR1");
 		else {
 		
 			if(i==l) { //check if the digit is x-xxxx
@@ -220,14 +215,14 @@ public class MOReceiver {
 						if(Integer.parseInt(receipt2[x]) > 0)
 							break;
 						else
-							entry.setStatus("invalid");
+							entry.setStatus("invalidRRRR2");
 					}				
 				} else {
 					for(int x=1;x<=receipt2.length;x++) {
 						if(Integer.parseInt(receipt2[x]) > 0)
 							break;
 						else
-							entry.setStatus("invalid");
+							entry.setStatus("invalidRRRRR3");
 					}				
 				}
 			} else {
@@ -240,17 +235,38 @@ public class MOReceiver {
 						if(Integer.parseInt(receipt2[x]) > 0)
 							break;
 						else
-							entry.setStatus("invalid");
+							entry.setStatus("invalidRRRRR4");
 					}				
 				} else {
 					for(int x=1;x<=receipt2.length;x++) {
 						if(Integer.parseInt(receipt2[x]) > 0)
 							break;
 						else
-							entry.setStatus("invalid");
+							entry.setStatus("invalidRRRRR5");
 					}				
 				}
 			}
+		}
+		
+		if(!entry.getStatus().matches("invalid")){
+			try{
+				duplicate = (Date) em.createNamedQuery("jetset.query.Entry.findId")
+						.setParameter("id", station)
+						.getSingleResult();
+				if(duplicate != null){
+					if(timeNow.equals(duplicate.toString())){
+						entry.setStatus("duplicate");
+					}
+					
+				}
+			} catch(NumberFormatException e) {
+				log.info("Invalid Station Number " + e.getMessage());
+				entry.setStatus("invalidstation1");
+			} catch(NoResultException e) {
+				log.info("Station Number cannot be found " + e.getMessage());
+				entry.setStatus("invalidstation2");
+			}
+			
 		}
 		
 		entry.setName(name);
@@ -259,6 +275,8 @@ public class MOReceiver {
 		entry.setStation(station);
 		entry.setUobMember(member);
 		entry.setChance(chance);
+		
+		
 		
 		return entry;
 	

@@ -8,6 +8,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -19,6 +21,12 @@ import javax.persistence.Table;
 		initialValue = 1,
 		allocationSize = 1
 )
+@NamedQueries({
+	@NamedQuery(name = "jetset.query.Entry.findId", 
+			query = "SELECT createdAt FROM Entry WHERE station_id = :id " +
+					"AND status = 'active' " +
+					"ORDER BY id ASC")
+})
 public class Entry extends EntityBase{
 
 	/**
