@@ -74,17 +74,19 @@ public class MOReceiver {
 			moLog.setDateReceived(SDF_MO_TIMESTAMP.parse(timestamp));
 			em.persist(moLog);
 			
-//			MTLog mtLog = new MTLog();
-//			mtLog.setDestination(msisdn);
-//			mtLog.setOriginator(destination);
-//			mtLog.setOutrouteId(outrouteID);
-//			mtLog.setMoLog(moLog);
-//			mtLog.setMessage("");
-//			em.persist(mtLog);
+			MTLog mtLog = new MTLog();
+			mtLog.setDestination(msisdn);
+			mtLog.setOriginator(destination);
+			mtLog.setOutrouteId(outrouteID);
+			mtLog.setMoLog(moLog);
+			mtLog.setMessage("GRATZ");
+			em.persist(mtLog);
+			log.info("MT PERSIST XXXXXXXXXXXXX");
 //			
 			Entry entry = new Entry();
 			entry.setMsisdn(msisdn);
 			entry.setMoLog(moLog);
+			entry.setMtLog(mtLog);
 			parseMessage(message, entry);
 			
 			
@@ -212,10 +214,16 @@ public class MOReceiver {
 				
 				if(receipt2[2].matches("-") || receipt2[2].matches(" ")) {
 					for(int x=3;x<=receipt2.length;x++) {
-						if(Integer.parseInt(receipt2[x]) > 0)
+						log.info("X, receipt2  length " + receipt2[x] + "," +receipt2.length);
+						if(Integer.parseInt(receipt2[x]) > 0){
+							log.info("MASUK IF");
+							entry.setStatus("active");
 							break;
-						else
+							
+						}else{
 							entry.setStatus("invalidRRRR2");
+							log.info("MASUK ELSE");
+						}
 					}				
 				} else {
 					for(int x=1;x<=receipt2.length;x++) {
@@ -253,6 +261,7 @@ public class MOReceiver {
 				duplicate = (Date) em.createNamedQuery("jetset.query.Entry.findId")
 						.setParameter("id", station)
 						.getSingleResult();
+				log.info(duplicate);
 				if(duplicate != null){
 					if(timeNow.equals(duplicate.toString())){
 						entry.setStatus("duplicate");
@@ -260,11 +269,9 @@ public class MOReceiver {
 					
 				}
 			} catch(NumberFormatException e) {
-				log.info("Invalid Station Number " + e.getMessage());
-				entry.setStatus("invalidstation1");
+				log.info("Invalid date " + e.getMessage());
 			} catch(NoResultException e) {
-				log.info("Station Number cannot be found " + e.getMessage());
-				entry.setStatus("invalidstation2");
+				log.info("No result " + e.getMessage());
 			}
 			
 		}

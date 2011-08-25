@@ -44,10 +44,10 @@ public class MTLog extends EntityBase {
 	@Column(name = "destination", nullable = false)
 	private String destination;
 	
-	@Column(name = "mtLogId", nullable = false)
+	@Column(name = "mtLogId", nullable = true)
 	private String mtLogId;
 	
-	@Column(name = "statusId", nullable = false)
+	@Column(name = "statusId", nullable = true)
 	private String statusId;
 	
 	@Column(name = "mt_count", nullable = false)
