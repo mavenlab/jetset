@@ -25,6 +25,7 @@ import org.jboss.seam.solder.logging.Category;
 import com.mavenlab.jetset.model.Entry;
 import com.mavenlab.jetset.model.MTLog;
 import com.mavenlab.jetset.model.MOLog;
+import com.mavenlab.jetset.model.SMSEntry;
 import com.mavenlab.jetset.model.Station;
 
 @Path("/mo")
@@ -83,32 +84,32 @@ public class MOReceiver {
 			em.persist(mtLog);
 			log.info("MT PERSIST XXXXXXXXXXXXX");
 //			
-			Entry entry = new Entry();
-			entry.setMsisdn(msisdn);
-			entry.setMoLog(moLog);
-			entry.setMtLog(mtLog);
-			parseMessage(message, entry);
+			SMSEntry smsEntry = new SMSEntry();
+			smsEntry.setMsisdn(msisdn);
+			smsEntry.setMoLog(moLog);
+			smsEntry.setMtLog(mtLog);
+			parseMessage(message, smsEntry);
 			
 			
-			em.persist(entry);
+			em.persist(smsEntry);
 //			
-////			if(entry.getStatus().getStatus().equals("active") && this.checkDuplicate(mapEntryFields, keyword, mtLog))
-////				entry.getStatus().setStatus("duplicate");
+////			if(smsEntry.getStatus().getStatus().equals("active") && this.checkDuplicate(mapEntryFields, keyword, mtLog))
+////				smsEntry.getStatus().setStatus("duplicate");
 ////			else
 ////				mtLog.setMessage(keyword.getValid().getMessage());
 //			
-//			if(entry.getStatus().getStatus().equals("active"))
+//			if(smsEntry.getStatus().getStatus().equals("active"))
 //				mtLog.setMessage(keyword.getValid().getMessage());
 //			else 
 //				mtLog.setMessage(keyword.getInvalid().getMessage());
 //			
 //			replyMessage(mtLog);
 //			em.persist(mtLog);
-//			entry.setMtLog(mtLog);
+//			smsEntry.setMtLog(mtLog);
 //
-//			em.persist(entry);
+//			em.persist(smsEntry);
 //			
-//			this.insertEntryField(mapEntryFields, entry);
+//			this.insertEntryField(mapEntryFields, smsEntry);
 			
 		} catch (Exception e) {
 			log.error(e.getMessage());
@@ -119,7 +120,7 @@ public class MOReceiver {
 		return "OK";
 	}
 	
-	public Entry parseMessage(String message, Entry entry) {
+	public SMSEntry parseMessage(String message, SMSEntry smsEntry) {
 		String[] messages = message.split("[\\s]+");
 		
 		int lastIndexMessages = messages.length-1;
@@ -131,19 +132,16 @@ public class MOReceiver {
 		Station station = null;
 		boolean member;
 		int chance = 0;
-		String timeNow = SDF_MO_TIMESTAMP.format(new Date());
-		Date duplicate;
-		
-		log.info("TIME NOW " + timeNow);
+		int duplicate;
 		
 		String keyword2 = messages[0];
-		entry.setStatus("active");
+		smsEntry.setStatus("active");
 		
 		if(!keyword2.toUpperCase().matches("SHELL")) {
 			
-			entry.setStatus("invalid");
+			smsEntry.setStatus("invalid");
 			
-			return entry;
+			return smsEntry;
 		}		
 		
 		int i=beginIndexMessages;
@@ -174,10 +172,10 @@ public class MOReceiver {
 			log.info("STATION QUERY: " + station.getId() + " ---- " + station.getName());
 		} catch(NumberFormatException e) {
 			log.info("Invalid Station Number " + e.getMessage());
-			entry.setStatus("invalidstation1");
+			smsEntry.setStatus("invalidstation1");
 		} catch(NoResultException e) {
 			log.info("Station Number cannot be found " + e.getMessage());
-			entry.setStatus("invalidstation2");
+			smsEntry.setStatus("invalidstation2");
 			e.printStackTrace();
 		}
 
@@ -189,13 +187,13 @@ public class MOReceiver {
 			i++;
 		}
 		if(name.equals("")) {
-			entry.setStatus("invalidname");
+			smsEntry.setStatus("invalidname");
 		}
 		
 		nric = "";
 		if(!messages[i].toUpperCase().matches(patternNRIC)) {
 			nric = "";
-			entry.setStatus("invalidnric");
+			smsEntry.setStatus("invalidnric");
 		}else{
 			nric = messages[i];
 			i++;
@@ -206,7 +204,7 @@ public class MOReceiver {
 		String[] receipt2;
 		// started to check if the receipt only contain 000 or not
 		if(!messages[i].matches(patternReceipt)) // check if invalid
-			entry.setStatus("invalidRRRR1");
+			smsEntry.setStatus("invalidRRRR1");
 		else {
 		
 			if(i==l) { //check if the digit is x-xxxx
@@ -218,11 +216,11 @@ public class MOReceiver {
 						log.info("X, receipt2  length " + receipt2[x] + "," +receipt2.length);
 						if(Integer.parseInt(receipt2[x]) > 0){
 							log.info("MASUK IF");
-							entry.setStatus("active");
+							smsEntry.setStatus("active");
 							break;
 							
 						}else{
-							entry.setStatus("invalidRRRR2");
+							smsEntry.setStatus("invalidRRRR2");
 							log.info("MASUK ELSE");
 						}
 					}				
@@ -231,7 +229,7 @@ public class MOReceiver {
 						if(Integer.parseInt(receipt2[x]) > 0)
 							break;
 						else
-							entry.setStatus("invalidRRRRR3");
+							smsEntry.setStatus("invalidRRRRR3");
 					}				
 				}
 			} else {
@@ -244,30 +242,28 @@ public class MOReceiver {
 						if(Integer.parseInt(receipt2[x]) > 0)
 							break;
 						else
-							entry.setStatus("invalidRRRRR4");
+							smsEntry.setStatus("invalidRRRRR4");
 					}				
 				} else {
 					for(int x=1;x<=receipt2.length;x++) {
 						if(Integer.parseInt(receipt2[x]) > 0)
 							break;
 						else
-							entry.setStatus("invalidRRRRR5");
+							smsEntry.setStatus("invalidRRRRR5");
 					}				
 				}
 			}
 		}
 		
-		if(!entry.getStatus().matches("invalid")){
+		if(!smsEntry.getStatus().matches("invalid")){
 			try{
-				duplicate = (Date) em.createNamedQuery("jetset.query.Entry.findId")
-						.setParameter("id", station)
+				duplicate = (Integer) em.createNamedQuery("jetset.query.Entry.duplicateCheck")
+						.setParameter("stationId", station)
+						.setParameter("receipt", receipt)
 						.getSingleResult();
 				log.info(duplicate);
-				if(duplicate != null){
-					if(timeNow.equals(duplicate.toString())){
-						entry.setStatus("duplicate");
-					}
-					
+				if(duplicate != 0){
+					smsEntry.setStatus("duplicate");
 				}
 			} catch(NumberFormatException e) {
 				log.info("Invalid date " + e.getMessage());
@@ -277,16 +273,16 @@ public class MOReceiver {
 			
 		}
 		
-		entry.setName(name);
-		entry.setNric(nric);
-		entry.setReceipt(receipt);
-		entry.setStation(station);
-		entry.setUobMember(member);
-		entry.setChance(chance);
+		smsEntry.setName(name);
+		smsEntry.setNric(nric);
+		smsEntry.setReceipt(receipt);
+		smsEntry.setStation(station);
+		smsEntry.setUobMember(member);
+		smsEntry.setChance(chance);
 		
 		
 		
-		return entry;
+		return smsEntry;
 	
 	}
 }
