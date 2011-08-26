@@ -149,7 +149,6 @@ public class MOReceiver {
 		String patternNRIC = "[A-Z]?[0-9]{7}[A-Z]?";
 		String patternReceipt = "([123][-\\s])?[0-9]{1,7}";
 		
-		log.info("MEMBER XXXXXXXXXX " + messages[l]);
 		member = false;
 		if (messages[l].toUpperCase().equals("Y")) 
 			member = true;
@@ -162,19 +161,17 @@ public class MOReceiver {
 		else
 			chance = 1;
 		
-		log.info("STATION XXXXXXXXXX " + messages[l]);
 		try {
 			int stationId = Integer.parseInt(messages[l]);
 			station = (Station) em.createNamedQuery("jetset.query.Station.findById")
 					.setParameter("id", stationId)
 					.getSingleResult();
-			log.info("STATION QUERY: " + station.getId() + " ---- " + station.getName());
 		} catch(NumberFormatException e) {
 			log.info("Invalid Station Number " + e.getMessage());
-			smsEntry.setStatus("invalidstation1");
+			smsEntry.setStatus("invalid");
 		} catch(NoResultException e) {
 			log.info("Station Number cannot be found " + e.getMessage());
-			smsEntry.setStatus("invalidstation2");
+			smsEntry.setStatus("invalid");
 			e.printStackTrace();
 		}
 
@@ -186,24 +183,23 @@ public class MOReceiver {
 			i++;
 		}
 		if(name.equals("")) {
-			smsEntry.setStatus("invalidname");
+			smsEntry.setStatus("invalid");
 		}
 		
 		nric = "";
 		if(!messages[i].toUpperCase().matches(patternNRIC)) {
 			nric = "";
-			smsEntry.setStatus("invalidnric");
+			smsEntry.setStatus("invalid");
 		}else{
 			nric = messages[i];
 			i++;
 		}
 
 		receipt = "";
-		log.info("RECEIPT XXXXXXXXXX " + messages[i]);
 		String[] receipt2;
 		// started to check if the receipt only contain 000 or not
 		if(!messages[i].matches(patternReceipt)) // check if invalid
-			smsEntry.setStatus("invalidRRRR1");
+			smsEntry.setStatus("invalid");
 		else {
 		
 			if(i==l) { //check if the digit is x-xxxx
@@ -214,21 +210,20 @@ public class MOReceiver {
 					for(int x=3;x<=receipt2.length;x++) {
 						log.info("X, receipt2  length " + receipt2[x] + "," +receipt2.length);
 						if(Integer.parseInt(receipt2[x]) > 0){
-							log.info("MASUK IF");
 							smsEntry.setStatus("active");
 							break;
 							
 						}else{
-							smsEntry.setStatus("invalidRRRR2");
-							log.info("MASUK ELSE");
+							smsEntry.setStatus("invalid");
 						}
 					}				
 				} else {
 					for(int x=1;x<=receipt2.length;x++) {
-						if(Integer.parseInt(receipt2[x]) > 0)
+						if(Integer.parseInt(receipt2[x]) > 0) {
+							smsEntry.setStatus("active");
 							break;
-						else
-							smsEntry.setStatus("invalidRRRRR3");
+						} else
+							smsEntry.setStatus("invalid");
 					}				
 				}
 			} else {
@@ -238,17 +233,19 @@ public class MOReceiver {
 				
 				if(receipt2[2].matches("-") || receipt2[2].matches(" ")) {
 					for(int x=3;x<=receipt2.length;x++) {
-						if(Integer.parseInt(receipt2[x]) > 0)
+						if(Integer.parseInt(receipt2[x]) > 0) {
+							smsEntry.setStatus("active");
 							break;
-						else
-							smsEntry.setStatus("invalidRRRRR4");
+						} else
+							smsEntry.setStatus("invalid");
 					}				
 				} else {
 					for(int x=1;x<=receipt2.length;x++) {
-						if(Integer.parseInt(receipt2[x]) > 0)
+						if(Integer.parseInt(receipt2[x]) > 0) {
+							smsEntry.setStatus("active");
 							break;
-						else
-							smsEntry.setStatus("invalidRRRRR5");
+						} else
+							smsEntry.setStatus("invalid");
 					}				
 				}
 			}
@@ -270,8 +267,6 @@ public class MOReceiver {
 		smsEntry.setStation(station);
 		smsEntry.setUobMember(member);
 		smsEntry.setChance(chance);
-		
-		
 		
 		return smsEntry;
 	

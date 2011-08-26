@@ -77,4 +77,18 @@ public class Prize extends EntityBase {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	/**
+	 * @return the quantity
+	 */
+	public String getQuantity() {
+		return quantity;
+	}
+
+	/**
+	 * @param quantity the quantity to set
+	 */
+	public void setQuantity(String quantity) {
+		this.quantity = quantity;
+	}
 }
