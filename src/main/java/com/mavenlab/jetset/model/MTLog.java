@@ -53,6 +53,8 @@ public class MTLog extends EntityBase {
 	@Column(name = "mt_count", nullable = false)
 	private int count;
 	
+	@ManyToOne
+	@JoinColumn(name = "mo_log_id", nullable = false)
 	private MOLog moLog;
 	
 

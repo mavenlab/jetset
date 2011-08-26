@@ -2,7 +2,6 @@ package com.mavenlab.jetset.rest;
 
 import java.util.Date;
 import java.util.Map;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
@@ -40,11 +39,12 @@ public class MOReceiver {
 	@Category("jetset.MOReceiver")
 	private Logger log;
 	
-	public final static String PATTERN = "^\\s*SHELL\\s+.+\\s+[A-Z]?[0-9]{7}[A-Z]?\\s+([1-3]\\-[0-9]{7}|[0-9]{5}|1\\-[0-9]{5})\\s+[0-9]{1,3}\\s+[YN]\\s*$";
+	public final static String PATTERN = "^\\s*SHELL\\s+[A-Z]?[0-9]{7}[A-Z]?\\s+([1-3]\\-[0-9]{6}|[0-9]{5}|1\\-[0-9]{5})\\s+[0-9]{1,3}\\s+[YN]\\s*$";
 	
 	public final static String PATTERN_KEYWORD = "SHELL";
 	public final static String PATTERN_MEMBER = "\\b[YN]$";
-	public final static String PATTERN_RECEIPT = "\\b([1-3]\\-[0-9]{7}|[0-9]{5}|1\\-[0-9]{5})\\b";
+	public final static String PATTERN_RECEIPT = "\\b([1-3]\\-[0-9]{6}|[0-9]{5}|1\\-[0-9]{5})\\b";
+	public final static String PATTERN_RECEIPT14 = "^1\\-[0-9]{5}$";
 	public final static String PATTERN_NRIC = "\\b[A-Z]?[0-9]{7}[A-Z]?\\b";
 	public final static String PATTERN_STATION = "\\b[0-9]{1,3}\\b";
 	
@@ -62,7 +62,7 @@ public class MOReceiver {
 	
 	public static Lock lock = new ReentrantLock();
 
-	private final static int outrouteId = 2;
+	private final static int outrouteId = 59;
 	private final static String username = "mvnprojects2";
 	private final static String password = "92279545ff";
 	private final static String orga = "SHELL";
@@ -92,8 +92,9 @@ public class MOReceiver {
 			mtLog.setOriginator(orga);
 			mtLog.setOutrouteId(outrouteId);
 			mtLog.setMoLog(moLog);
-
-			if(message.matches(PATTERN)) {
+			
+			if(!message.toUpperCase().matches(PATTERN)) {
+				log.info("INVALID PATTERN: " + message);
 				mtLog.setMessage(INVALID_MESSAGE);
 				replyMessage(mtLog);
 				return "Invalid Message";
@@ -105,6 +106,8 @@ public class MOReceiver {
 			if(smsEntry.getStatus().equals("invalid")) {
 				mtLog.setMessage(INVALID_MESSAGE);
 				replyMessage(mtLog);
+				smsEntry.setMtLog(mtLog);
+				log.info("INVALID ENTRY: " + message);
 				return "Invalid Entry";
 			}
 
@@ -112,8 +115,9 @@ public class MOReceiver {
 			
 			if(duplicate) {
 				smsEntry.setStatus("duplicate");
-				mtLog.setMessage(INVALID_MESSAGE);
+				mtLog.setMessage(DUPLICATE_MESSAGE);
 				replyMessage(mtLog);
+				smsEntry.setMtLog(mtLog);
 				return "duplicate";
 			}
 			
@@ -121,14 +125,14 @@ public class MOReceiver {
 			
 			if(prize == null) {
 				smsEntry.setStatus("no prize");
-				mtLog.setMessage(DUPLICATE_MESSAGE);
-				replyMessage(mtLog);
+				//TODO SEND ALERT SMS
 				return "no prize";
 			}
 			
 			smsEntry.setPrize(prize);
 			mtLog.setMessage(prize.getSmsMessage());
 			replyMessage(mtLog);
+			smsEntry.setMtLog(mtLog);
 
 			return "OK";
 		} catch (Exception e) {
@@ -183,46 +187,45 @@ public class MOReceiver {
 			try {
 				Station station = (Station) em.createNamedQuery("jetset.query.Station.findById").setParameter("id", Integer.parseInt(stationId)).getSingleResult();
 				smsEntry.setStation(station);
+
+				if((station.getId() != 14 && smsEntry.getReceipt().matches(PATTERN_RECEIPT14)) ||
+						(station.getId() == 14 && !smsEntry.getReceipt().matches(PATTERN_RECEIPT14))) {
+					log.info("INVALID RECEIPT 14");
+					smsEntry.setStatus("invalid");
+				}
 			} catch(NoResultException e) {
 				smsEntry.setStatus("invalid");
 			}
+
 			message = stationMatcher.replaceFirst("");
 		}
 
+		log.info("FLUSH SMS ENTRY");
 		em.persist(smsEntry);
 		
 		return smsEntry;
 	}
-	
-	/**
-	 * get random prize
-	 * 
-	 * @return
-	 */
-	public Prize getRandomPrize() {
-		Random rnd = new Random(System.currentTimeMillis());
-		int prizeId = rnd.nextInt(3) + 1;
-		try {
-			Prize prize = (Prize) em.createNamedQuery("jetset.query.Prize.findById").setParameter("id", prizeId).getSingleResult();
-			int quantity = prize.getQuantity() - 1;
-			prize.setQuantity(quantity);
-			return prize;
-		} catch (NoResultException e) {
-			log.error("PRIZE WITH ID NOT FOUND: " + prizeId);
-		}
-		return null;
-	}
 
 	private void replyMessage(MTLog mtLog) {
-	       Map<String, Object> resp = GavriSenderUtil.sendTextMessage(null, username, password, 
-	                   outrouteId, orga, mtLog.getDestination(), mtLog.getMessage(), 
-	                   mtLog.getMoLog().getMoId(), null);
-	       
-	       log.info("REPLY: " + resp);
-	       
-	       mtLog.setMtLogId((String) resp.get("id"));
-	       mtLog.setCount((Integer) resp.get("count"));
-	       mtLog.setStatusId(resp.get("statusId").toString());
-	       em.persist(mtLog);
-	   }
+		Map<String, Object> resp = GavriSenderUtil.sendTextMessage(null, username, password, 
+               outrouteId, mtLog.getDestination(), orga, mtLog.getMessage(), 
+               mtLog.getMoLog().getMoId(), null);
+   
+		log.info("REPLY: " + resp);
+		mtLog.setMtLogId((String) resp.get("id"));
+		mtLog.setCount((Integer) resp.get("count"));
+		mtLog.setStatusId(resp.get("statusId").toString());
+		em.persist(mtLog);
+	}
+	
+	public static void main(String [] args) {
+//		String pattern = "^\\s*SHELL\\s+[A-Z]?[0-9]{7}[A-Z]?\\s+([1-3]\\-[0-9]{6}|[0-9]{5}|1\\-[0-9]{5})$";
+		
+		
+		String message = "SHELL 23456 20 N";
+		System.out.println(message.toUpperCase().matches(PATTERN));
+		
+		message = "Shell s1234567a 1-123457 1 y";
+		System.out.println(message.toUpperCase().matches(PATTERN));
+	}
 }

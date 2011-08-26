@@ -1,4 +1,3 @@
 <jboss-web>
 	<context-root>/</context-root>
-	<virtual-host>jetset.local</virtual-host>
 </jboss-web>
