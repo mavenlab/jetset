@@ -1,6 +1,6 @@
 package com.mavenlab.jetset.controller;
 
-import javax.ejb.PostActivate;
+import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.inject.Inject;
@@ -12,7 +12,7 @@ public class Initiator {
 	@Inject
 	private PrizeController prizeController;
 	
-	@PostActivate
+	@PostConstruct
 	public void init() {
 		prizeController.createPrize("Purchase a 250ml bottle of Sunkist juice at $1", 
 				"Thank you for participating. Purchase a 250ml Sunkist no sugar added juice at $1 at any 7E@Shell by 31/10/11 with this SMS and Shell Escape Card. T&C apply.", 
