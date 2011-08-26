@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -16,6 +18,10 @@ import javax.persistence.Table;
 		initialValue = 1,
 		allocationSize = 1
 )
+@NamedQueries({
+	@NamedQuery(name = "jetset.query.Prize.findById", 
+			query = "FROM Prize WHERE id = :id AND status = 'active' ")
+})
 public class Prize extends EntityBase {
 	
 	/**
@@ -38,7 +44,7 @@ public class Prize extends EntityBase {
 
 	@Column(name = "quantity", nullable = false)
 	private int quantity;
-	
+
 	/**
 	 * default constructor
 	 */

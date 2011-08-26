@@ -23,8 +23,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 			}),
 	@NamedQuery(name = "jetset.query.Station.findById", 
 			query = "FROM Station WHERE id = :id " +
-					"AND status = 'active' " +
-					"ORDER BY id ASC")
+					"AND status = 'active'")
 })
 public class Station extends EntityBase{
 

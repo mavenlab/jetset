@@ -69,6 +69,7 @@ div.errorDiv div.formLabel1 {
 div.errorDiv div.errorTextDiv {
 	color: #FF2222;
 	padding: 5px 0;
+	display: hidden;
 }
 
 div.commentMaginL250 {

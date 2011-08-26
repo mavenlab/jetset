@@ -1,11 +1,12 @@
 package com.mavenlab.jetset.rest;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -16,10 +17,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
+import org.apache.commons.lang.StringUtils;
 import org.jboss.logging.Logger;
 import org.jboss.seam.solder.logging.Category;
 
-import com.mavenlab.jetset.model.MTLog;
+import com.mavenlab.jetset.controller.EntryController;
 import com.mavenlab.jetset.model.MOLog;
 import com.mavenlab.jetset.model.SMSEntry;
 import com.mavenlab.jetset.model.Station;
@@ -28,19 +30,26 @@ import com.mavenlab.jetset.model.Station;
 @Stateless
 public class MOReceiver {
 
-	public final static SimpleDateFormat SDF_MO_TIMESTAMP = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
-	
 	@Inject
 	@Category("jetset.MOReceiver")
 	private Logger log;
 	
+	public final static String PATTERN = "^\\s*SHELL\\s+.+\\s+[A-Z]?[0-9]{7}[A-Z]?\\s+([0-9]\\-)?[0-9]{7}\\s+[0-9]{1,3}\\s+[YN]\\s*$";
+	
+	public final static String PATTERN_KEYWORD = "SHELL";
+	public final static String PATTERN_MEMBER = "\\b[YN]$";
+	public final static String PATTERN_RECEIPT = "\\b([0-9]\\-)?[0-9]{7}\\b";
+	public final static String PATTERN_NRIC = "\\b[A-Z]?[0-9]{7}[A-Z]?\\b";
+	public final static String PATTERN_STATION = "\\b[0-9]{1,3}\\b";
+	
 	@Inject
 	private EntityManager em;
 	
-	public static Lock lock = new ReentrantLock();
-	private String timestamp;
-	private String keywordChecked = "SHELL";
+	@Inject
+	private EntryController entryController;
 	
+	public static Lock lock = new ReentrantLock();
+
 	private final static int outrouteID = -1;
 	private final static String URL = "http://gavri.mavenlab.com/Gavri/GavriSender";
 	private final static String username = "mvnprojects2";
@@ -54,59 +63,48 @@ public class MOReceiver {
 	public String receive(@QueryParam("moId") String moId, 
 			@QueryParam("msisdn") String msisdn, @QueryParam("message") String message) {
 		
-		timestamp = SDF_MO_TIMESTAMP.format(new Date());
-		
 		try {
 			MOReceiver.lock.tryLock(900, TimeUnit.SECONDS);
-			timestamp = SDF_MO_TIMESTAMP.format(new Date());
 			log.info("Message: " + message);
 			log.info("MSISDN: " + msisdn);
 			log.info("moId: " + moId);
-			log.info("timestamp: " + timestamp);
 			
 			MOLog moLog = new MOLog();
 			moLog.setMoId(moId);
 			moLog.setMessage(message);
 			moLog.setMsisdn(msisdn);
-			moLog.setDateReceived(SDF_MO_TIMESTAMP.parse(timestamp));
+			moLog.setDateReceived(new Date());
 			em.persist(moLog);
 			
-			MTLog mtLog = new MTLog();
-			mtLog.setDestination(msisdn);
-			mtLog.setOriginator(destination);
-			mtLog.setOutrouteId(outrouteID);
-			mtLog.setMoLog(moLog);
-			mtLog.setMessage("GRATZ");
-			em.persist(mtLog);
-			log.info("MT PERSIST XXXXXXXXXXXXX");
-//			
-			SMSEntry smsEntry = new SMSEntry();
-			smsEntry.setMsisdn(msisdn);
-			smsEntry.setMoLog(moLog);
-			smsEntry.setMtLog(mtLog);
-			parseMessage(message, smsEntry);
+			if(message.matches(PATTERN)) {
+				//TODO: SEND MT
+				return "Invalid Message";
+			}
 			
-			
-			em.persist(smsEntry);
-//			
-////			if(smsEntry.getStatus().getStatus().equals("active") && this.checkDuplicate(mapEntryFields, keyword, mtLog))
-////				smsEntry.getStatus().setStatus("duplicate");
-////			else
-////				mtLog.setMessage(keyword.getValid().getMessage());
-//			
-//			if(smsEntry.getStatus().getStatus().equals("active"))
-//				mtLog.setMessage(keyword.getValid().getMessage());
-//			else 
-//				mtLog.setMessage(keyword.getInvalid().getMessage());
-//			
-//			replyMessage(mtLog);
+//			MTLog mtLog = new MTLog();
+//			mtLog.setDestination(msisdn);
+//			mtLog.setOriginator(destination);
+//			mtLog.setOutrouteId(outrouteID);
+//			mtLog.setMoLog(moLog);
+//			mtLog.setMessage("GRATZ");
 //			em.persist(mtLog);
-//			smsEntry.setMtLog(mtLog);
-//
-//			em.persist(smsEntry);
+//			log.info("MT PERSIST XXXXXXXXXXXXX");
 //			
-//			this.insertEntryField(mapEntryFields, smsEntry);
+			SMSEntry smsEntry = parseMessage(moLog);
 			
+			if(smsEntry.getStatus().equals("invalid")) {
+				//TODO: SEND MT
+				return "Invalid Entry";
+			}
+
+			
+			boolean duplicate = entryController.isDuplicate(smsEntry);
+			
+			if(duplicate) {
+				//TODO: SEND MT DUPE
+				smsEntry.setStatus("duplicate");
+				return "duplicate";
+			}
 		} catch (Exception e) {
 			log.error(e.getMessage());
 			e.printStackTrace();
@@ -116,155 +114,98 @@ public class MOReceiver {
 		return "OK";
 	}
 	
-	public SMSEntry parseMessage(String message, SMSEntry smsEntry) {
-		String[] messages = message.split("[\\s]+");
+	private SMSEntry parseMessage(MOLog moLog) {
+		String message = moLog.getMessage().toUpperCase().trim();
 		
-		int lastIndexMessages = messages.length-1;
-		int beginIndexMessages = 1;
-		
-		String name;
-		String nric;
-		String receipt;
-		Station station = null;
-		boolean member;
-		int chance = 0;
-		
-		String keyword2 = messages[0];
-		smsEntry.setStatus("active");
-		
-		if(!keyword2.toUpperCase().matches(keywordChecked)) {
-			
-			smsEntry.setStatus("invalidKeyword");
-			
-			return smsEntry;
-		}		
-		
-		int i=beginIndexMessages;
-		int l=lastIndexMessages;
-		
-		String patternNRIC = "[A-Z]?[0-9]{7}[A-Z]?";
-		String patternReceipt = "([123][-\\s])?[0-9]{1,7}";
-		
-		member = false;
-		if (messages[l].toUpperCase().equals("Y")) 
-			member = true;
-		else if (messages[l].toUpperCase().equals("N")) 
-			member = false;
-		l--;
-		
-		if(member==true)
-			chance = 2;
-		else
-			chance = 1;
-		
-		try {
-			int stationId = Integer.parseInt(messages[l]);
-			station = (Station) em.createNamedQuery("jetset.query.Station.findById")
-					.setParameter("id", stationId)
-					.getSingleResult();
-		} catch(NumberFormatException e) {
-			log.info("Invalid Station Number " + e.getMessage());
-			smsEntry.setStatus("invalidStationFormat");
-		} catch(NoResultException e) {
-			log.info("Station Number cannot be found " + e.getMessage());
-			smsEntry.setStatus("invalidStationNull");
-			e.printStackTrace();
-		}
+		SMSEntry smsEntry = new SMSEntry();
+		smsEntry.setMsisdn(moLog.getMsisdn());
+		smsEntry.setMoLog(moLog);
 
-		l--;
-		
-		name = "";
-		while(!messages[i].toUpperCase().matches(patternNRIC)) {
-			name = name + " " + messages[i];
-			i++;
-		}
-		if(name.equals("")) {
-			smsEntry.setStatus("invalidName");
-		}
-		
-		nric = "";
-		if(!messages[i].toUpperCase().matches(patternNRIC)) {
-			nric = "";
-			smsEntry.setStatus("invalidNRIC");
-		}else{
-			nric = messages[i];
-			i++;
-		}
+		message = message.trim().toUpperCase();
+		message = message.replace("SHELL", "").trim();
 
-		receipt = "";
-		String[] receipt2;
-		// started to check if the receipt only contain 000 or not
-		if(!messages[i].matches(patternReceipt)) // check if invalid
-			smsEntry.setStatus("invalidReceiptPattern");
-		else {
-		
-			if(i==l) { //check if the digit is x-xxxx
-				receipt = messages[i];
-				receipt2 = receipt.split("");
-				
-				if(receipt2[2].matches("-") || receipt2[2].matches(" ")) {
-					for(int x=3;x<=receipt2.length;x++) {
-						log.info("X, receipt2  length " + receipt2[x] + "," +receipt2.length);
-						if(Integer.parseInt(receipt2[x]) > 0){
-							smsEntry.setStatus("active");
-							break;
-							
-						}else{
-							smsEntry.setStatus("invalidReceipt");
-						}
-					}				
-				} else {
-					for(int x=1;x<=receipt2.length;x++) {
-						if(Integer.parseInt(receipt2[x]) > 0) {
-							smsEntry.setStatus("active");
-							break;
-						} else
-							smsEntry.setStatus("invalidReceipt");
-					}				
-				}
-			} else {
-				String temp = messages[i] + " " + messages[l];
-				receipt = temp;
-				receipt2 = receipt.split("");
-				
-				if(receipt2[2].matches("-") || receipt2[2].matches(" ")) {
-					for(int x=3;x<=receipt2.length;x++) {
-						if(Integer.parseInt(receipt2[x]) > 0) {
-							smsEntry.setStatus("active");
-							break;
-						} else
-							smsEntry.setStatus("invalidReceipt");
-					}				
-				} else {
-					for(int x=1;x<=receipt2.length;x++) {
-						if(Integer.parseInt(receipt2[x]) > 0) {
-							smsEntry.setStatus("active");
-							break;
-						} else
-							smsEntry.setStatus("invalidReceipt");
-					}				
-				}
-			}
-		}
-		
-		if(!smsEntry.getStatus().matches("invalid")){
-			long duplicate = (Long) em.createNamedQuery("jetset.query.Entry.duplicateCheck")
-					.setParameter("stationId", station)
-					.setParameter("receipt", receipt)
-					.getSingleResult();
-			if(duplicate != 0){
-				smsEntry.setStatus("duplicate");
-			}
-		}
-		
-		smsEntry.setName(name);
-		smsEntry.setNric(nric);
-		smsEntry.setReceipt(receipt);
-		smsEntry.setStation(station);
-		smsEntry.setUobMember(member);
+		String member = StringUtils.substring(message, -1);
+		message = StringUtils.substring(message, 0, -2);
+		smsEntry.setUobMember(member.equals("Y"));
+		int chance = member.equals("Y") ? 1 : 2;
 		smsEntry.setChance(chance);
 		
+		Pattern receiptPattern = Pattern.compile(PATTERN_RECEIPT);
+		Matcher receiptMatcher = receiptPattern.matcher(message);
+
+		if(receiptMatcher.find()) {
+			String receipt = receiptMatcher.group();
+			smsEntry.setReceipt(receipt);
+			message = receiptMatcher.replaceFirst("");
+		}
+
+		Pattern nricPattern = Pattern.compile(PATTERN_NRIC);
+		Matcher nricMatcher = nricPattern.matcher(message);
+
+		if(nricMatcher.find()) {
+			String nric = nricMatcher.group();
+			smsEntry.setNric(nric);
+			message = nricMatcher.replaceFirst("");
+		}
+
+		Pattern stationPattern = Pattern.compile(PATTERN_STATION);
+		Matcher stationMatcher = stationPattern.matcher(message);
+
+		if(stationMatcher.find()) {
+			String stationId = stationMatcher.group();
+			try {
+				Station station = (Station) em.createNamedQuery("jetset.query.Station.findById").setParameter("id", Integer.parseInt(stationId)).getSingleResult();
+				smsEntry.setStation(station);
+			} catch(NoResultException e) {
+				smsEntry.setStatus("invalid");
+			}
+			message = stationMatcher.replaceFirst("");
+		}
+
+		String name = message.trim();
+		smsEntry.setName(name);
+
+		em.persist(smsEntry);
+		
 		return smsEntry;
-	
 	}
+//	
+//	public static void main(String[] args) {
+//		String message = "SHELL samuel Edison s1345678 1-1234567 123 N";
+//		System.out.println(message.toUpperCase().matches(PATTERN));
+//		
+//		message = message.trim().toUpperCase();
+//		message = message.replace("SHELL", "").trim();
+//		
+//		String member = StringUtils.substring(message, -1);
+//		message = StringUtils.substring(message, 0, -2);
+//		
+//		Pattern receiptPattern = Pattern.compile(PATTERN_RECEIPT);
+//		Matcher receiptMatcher = receiptPattern.matcher(message);
+//
+//		if(receiptMatcher.find()) {
+//			String receipt = receiptMatcher.group();
+//			message = receiptMatcher.replaceFirst("");
+//		}
+//
+//		System.out.println(message);
+//
+//		Pattern nricPattern = Pattern.compile(PATTERN_NRIC);
+//		Matcher nricMatcher = nricPattern.matcher(message);
+//
+//		if(nricMatcher.find()) {
+//			String nric = nricMatcher.group();
+//			message = nricMatcher.replaceFirst("");
+//		}
+//
+//		Pattern stationPattern = Pattern.compile(PATTERN_STATION);
+//		Matcher stationMatcher = stationPattern.matcher(message);
+//
+//		if(stationMatcher.find()) {
+//			String station = stationMatcher.group();
+//			message = stationMatcher.replaceFirst("");
+//		}
+//
+//		String name = message.trim();
+//	}
 }
