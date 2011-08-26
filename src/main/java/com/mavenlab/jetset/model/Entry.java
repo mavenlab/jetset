@@ -50,9 +50,6 @@ public class Entry extends EntityBase{
 	@Column(name = "msisdn", nullable = false)
 	private String msisdn;
 	
-	@Column(name = "name", nullable = true)
-	private String name;
-	
 	@Column(name = "nric", nullable = true)
 	private String nric;
 	
@@ -68,6 +65,10 @@ public class Entry extends EntityBase{
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "station_id", nullable = true)
 	private Station station;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "prize_id", nullable = true)
+	private Prize prize;
 
 	/**
 	 * @return the id
@@ -89,14 +90,6 @@ public class Entry extends EntityBase{
 
 	public void setMsisdn(String msisdn) {
 		this.msisdn = msisdn;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public String getNric() {
@@ -149,5 +142,19 @@ public class Entry extends EntityBase{
 	 */
 	public void setStation(Station station) {
 		this.station = station;
+	}
+
+	/**
+	 * @return the prize
+	 */
+	public Prize getPrize() {
+		return prize;
+	}
+
+	/**
+	 * @param prize the prize to set
+	 */
+	public void setPrize(Prize prize) {
+		this.prize = prize;
 	}
 }

@@ -13,6 +13,9 @@ public class WebEntry extends Entry {
 	 */
 	private static final long serialVersionUID = -1047371976228046915L;
 
+	@Column(name = "name", length = 200, nullable = true)
+	private String name;
+
 	@Column(name = "payment_mode", length = 50)
 	private String paymentMode;
 	
@@ -21,12 +24,20 @@ public class WebEntry extends Entry {
 	
 	@Column(name = "cc_type", length = 50)
 	private String ccType;
-	
+
 	/**
 	 * default constructor
 	 */
 	public WebEntry() {
 		super();
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	/**

@@ -37,9 +37,9 @@ public class MOLog extends EntityBase {
 	private String message;
 	
 	@Column(name = "mo_id", nullable = false)
-	private String moId;
+	private int moId;
 	
-	@Column(name = "msisdn", nullable = false)
+	@Column(name = "msisdn", length = 20, nullable = false)
 	private String msisdn;
 	
 	@Column(name = "date_received", nullable = false)
@@ -79,14 +79,14 @@ public class MOLog extends EntityBase {
 	/**
 	 * @return the moId
 	 */
-	public String getMoId() {
+	public int getMoId() {
 		return moId;
 	}
 
 	/**
 	 * @param moId the moId to set
 	 */
-	public void setMoId(String moId) {
+	public void setMoId(int moId) {
 		this.moId = moId;
 	}
 

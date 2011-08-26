@@ -19,7 +19,7 @@ public class EntryController {
 								setParameter("stationId", entry.getStation().getId()).
 								getSingleResult();
 
-		return (count > 0);
+		return (count > 1);
 	}
 	
 }

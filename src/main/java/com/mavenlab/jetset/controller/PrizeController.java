@@ -50,9 +50,12 @@ public class PrizeController {
 	 */
 	public Prize getRandomPrize() {
 		Random rnd = new Random(System.currentTimeMillis());
-		int prizeId = rnd.nextInt(3);
+		int prizeId = rnd.nextInt(3) + 1;
 		try {
-			return (Prize) em.createNamedQuery("jetset.query.Prize.findById").setParameter("id", prizeId).getSingleResult();
+			Prize prize = (Prize) em.createNamedQuery("jetset.query.Prize.findById").setParameter("id", prizeId).getSingleResult();
+			int quantity = prize.getQuantity() - 1;
+			prize.setQuantity(quantity);
+			return prize;
 		} catch (NoResultException e) {
 			log.error("PRIZE WITH ID NOT FOUND: " + prizeId);
 		}
