@@ -29,12 +29,12 @@ import javax.persistence.Table;
 )
 @NamedQueries({
 	@NamedQuery(name = "jetset.query.Entry.findId", 
-			query = "SELECT createdAt FROM Entry WHERE station_id = :id " +
+			query = "SELECT createdAt FROM Entry WHERE station.id = :id " +
 					"AND status = 'active' " +
 					"ORDER BY id ASC"),
 	@NamedQuery(name = "jetset.query.Entry.duplicateCheck", 
 				query = "SELECT COUNT(id) FROM Entry " +
-						"WHERE receipt = :receipt AND station_id = :stationId ")
+						"WHERE receipt = :receipt AND station.id = :stationId ")
 })
 public class Entry extends EntityBase{
 
@@ -67,14 +67,6 @@ public class Entry extends EntityBase{
 	
 	@Column(name = "chances", nullable = true)
 	private int chance;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "mo_log_id", nullable = false)
-	private MOLog moLog;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "mt_log_id", nullable = false)
-	private MTLog mtLog;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "station_id", nullable = true)
@@ -135,20 +127,6 @@ public class Entry extends EntityBase{
 	}
 
 	/**
-	 * @return the mtLog
-	 */
-	public MTLog getMtLog() {
-		return mtLog;
-	}
-
-	/**
-	 * @param mtLog the mtLog to set
-	 */
-	public void setMtLog(MTLog mtLog) {
-		this.mtLog = mtLog;
-	}
-
-	/**
 	 * @return the chance
 	 */
 	public int isChance() {
@@ -160,20 +138,6 @@ public class Entry extends EntityBase{
 	 */
 	public void setChance(int chance) {
 		this.chance = chance;
-	}
-
-	/**
-	 * @return the moLog
-	 */
-	public MOLog getMoLog() {
-		return moLog;
-	}
-
-	/**
-	 * @param moLog the moLog to set
-	 */
-	public void setMoLog(MOLog moLog) {
-		this.moLog = moLog;
 	}
 
 	/**
