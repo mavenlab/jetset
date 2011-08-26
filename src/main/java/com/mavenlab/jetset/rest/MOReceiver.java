@@ -77,29 +77,29 @@ public class MOReceiver {
 			moLog.setDateReceived(new Date());
 			em.persist(moLog);
 			
-<<<<<<< HEAD
-			MTLog mtLog = new MTLog();
-			mtLog.setDestination(msisdn);
-			mtLog.setOriginator(destination);
-			mtLog.setOutrouteId(outrouteID);
-			mtLog.setMoLog(moLog);
-			mtLog.setMessage("GRATZ");
-			em.persist(mtLog);
-			log.info("MT PERSIST XXXXXXXXXXXXX");
+
+//			MTLog mtLog = new MTLog();
+//			mtLog.setDestination(msisdn);
+//			mtLog.setOriginator(destination);
+//			mtLog.setOutrouteId(outrouteID);
+//			mtLog.setMoLog(moLog);
+//			mtLog.setMessage("GRATZ");
+//			em.persist(mtLog);
+//			log.info("MT PERSIST XXXXXXXXXXXXX");
 //			
-			SMSEntry smsEntry = new SMSEntry();
-			smsEntry.setMsisdn(msisdn);
-			smsEntry.setMoLog(moLog);
-			smsEntry.setMtLog(mtLog);
-			smsEntry.setChannel(channel);
-			parseMessage(message, smsEntry);
+//			SMSEntry smsEntry = new SMSEntry();
+//			smsEntry.setMsisdn(msisdn);
+//			smsEntry.setMoLog(moLog);
+//			smsEntry.setMtLog(mtLog);
+//			smsEntry.setChannel(channel);
+//			parseMessage(message, smsEntry);
 			
-=======
+
 			if(message.matches(PATTERN)) {
 				//TODO: SEND MT
 				return "Invalid Message";
 			}
->>>>>>> b8b29eee9b06cd595f7bc74ff056ed4b6f75d820
+
 			
 //			MTLog mtLog = new MTLog();
 //			mtLog.setDestination(msisdn);
