@@ -32,6 +32,9 @@ public class Prize extends EntityBase {
 	
 	@Column(name = "message", nullable = false)
 	private String message;
+	
+	@Column(name = "quantity", nullable = false)
+	private String quantity;
 
 	/**
 	 * @return the id
