@@ -44,8 +44,7 @@ public class WebReceiver {
 			@QueryParam("cc") String cc,
 			@QueryParam("station") Station station,
 			@QueryParam("receipt") String receipt,
-			@QueryParam("grade") String grade)		
-			{
+			@QueryParam("grade") String grade)	{	
 		try {
 			WebReceiver.lock.tryLock(900, TimeUnit.SECONDS);
 		
@@ -62,7 +61,6 @@ public class WebReceiver {
 			webEntry.setStation(station);
 			webEntry.setReceipt(receipt);
 			webEntry.setFuelGrade(grade);
-			webEntry.setChannel(channel);
 		
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block

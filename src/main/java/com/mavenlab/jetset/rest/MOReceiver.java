@@ -78,23 +78,6 @@ public class MOReceiver {
 			em.persist(moLog);
 			
 
-//			MTLog mtLog = new MTLog();
-//			mtLog.setDestination(msisdn);
-//			mtLog.setOriginator(destination);
-//			mtLog.setOutrouteId(outrouteID);
-//			mtLog.setMoLog(moLog);
-//			mtLog.setMessage("GRATZ");
-//			em.persist(mtLog);
-//			log.info("MT PERSIST XXXXXXXXXXXXX");
-//			
-//			SMSEntry smsEntry = new SMSEntry();
-//			smsEntry.setMsisdn(msisdn);
-//			smsEntry.setMoLog(moLog);
-//			smsEntry.setMtLog(mtLog);
-//			smsEntry.setChannel(channel);
-//			parseMessage(message, smsEntry);
-			
-
 			if(message.matches(PATTERN)) {
 				//TODO: SEND MT
 				return "Invalid Message";
