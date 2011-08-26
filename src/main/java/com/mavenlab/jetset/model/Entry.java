@@ -50,6 +50,9 @@ public class Entry extends EntityBase{
 	@Column(name = "msisdn", nullable = false)
 	private String msisdn;
 	
+	@Column(name = "channel", nullable = false)
+	private String channel;
+	
 	@Column(name = "name", nullable = true)
 	private String name;
 	
@@ -185,5 +188,26 @@ public class Entry extends EntityBase{
 	 */
 	public void setStation(Station station) {
 		this.station = station;
+	}
+
+	/**
+	 * @return the channel
+	 */
+	public String getChannel() {
+		return channel;
+	}
+
+	/**
+	 * @param channel the channel to set
+	 */
+	public void setChannel(String channel) {
+		this.channel = channel;
+	}
+
+	/**
+	 * @return the chance
+	 */
+	public int getChance() {
+		return chance;
 	}
 }

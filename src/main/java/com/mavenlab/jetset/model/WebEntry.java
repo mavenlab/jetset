@@ -22,6 +22,8 @@ public class WebEntry extends Entry {
 	@Column(name = "cc_type", length = 50)
 	private String ccType;
 	
+	@Column(name = "email", length = 50)
+	private String email;
 	/**
 	 * default constructor
 	 */
@@ -69,6 +71,20 @@ public class WebEntry extends Entry {
 	 */
 	public void setCcType(String ccType) {
 		this.ccType = ccType;
+	}
+
+	/**
+	 * @return the email
+	 */
+	public String getEmail() {
+		return email;
+	}
+
+	/**
+	 * @param email the email to set
+	 */
+	public void setEmail(String email) {
+		this.email = email;
 	}
 	
 }

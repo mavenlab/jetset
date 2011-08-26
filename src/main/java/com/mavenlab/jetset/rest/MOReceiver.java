@@ -46,6 +46,7 @@ public class MOReceiver {
 	private final static String username = "mvnprojects2";
 	private final static String password = "92279545ff";
 	private final static String destination = "Shell";
+	private final static String channel = "SMS";
 	
 	public static AtomicInteger countPrize;
 	
@@ -84,6 +85,7 @@ public class MOReceiver {
 			smsEntry.setMsisdn(msisdn);
 			smsEntry.setMoLog(moLog);
 			smsEntry.setMtLog(mtLog);
+			smsEntry.setChannel(channel);
 			parseMessage(message, smsEntry);
 			
 			
