@@ -98,6 +98,7 @@ public class MOReceiver {
 				replyMessage(mtLog);
 				return "Invalid Message";
 			}
+
 			
 			SMSEntry smsEntry = parseMessage(moLog);
 			
