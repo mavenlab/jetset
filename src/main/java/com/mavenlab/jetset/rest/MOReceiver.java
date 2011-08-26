@@ -1,10 +1,7 @@
 package com.mavenlab.jetset.rest;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
@@ -22,7 +19,6 @@ import javax.ws.rs.QueryParam;
 import org.jboss.logging.Logger;
 import org.jboss.seam.solder.logging.Category;
 
-import com.mavenlab.jetset.model.Entry;
 import com.mavenlab.jetset.model.MTLog;
 import com.mavenlab.jetset.model.MOLog;
 import com.mavenlab.jetset.model.SMSEntry;
@@ -136,9 +132,9 @@ public class MOReceiver {
 		String keyword2 = messages[0];
 		smsEntry.setStatus("active");
 		
-		if(!keyword2.toUpperCase().matches("SHELL")) {
+		if(!keyword2.toUpperCase().matches(keywordChecked)) {
 			
-			smsEntry.setStatus("invalid");
+			smsEntry.setStatus("invalidKeyword");
 			
 			return smsEntry;
 		}		
@@ -168,10 +164,10 @@ public class MOReceiver {
 					.getSingleResult();
 		} catch(NumberFormatException e) {
 			log.info("Invalid Station Number " + e.getMessage());
-			smsEntry.setStatus("invalid");
+			smsEntry.setStatus("invalidStationFormat");
 		} catch(NoResultException e) {
 			log.info("Station Number cannot be found " + e.getMessage());
-			smsEntry.setStatus("invalid");
+			smsEntry.setStatus("invalidStationNull");
 			e.printStackTrace();
 		}
 
@@ -183,13 +179,13 @@ public class MOReceiver {
 			i++;
 		}
 		if(name.equals("")) {
-			smsEntry.setStatus("invalid");
+			smsEntry.setStatus("invalidName");
 		}
 		
 		nric = "";
 		if(!messages[i].toUpperCase().matches(patternNRIC)) {
 			nric = "";
-			smsEntry.setStatus("invalid");
+			smsEntry.setStatus("invalidNRIC");
 		}else{
 			nric = messages[i];
 			i++;
@@ -199,7 +195,7 @@ public class MOReceiver {
 		String[] receipt2;
 		// started to check if the receipt only contain 000 or not
 		if(!messages[i].matches(patternReceipt)) // check if invalid
-			smsEntry.setStatus("invalid");
+			smsEntry.setStatus("invalidReceiptPattern");
 		else {
 		
 			if(i==l) { //check if the digit is x-xxxx
@@ -214,7 +210,7 @@ public class MOReceiver {
 							break;
 							
 						}else{
-							smsEntry.setStatus("invalid");
+							smsEntry.setStatus("invalidReceipt");
 						}
 					}				
 				} else {
@@ -223,7 +219,7 @@ public class MOReceiver {
 							smsEntry.setStatus("active");
 							break;
 						} else
-							smsEntry.setStatus("invalid");
+							smsEntry.setStatus("invalidReceipt");
 					}				
 				}
 			} else {
@@ -237,7 +233,7 @@ public class MOReceiver {
 							smsEntry.setStatus("active");
 							break;
 						} else
-							smsEntry.setStatus("invalid");
+							smsEntry.setStatus("invalidReceipt");
 					}				
 				} else {
 					for(int x=1;x<=receipt2.length;x++) {
@@ -245,7 +241,7 @@ public class MOReceiver {
 							smsEntry.setStatus("active");
 							break;
 						} else
-							smsEntry.setStatus("invalid");
+							smsEntry.setStatus("invalidReceipt");
 					}				
 				}
 			}
