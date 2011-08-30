@@ -32,6 +32,12 @@ import javax.persistence.Table;
 			query = "SELECT createdAt FROM Entry WHERE station.id = :id " +
 					"AND status = 'active' " +
 					"ORDER BY id ASC"),
+	@NamedQuery(name = "jetset.query.Entry.findIdFetchAll", 
+			query = "Select entry FROM Entry entry " +
+					"LEFT JOIN FETCH entry.station " +
+					"LEFT JOIN FETCH entry.prize " +
+					"WHERE entry.id = :id " +
+					"AND entry.status = 'active'"),
 	@NamedQuery(name = "jetset.query.Entry.duplicateCheck", 
 				query = "SELECT COUNT(id) FROM Entry " +
 						"WHERE receipt = :receipt AND station.id = :stationId ")
@@ -69,6 +75,10 @@ public class Entry extends EntityBase{
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "prize_id", nullable = true)
 	private Prize prize;
+	
+	public Entry() {
+		chance = 1;
+	}
 
 	/**
 	 * @return the id

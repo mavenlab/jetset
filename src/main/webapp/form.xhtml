@@ -9,17 +9,7 @@
 <ui:param name="activeMenu" value="home"/>
 
 <ui:define name="head">
-<script>
-$(function() {
-	$('#paymentModeSelect').change(function() {
-		if($(this).val() == 'Other Credit Card') {
-			$('#ccSelectDiv').show();
-		} else {
-			$('#ccSelectDiv').hide();
-		}
-	});
-});
-</script>
+<script type="text/javascript" src="/js/form.js"></script>
 </ui:define>
 
 <ui:define name="content">
@@ -27,100 +17,100 @@ $(function() {
 	Please fill in the following
 </div>
 <div class="marginT20">
-	<div class="note">all fields are required</div>
-</div>
-<div class="marginT20">
 	<form>
-		<div class="marginT10">
+		<div id="nameWrapperDiv" class="marginT10">
 			<div id="nameError" class="errorTextDiv"></div>
 			<div class="formLabel1"><label>Full name as in NRIC/Passport:</label></div>
-			<input type="text" class="formField1"/>
+			<input id="nameTF" name="nameTF" type="text" class="formField1"/>
 		</div>
-		<div class="marginT10">
+		<div id="nricWrapperDiv" class="marginT10">
 			<div id="nricError" class="errorTextDiv"></div>
 			<div class="formLabel1"><label>NRIC/Passport No.:</label></div>
-			<input type="text" class="formField1"/>
+			<input id="nricTF" name="nricTF" type="text" class="formField1"/>
 		</div>
-		<div class="marginT10">
+		<div id="contactWrapperDiv" class="marginT10">
 			<div id="contactError" class="errorTextDiv"></div>
 			<div class="formLabel1"><label>Contact Number:</label></div>
-			<input type="text" class="formField1"/>
+			<input id="numberTF" name="numberTF" type="text" class="formField1"/>
 			<div class="commentMaginL250">
 				If you are shortlisted as a winner, we will be contacting you at this number between 10:30am - 4pm, Mon to Fri
 				to verify your details and get a copy of your fuel receipt
 			</div>
 		</div>
-		<div class="marginT10">
+		<div id="emailWrapperDiv" class="marginT10">
 			<div id="emailError" class="errorTextDiv"></div>
 			<div class="formLabel1"><label>Email Address:</label></div>
-			<input type="text" class="formField1"/>
+			<input id="emailTF" name="emailTF" type="text" class="formField1"/>
 		</div>
 		<div class="marginT10">
 			<div class="formLabel1"><label>Mode of Payment:</label></div>
-			<select id="paymentModeSelect" class="formField1">
-				<option value="UOB Card">UOB Card</option>
+			<select id="paymentModeSelect" name="paymentModeSelect" class="formField1">
+				<option value="UOB Credit/Debit Card">UOB Credit/Debit Card</option>
 				<option value="Cash">Cash</option>
-				<option value="Nets">Nets</option>
+				<option value="NETS">NETS</option>
+				<option value="Shell Card">Shell Card</option>
 				<option value="Other Credit Card">Other Credit Card</option>
-				<option value="Shell Fuel Vouchers">Shell Fule Vouchers</option>
+				<option value="Shell Fuel Vouchers">Shell Fuel Vouchers</option>
 				<option value="Shell Escape Points">Shell Escape Points</option>
 			</select>
 		</div>
 		<div id="ccSelectDiv" class="marginT10 hidden">
 			<div id="ccError" class="errorTextDiv"></div>
 			<div class="formLabel1"><label>Credit Card:</label></div>
-			<select id="ccSelect" class="formField1">
-				<option value="DBS/POSB Credit Card">DBS/POSB Credit Card</option>
+			<select id="ccSelect" name="ccSelect" class="formField1">
+				<option value="Citibank Credit Card">Citibank Credit Card</option>
+				<option value="DBS Credit Card">DBS Credit Card</option>
 				<option value="HSBC Credit Card">HSBC Credit Card</option>
 				<option value="OCBC Credit Card">OCBC Credit Card</option>
+				<option value="POSB Credit Card">POSB Credit Card</option>
 				<option value="Standard Chartered Credit Card">Standard Chartered Credit Card</option>
 				<option value="Other Credit Card">Other Credit Card</option>
 			</select>
 		</div>
 		<div class="marginT10">
 			<div class="formLabel1"><label>Shell Station:</label></div>
-			<select class="formField1">
+			<select id="stationSelect" name="stationSelect" class="formField1">
 				<ui:repeat value="#{stationController.stations}" var="station">
-					<option id="#{station.id}">#{station.name}</option>
+					<option value="#{station.id}">#{station.name}</option>
 				</ui:repeat>
 			</select>
 		</div>
-		<div class="marginT10">
+		<div id="receiptWrapperDiv" class="marginT10">
 			<div id="receiptError" class="errorTextDiv"></div>
 			<div class="formLabel1"><label>Receipt Number:</label></div>
-			<input type="text" class="formField1"/>
+			<input id="receiptTF" name="receiptTF" type="text" class="formField1"/>
 			<div class="commentMaginL250">
 				<a href="#">How to find the receipt number?</a>
 			</div>
 		</div>
 		<div class="marginT10">
 			<div class="formLabel1"><label>Fuel Grade:</label></div>
-			<select class="formField1">
-				<option value="Shell FuelSave 95">Shell FuelSave 95</option>
-				<option value="Shell FuelSave 98">Shell FuelSave 98</option>
+			<select id="gradeSelect" name="gradeSelect" class="formField1">
 				<option value="Shell V-Power">Shell V-Power</option>
+				<option value="Shell FuelSave 98">Shell FuelSave 98</option>
+				<option value="Shell FuelSave 95">Shell FuelSave 95</option>
 				<option value="Shell Diesel">Shell Diesel</option>
 			</select>
 		</div>
-		<div class="marginT10">
+		<div id="memberWrapperDiv" class="marginT10">
 			<div id="memberError" class="errorTextDiv"></div>
 			<div class="formLabel1"><label>Shell Escape Member:</label></div>
-			<input type="radio" name="memberRB" value="yes" class="marginT10"/> Yes
-			<input type="radio" name="memberRB" value="no" class="marginL10 marginT10"/> No
+			<input id="memberYRB" type="radio" name="memberRB" value="yes" class="marginT10"/> Yes
+			<input id="memberNRB"  type="radio" name="memberRB" value="no" class="marginL10 marginT10"/> No
 		</div>
-		<div class="marginT20 clearBoth">
+		<div id="subscribeWrapperDiv" class="marginT20 clearBoth">
 			<div id="subscribeError" class="errorTextDiv"></div>
 			<input id="subscribeCB" name="sbuscribeCB" type="checkbox" value=""/>
-			<label for="subscribeCB">Yes, I would like to receive communicatioons and offers from Shell</label>
+			<label for="subscribeCB">Yes, I would like to receive communications and offers from Shell</label>
 		</div>
-		<div class="marginT10">
+		<div id="agreeWrapperDiv" class="marginT10">
 			<div id="agreeError" class="errorTextDiv"></div>
 			<input id="agreeCB" name="agreeCB" type="checkbox" value=""/>
-			<label for="agreeCB">I have read and agree to the Shell, <a href="#">Terms and Conditions</a></label>
+			<label for="agreeCB">I have read and agree to the Shell, <a href="/tnc">Terms and Conditions</a></label>
 		</div>
 		<div class="marginT20">
 			<div class="formLabel1">&#160;</div>
-			<a href="form"><img src="img/submit.png"/></a>
+			<img id="submitBtn" src="img/submit.png" class="action"/>
 		</div>
 	</form>
 </div>

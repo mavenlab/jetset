@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	template="/WEB-INF/templates/default.xhtml">
+
+<f:metadata>
+	<f:viewParam name="id" value="#{thankYouController.id}"/>
+</f:metadata>
+	
+<ui:param name="pageTitle" value="Home"/>	
+<ui:param name="activeMenu" value="home"/>
+
+<ui:define name="content">
+	<ui:param name="entry" value="#{thankYouController.entry}"/>
+	<ui:param name="prize" value="#{thankYouController.entry.prize}"/>
+	<ui:param name="station" value="#{thankYouController.entry.station}"/>
+	
+	<div class="redTitle">
+		#{prize.webMessage} 
+	</div>
+	<div class="thankyouBox">
+		<div class="tytitle">Terms and Conditions:</div>
+		<ui:include src="/WEB-INF/templates/prize#{prize.id}tnc.xhtml"/>
+	</div>
+	<div class="marginT20">
+		<p>Shortlisted winners will be contacted at this number between 10:30am - 4pm, Mon to Fri to verify your details and get a copy of your fuel receipt.</p>
+	</div>
+	<div class="marginT20">
+		<div class="marginT20">
+			<div class="formLabel2">Full Name as in NRIC/Passport:</div>
+			<div class="marginT7 floatLeft">#{entry.name}</div>
+			<div class="clearBoth"/>
+		</div>
+		<div class="marginT20">
+			<div class="formLabel2">Contact Number:</div>
+			<div class="marginT7 floatLeft">#{entry.msisdn}</div>
+			<div class="clearBoth"/>
+		</div>
+		<div class="marginT20">
+			<div class="formLabel2">Email Address:</div>
+			<div class="marginT7 floatLeft">#{entry.email}</div>
+			<div class="clearBoth"/>
+		</div>
+		<div class="marginT20">
+			<div class="formLabel2">Mode of Payment:</div>
+			<div class="marginT7 floatLeft">#{entry.paymentMode}</div>
+			<div class="clearBoth"/>
+		</div>
+		<div class="marginT20">
+			<div class="formLabel2">Shell Station:</div>
+			<div class="marginT7 floatLeft">#{station.name}</div>
+			<div class="clearBoth"/>
+		</div>
+		<div class="marginT20">
+			<div class="formLabel2">Receipt Number:</div>
+			<div class="marginT7 floatLeft">#{entry.receipt}</div>
+			<div class="clearBoth"/>
+		</div>
+		<div class="marginT20">
+			<div class="formLabel2">Fuel Grade:</div>
+			<div class="marginT7 floatLeft">#{entry.fuelGrade}</div>
+			<div class="clearBoth"/>
+		</div>
+		<div class="marginT20">
+			<div class="formLabel2">Shell Escape Member:</div>
+			<div class="marginT7 floatLeft">#{entry.member ? 'Yes' : 'No'}</div>
+			<div class="clearBoth"/>
+		</div>
+	</div>
+	<div class="marginT50">
+		<img src="/img/bottom_logos.jpg"/>
+	</div>
+	
+</ui:define>
+
+</ui:composition>

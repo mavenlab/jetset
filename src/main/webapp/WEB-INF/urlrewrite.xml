@@ -8,8 +8,20 @@
 		<to type="forward">/index.mvn</to>
 	</rule>
 	<rule>
+		<from>^/winner$</from>
+		<to type="forward">/winner.mvn</to>
+	</rule>
+	<rule>
 		<from>^/form$</from>
 		<to type="forward">/form.mvn</to>
+	</rule>
+	<rule>
+		<from>^/tnc$</from>
+		<to type="forward">/tnc.mvn</to>
+	</rule>
+	<rule>
+		<from>^/thankyou/(.*)$</from>
+		<to type="forward">/thank_you.mvn?id=$1</to>
 	</rule>
 <!-- 
 	<rule>

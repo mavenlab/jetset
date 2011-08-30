@@ -27,6 +27,15 @@ public class WebEntry extends Entry {
 	
 	@Column(name = "email", length = 50)
 	private String email;
+	
+	@Column(name = "member")
+	private boolean member;
+
+	@Column(name = "agree")
+	private boolean agree;
+	
+	@Column(name = "subscribe")
+	private boolean subscribe;
 
 	/**
 	 * default constructor
@@ -97,6 +106,48 @@ public class WebEntry extends Entry {
 	 */
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	/**
+	 * @return the member
+	 */
+	public boolean isMember() {
+		return member;
+	}
+
+	/**
+	 * @param member the member to set
+	 */
+	public void setMember(boolean member) {
+		this.member = member;
+	}
+
+	/**
+	 * @return the agree
+	 */
+	public boolean isAgree() {
+		return agree;
+	}
+
+	/**
+	 * @param agree the agree to set
+	 */
+	public void setAgree(boolean agree) {
+		this.agree = agree;
+	}
+
+	/**
+	 * @return the subscribe
+	 */
+	public boolean isSubscribe() {
+		return subscribe;
+	}
+
+	/**
+	 * @param subscribe the subscribe to set
+	 */
+	public void setSubscribe(boolean subscribe) {
+		this.subscribe = subscribe;
 	}
 	
 }

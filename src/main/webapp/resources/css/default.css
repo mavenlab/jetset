@@ -32,6 +32,11 @@ div#menuWrapper ul li.active {
 	cursor: default;
 }
 
+div#menuWrapper ul li a {
+	text-decoration: none;
+	color: #000;
+}
+
 div#contentWrapper {
 	border: 3px solid #D7251C;
 	padding: 10px;
@@ -49,11 +54,16 @@ div.note {
 	font-style: italic;
 }
 
-div.formLabel1 {
+div.formLabel1, div.formLabel2 {
 	clear: left;
 	width: 250px;
 	float: left;
 	margin-top: 7px;
+}
+
+div.formLabel2 {
+	width: 275px;
+	font-weight: bold;
 }
 
 .formField1 {
@@ -62,14 +72,30 @@ div.formLabel1 {
 	padding: 3px;
 }
 
-div.errorDiv div.formLabel1 {
+div.errorTextDiv {
 	color: #FF2222;
+	padding: 5px 0;
+	display: none;
 }
 
 div.errorDiv div.errorTextDiv {
-	color: #FF2222;
-	padding: 5px 0;
-	display: hidden;
+	display: block;
+}
+
+div.thankyouBox {
+	padding: 10px;
+	background-color: #F6F6F6;
+	border: 1px solid #D8D6D6;
+	-moz-border-radius: 7px;
+	border-radius: 7px;
+	margin-top: 20px;
+	color: #717171;
+}
+
+div.thankyouBox div.tytitle {
+	color: #0BA0BB;
+	margin-bottom: 10px;
+	font-weight: bold;
 }
 
 div.commentMaginL250 {
@@ -79,13 +105,61 @@ div.commentMaginL250 {
 	margin: 5px 0 5px 250px ;
 }
 
+ul.squareBullet {
+	list-style-type: square;
+}
+
+ul.squareBullet li {
+	margin-top: 10px;
+}
+
+ul.squareBullet table, ul.tncOl table {
+	border-width: 1px;
+	border-spacing: 0px;
+	border-style: outset;
+	border-color: gray;
+	border-collapse: collapse;
+	background-color: white;
+}
+
+ul.squareBullet table td, ul.tncOl table td, ul.tncOl table th {
+	border-width: 1px;
+	padding: 5px;
+	border-style: solid;
+	border-color: gray;
+	background-color: white;
+}
+
+ul.tncOl table th {
+	background-color: #F5F5F5
+}
+
+ul.tncOl {
+	list-style: square;
+}
+
+ul.tncOl li ul {
+	list-style: circle;
+}
+
+ul.tncOl li {
+	padding-bottom: 20px;
+}
+
+.action { cursor: pointer; }
+
 .alignCenter { text-align: center; }
 
+.bold { font-weight: bold; }
+
 .clearBoth { clear: both; }
+
+.floatLeft { float: left; }
 
 .hidden { display: none; }
 
 .marginL10 { margin-left: 10px; }
+.marginT7 { margin-top: 7px; }
 .marginT10 { margin-top: 10px; }
 .marginT20 { margin-top: 20px; }
 .marginT50 { margin-top: 50px; }

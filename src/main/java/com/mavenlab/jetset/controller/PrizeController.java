@@ -4,6 +4,7 @@ import java.util.Random;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
@@ -13,6 +14,7 @@ import org.jboss.seam.solder.logging.Category;
 import com.mavenlab.jetset.model.Prize;
 
 @Stateless
+@Named
 public class PrizeController {
 
 	@Inject
@@ -41,6 +43,16 @@ public class PrizeController {
 		
 		em.persist(prize);
 		return prize;
+	}
+	
+	public Prize getPrize(int id) {
+		try {
+			Prize prize = (Prize) em.createNamedQuery("jetset.query.Prize.findById").setParameter("id", id).getSingleResult();
+			return prize;
+		} catch (NoResultException e) {
+			log.error("PRIZE WITH ID NOT FOUND: " + id);
+		}
+		return null;
 	}
 	
 	/**

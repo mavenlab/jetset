@@ -12,7 +12,6 @@ import java.util.regex.Pattern;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -24,6 +23,7 @@ import org.jboss.seam.solder.logging.Category;
 
 import com.mavenlab.jetset.controller.EntryController;
 import com.mavenlab.jetset.controller.PrizeController;
+import com.mavenlab.jetset.controller.StationController;
 import com.mavenlab.jetset.model.MOLog;
 import com.mavenlab.jetset.model.MTLog;
 import com.mavenlab.jetset.model.Prize;
@@ -59,6 +59,9 @@ public class MOReceiver {
 	
 	@Inject
 	private PrizeController prizeController;
+	
+	@Inject
+	private StationController stationController;
 	
 	public static Lock lock = new ReentrantLock();
 
@@ -170,37 +173,45 @@ public class MOReceiver {
 			message = receiptMatcher.replaceFirst("");
 		}
 
-		Pattern nricPattern = Pattern.compile(PATTERN_NRIC);
-		Matcher nricMatcher = nricPattern.matcher(message);
+//		Pattern nricPattern = Pattern.compile(PATTERN_NRIC);
+//		Matcher nricMatcher = nricPattern.matcher(message);
 
-		if(nricMatcher.find()) {
-			String nric = nricMatcher.group();
-			smsEntry.setNric(nric);
-			message = nricMatcher.replaceFirst("");
-		}
+//		if(nricMatcher.find()) {
+//			String nric = nricMatcher.group();
+//			smsEntry.setNric(nric);
+//			message = nricMatcher.replaceFirst("");
+//		}
 
 		Pattern stationPattern = Pattern.compile(PATTERN_STATION);
 		Matcher stationMatcher = stationPattern.matcher(message);
 
 		if(stationMatcher.find()) {
 			String stationId = stationMatcher.group();
-			try {
-				Station station = (Station) em.createNamedQuery("jetset.query.Station.findById").setParameter("id", Integer.parseInt(stationId)).getSingleResult();
+			Station station = stationController.getStationById(Integer.parseInt(stationId));
+			if(station != null) {
 				smsEntry.setStation(station);
-
 				if((station.getId() != 14 && smsEntry.getReceipt().matches(PATTERN_RECEIPT14)) ||
 						(station.getId() == 14 && !smsEntry.getReceipt().matches(PATTERN_RECEIPT14))) {
 					log.info("INVALID RECEIPT 14");
 					smsEntry.setStatus("invalid");
 				}
-			} catch(NoResultException e) {
+			} else {
 				smsEntry.setStatus("invalid");
 			}
 
 			message = stationMatcher.replaceFirst("");
 		}
 
-		log.info("FLUSH SMS ENTRY");
+		String nric = message.trim();
+		
+		if(nric.equals("")) {
+			smsEntry.setNric(null);
+			smsEntry.setStatus("invalid");
+		} else{
+			smsEntry.setNric(nric);
+		}
+		
+		log.info("PERSIST SMS ENTRY");
 		em.persist(smsEntry);
 		
 		return smsEntry;

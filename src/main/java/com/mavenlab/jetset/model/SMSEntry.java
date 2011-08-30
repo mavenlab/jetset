@@ -16,7 +16,7 @@ public class SMSEntry extends Entry {
 	private static final long serialVersionUID = -1047371976228046915L;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "mo_log_id", nullable = false)
+	@JoinColumn(name = "mo_log_id", nullable = true)
 	private MOLog moLog;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
