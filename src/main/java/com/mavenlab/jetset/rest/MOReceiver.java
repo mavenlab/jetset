@@ -39,14 +39,14 @@ public class MOReceiver {
 	@Category("jetset.MOReceiver")
 	private Logger log;
 	
-	public final static String PATTERN = "^\\s*(TSHELL|S(HELL)?)\\s+\\w+\\s+([1-3]\\-[0-9]{6}|([1-3]\\-)?[0-9]{5})\\s+[0-9]{1,3}\\s+[YN]\\s*$";
+	public final static String PATTERN = "^\\s*(TSHELL|S(HELL)?)\\s+\\w+\\s+([1-3]\\-[0-9]{6}|([1-3]\\-)?[0-9]{5})\\s+[0-9]{1,2}\\s+[YN]\\s*$";
 	
 	public final static String PATTERN_KEYWORD = "^\\s*(TSHELL|S(HELL)?)\\s+";
 	public final static String PATTERN_MEMBER = "\\b[YN]$";
 	public final static String PATTERN_RECEIPT = "\\b([1-3]\\-[0-9]{6}|([1-3]\\-)?[0-9]{5})\\b";
 	public final static String PATTERN_RECEIPT14 = "^([1-3]\\-)?[0-9]{5}$";
 //	public final static String PATTERN_NRIC = "\\b[A-Z]?[0-9]{7}[A-Z]?\\b";
-	public final static String PATTERN_STATION = "\\b[0-9]{1,3}\\b";
+	public final static String PATTERN_STATION = "\\b[0-9]{1,2}\\b";
 	
 	public final static String INVALID_MESSAGE = "Invalid entry. Pls check ur SMS is sent as <SHELL><NRIC/Passport><Receipt no><Station no><UOB Y/N> & resend.For assistance, call 1800-467-4355 Mon-Fri, 9am-5pm.";
 	public final static String DUPLICATE_MESSAGE = "Thank you for your SMS. We have already received this entry. Please check your SMS is correct. For assitance, call 1800-467-4355 Mon-Fri, 9am-5pm.";

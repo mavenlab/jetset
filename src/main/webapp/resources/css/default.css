@@ -141,6 +141,9 @@ ul.tncOl li {
 	padding-bottom: 20px;
 }
 
+span#fancy_left_ico {left: 20px;} 
+span#fancy_right_ico {right: 20px;}
+
 .action { cursor: pointer; }
 
 .alignCenter { text-align: center; }
