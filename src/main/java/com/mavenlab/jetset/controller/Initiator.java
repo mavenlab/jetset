@@ -15,7 +15,7 @@ public class Initiator {
 	@PostConstruct
 	public void init() {
 		prizeController.createPrize("Purchase a 250ml bottle of Sunkist juice at $1", 
-				"Thank you for participating. Purchase a 250ml Sunkist no sugar added juice at $1 at any 7Eleven@Shell by 31/10/11 with this SMS and Shell Escape Card. T&C apply.", 
+				"Thank you for participating. Purchase a 250ml Sunkist no sugar added juice at $1 at any 7E@Shell by 31/10/11 with this SMS and Shell Escape Card. T&C apply.", 
 				"Thank you for participating. Print out this page and purchase a 250ml bottle of Sunkist no sugar added orange juice at only $1 at any 7Eleven@Shell by 31/10/11 with your Shell Escape Card. T&Cs apply.",
 				30000);
 

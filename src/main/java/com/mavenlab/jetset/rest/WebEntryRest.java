@@ -33,8 +33,10 @@ public class WebEntryRest {
 	
 	public final static String PATTERN_MOBILE_NUMBER = "^[0-9\\-\\s]+$";
 	public final static String PATTERN_EMAIL = "^[\\w\\-]([\\.\\w])+[\\w]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+	public final static String PATTERN_RECEIPT_NON_14 = "^([1-3]\\-[0-9]{6}|[0-9]{5})$";
 	public final static String PATTERN_RECEIPT7 = "^[1-3]\\-[0-9]{6}$";
 	public final static String PATTERN_RECEIPT6 = "^[1-3]\\-[0-9]{5}$";
+	public final static String PATTERN_RECEIPT5 = "^[0-9]{5}$";
 	
 	@Inject
 	private EntityManager em;
@@ -135,7 +137,8 @@ public class WebEntryRest {
 		} else if ((receipt != null && !receipt.toUpperCase().matches(MOReceiver.PATTERN_RECEIPT)) ||
 				(station.getId() == 14 && !receipt.toUpperCase().matches(MOReceiver.PATTERN_RECEIPT14) && payment.equals("Shell Card")) ||
 				(station.getId() == 14 && !receipt.toUpperCase().matches(PATTERN_RECEIPT6) && !payment.equals("Shell Card")) ||
-				(station.getId() != 14 && receipt.toUpperCase().matches(MOReceiver.PATTERN_RECEIPT14))) {
+				(station.getId() != 14 && receipt.toUpperCase().matches(PATTERN_RECEIPT_NON_14) && payment.equals("Shell Card")) ||
+				(station.getId() != 14 && receipt.toUpperCase().matches(PATTERN_RECEIPT7) && !payment.equals("Shell Card"))) {
 			response.addMessage("receipt", "Please enter a correct receipt number");
 			flag = false;
 		}

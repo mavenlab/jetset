@@ -49,7 +49,7 @@ public class MOReceiver {
 	public final static String PATTERN_STATION = "\\b[0-9]{1,2}\\b";
 	
 	public final static String INVALID_MESSAGE = "Invalid entry. Pls check ur SMS is sent as <S><NRIC/Passport><Receipt no><Station no><UOB Y/N> & resend.For assistance, call 1800-467-4355 Mon-Fri, 9am-5pm.";
-	public final static String DUPLICATE_MESSAGE = "Thank you for your SMS. We have already received this entry. Please check your SMS is correct. For assitance, call 1800-467-4355 Mon-Fri, 9am-5pm.";
+	public final static String DUPLICATE_MESSAGE = "Thank you for your SMS. We have already received this entry. Please check your SMS is correct. For assistance, call 1800-467-4355 Mon-Fri, 9am-5pm.";
 
 	@Inject
 	private EntityManager em;
