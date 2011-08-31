@@ -233,7 +233,7 @@ public class MOReceiver {
 //		String pattern = "^\\s*SHELL\\s+[A-Z]?[0-9]{7}[A-Z]?\\s+([1-3]\\-[0-9]{6}|[0-9]{5}|1\\-[0-9]{5})$";
 		
 		
-		String message = "Tshell 1234567 2-12345 14 N";
+		String message = "Tshell 111 54321 14 N";
 		System.out.println(message.toUpperCase().matches(PATTERN));
 		message = message.toUpperCase().replaceAll(PATTERN_KEYWORD, "").trim();
 		System.out.println(message);
