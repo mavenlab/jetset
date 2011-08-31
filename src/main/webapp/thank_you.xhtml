@@ -9,7 +9,7 @@
 	<f:viewParam name="id" value="#{thankYouController.id}"/>
 </f:metadata>
 	
-<ui:param name="pageTitle" value="Home"/>	
+<ui:param name="pageTitle" value="Thank You"/>	
 <ui:param name="activeMenu" value="home"/>
 
 <ui:define name="content">
@@ -70,9 +70,11 @@
 			<div class="marginT7 floatLeft">#{entry.member ? 'Yes' : 'No'}</div>
 			<div class="clearBoth"/>
 		</div>
+		<div class="marginT20">
+			<div class="formLabel2">Shell Escape Member:</div>
+			<div class="marginT7 floatLeft"><img class="action" src="/img/print.png" onclick="window.print();"/></div>
+			<div class="clearBoth"/>
 	</div>
-	<div class="marginT20">
-		<img src="/img/print.png" onclick="window.print();"/>
 	</div>
 	<div class="marginT50">
 		<img src="/img/bottom_logos.jpg"/>

@@ -101,6 +101,10 @@ public class WebEntryRest {
 			flag = false;
 		}
 		
+		if(email != null && email.trim().length() == 0) {
+			email = null;
+		}
+		
 		if(payment == null || payment.trim().equals("")) {
 			response.addMessage("payment", "Please select a payment method");
 			flag = false;
@@ -125,12 +129,14 @@ public class WebEntryRest {
 			}
 		}
 		
-		if((receipt == null || receipt.trim().equals("")) || 
-				(receipt != null && !receipt.toUpperCase().matches(MOReceiver.PATTERN_RECEIPT)) ||
+		if(receipt == null || receipt.trim().equals("")) {
+			response.addMessage("receipt", "Please enter your receipt number");
+			flag = false;
+		} else if ((receipt != null && !receipt.toUpperCase().matches(MOReceiver.PATTERN_RECEIPT)) ||
 				(station.getId() == 14 && !receipt.toUpperCase().matches(MOReceiver.PATTERN_RECEIPT14) && payment.equals("Shell Card")) ||
 				(station.getId() == 14 && !receipt.toUpperCase().matches(PATTERN_RECEIPT6) && !payment.equals("Shell Card")) ||
 				(station.getId() != 14 && receipt.toUpperCase().matches(MOReceiver.PATTERN_RECEIPT14))) {
-			response.addMessage("receipt", "Please enter your receipt number");
+			response.addMessage("receipt", "Please enter a correct receipt number");
 			flag = false;
 		}
 
