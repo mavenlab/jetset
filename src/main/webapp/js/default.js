@@ -4,8 +4,8 @@ $(function() {
 		if(ref == 'home') {
 			ref = "";
 		}
-		if(ref != 'prizes') {
+		//if(ref != 'prizes') {
 			window.location = "/" + ref;
-		}
+		//}
 	});
 });

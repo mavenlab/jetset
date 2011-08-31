@@ -12,6 +12,10 @@
 		<to type="forward">/winner.mvn</to>
 	</rule>
 	<rule>
+		<from>^/prizes$</from>
+		<to type="forward">/prizes.mvn</to>
+	</rule>
+	<rule>
 		<from>^/form$</from>
 		<to type="forward">/form.mvn</to>
 	</rule>

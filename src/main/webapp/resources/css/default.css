@@ -43,6 +43,12 @@ div.redTitle {
 	font-weight: bold;
 }
 
+div.blackSubTitle {
+	color: #000000;
+	font-size: 15px;
+	font-weight: bold;
+}
+
 div.note {
 	color: #777;
 	font-size: 0.9em;
@@ -160,4 +166,30 @@ span#fancy_right_ico {right: 20px;}
 .marginT7 { margin-top: 7px; }
 .marginT10 { margin-top: 10px; }
 .marginT20 { margin-top: 20px; }
+.marginT30 { margin-top: 30px; }
 .marginT50 { margin-top: 50px; }
+
+img {
+    vertical-align: middle;
+    height: 100%;
+}
+
+.clearfix:after {
+	content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+}
+
+.clearfix {
+	display: inline-block;
+}
+
+* html .clearfix {
+	height: 1%;
+}
+
+.clearfix {
+	display: block;
+}
