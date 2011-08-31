@@ -94,7 +94,7 @@ public class WebEntryRest {
 			flag = false;
 		}
 		
-		if(email != null && !email.toUpperCase().matches(PATTERN_EMAIL)) {
+		if(email != null && email.trim().length() > 0 && !email.toUpperCase().matches(PATTERN_EMAIL)) {
 			response.addMessage("email", "Please enter correct email address");
 			flag = false;
 		}
@@ -145,10 +145,10 @@ public class WebEntryRest {
 			flag = false;
 		}
 
-		if(subscribe == null || !subscribe) {
-			response.addMessage("subscribe", "Please check to subscribe");
-			flag = false;
-		}
+//		if(subscribe == null || !subscribe) {
+//			response.addMessage("subscribe", "Please check to subscribe");
+//			flag = false;
+//		}
 
 		if(agree == null || !agree) {
 			response.addMessage("agree", "Please check to agree to Shell Terms and Conditions");
@@ -177,7 +177,7 @@ public class WebEntryRest {
 				
 				MOReceiver.lock.tryLock(900, TimeUnit.SECONDS);
 				
-				boolean duplicate = entryController.isDuplicate(webEntry);
+				boolean duplicate = entryController.isDuplicate(webEntry, true);
 				
 				if(duplicate) {
 					response.addMessage("error", "We have already received this entry. Please check your entry is correct. For assitance, call 1800-467-4355 Mon-Fri, 9am-5pm.");

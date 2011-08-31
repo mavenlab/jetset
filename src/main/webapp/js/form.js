@@ -8,6 +8,15 @@ $(function() {
 	});
 	
 	$('#submitBtn').click(submitForm);
+	
+	$("a.receiptImg").fancybox({
+		'transitionIn'	:	'elastic',
+		'transitionOut'	:	'elastic',
+		'speedIn'		:	600, 
+		'speedOut'		:	200, 
+		'overlayShow'	:	true,
+		'showNavArrows'	:	true
+	});
 });
 
 var submitForm = function() {

@@ -8,14 +8,8 @@ div#menuWrapper {
 	margin-top: 10px;
 }
 
-div#menuWrapper ul {
-	margin: 0;
-	padding: 0;
-	list-style: none;
-}
-
-div#menuWrapper ul li {
-	margin: 0;
+div#menuWrapper div {
+	margin-right: 3px;
 	padding: 20px;
 	display: inline-block;
 	width: 130px;
@@ -24,15 +18,16 @@ div#menuWrapper ul li {
 	text-align: center;
 	font-weight: bold;
 	cursor: pointer;
+	float:;
 }
 
-div#menuWrapper ul li.active {
+div#menuWrapper div.active {
 	background-color: #D7251C;
 	color: #FFF;
 	cursor: default;
 }
 
-div#menuWrapper ul li a {
+div#menuWrapper div a {
 	text-decoration: none;
 	color: #000;
 }

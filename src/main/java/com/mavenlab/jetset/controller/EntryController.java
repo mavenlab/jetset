@@ -22,14 +22,14 @@ public class EntryController {
 		return null;
 	}
 	
-	public boolean isDuplicate(Entry entry) {
+	public boolean isDuplicate(Entry entry, boolean web) {
 		
 		long count = (Long) em.createNamedQuery("jetset.query.Entry.duplicateCheck").
 								setParameter("receipt", entry.getReceipt()).
 								setParameter("stationId", entry.getStation().getId()).
 								getSingleResult();
 
-		return (count > 1);
+		return (count > 1 && !web) || (count > 0);
 	}
 	
 }

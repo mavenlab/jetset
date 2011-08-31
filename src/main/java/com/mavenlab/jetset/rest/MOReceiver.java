@@ -39,9 +39,8 @@ public class MOReceiver {
 	@Category("jetset.MOReceiver")
 	private Logger log;
 	
-	public final static String PATTERN = "^\\s*SHELL\\s+[A-Z]?[0-9]{7}[A-Z]?\\s+([1-3]\\-[0-9]{6}|[0-9]{5}|1\\-[0-9]{5})\\s+[0-9]{1,3}\\s+[YN]\\s*$";
+	public final static String PATTERN = "^\\s*(TSHELL|S(HELL)?)\\s+[A-Z]?[0-9]{7}[A-Z]?\\s+([1-3]\\-[0-9]{6}|[0-9]{5}|1\\-[0-9]{5})\\s+[0-9]{1,3}\\s+[YN]\\s*$";
 	
-	public final static String PATTERN_KEYWORD = "SHELL";
 	public final static String PATTERN_MEMBER = "\\b[YN]$";
 	public final static String PATTERN_RECEIPT = "\\b([1-3]\\-[0-9]{6}|[0-9]{5}|1\\-[0-9]{5})\\b";
 	public final static String PATTERN_RECEIPT14 = "^1\\-[0-9]{5}$";
@@ -114,7 +113,7 @@ public class MOReceiver {
 				return "Invalid Entry";
 			}
 
-			boolean duplicate = entryController.isDuplicate(smsEntry);
+			boolean duplicate = entryController.isDuplicate(smsEntry, false);
 			
 			if(duplicate) {
 				smsEntry.setStatus("duplicate");
