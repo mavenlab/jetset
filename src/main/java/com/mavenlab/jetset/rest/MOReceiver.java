@@ -43,7 +43,7 @@ public class MOReceiver {
 	
 	public final static String PATTERN_MEMBER = "\\b[YN]$";
 	public final static String PATTERN_RECEIPT = "\\b([1-3]\\-[0-9]{6}|[0-9]{5}|1\\-[0-9]{5})\\b";
-	public final static String PATTERN_RECEIPT14 = "^1\\-[0-9]{5}$";
+	public final static String PATTERN_RECEIPT14 = "^[1-3]\\-[0-9]{5}$";
 	public final static String PATTERN_NRIC = "\\b[A-Z]?[0-9]{7}[A-Z]?\\b";
 	public final static String PATTERN_STATION = "\\b[0-9]{1,3}\\b";
 	
