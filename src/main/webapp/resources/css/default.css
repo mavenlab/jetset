@@ -18,7 +18,7 @@ div#menuWrapper div {
 	text-align: center;
 	font-weight: bold;
 	cursor: pointer;
-	float:;
+	float:left;
 }
 
 div#menuWrapper div.active {

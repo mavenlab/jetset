@@ -16,10 +16,10 @@
    <ui:insert name="head"/>
 </h:head>
 <h:body>
-<div id="menuWrapper">
-	<div class="mainMenu#{activeMenu == 'home' ? ' active' : ''}" ref="home">Enter Now</div>
-	<div class="mainMenu#{activeMenu == 'prizes' ? ' active' : ''}" ref="prizes">Prizes</div>
-	<div class="mainMenu#{activeMenu == 'winner' ? ' active' : ''}" ref="winner">Winner</div>
+<div id="menuWrapper clearfix">
+	<div class="clearfix mainMenu#{activeMenu == 'home' ? ' active' : ''}" ref="home">Enter Now</div>
+	<div class="clearfix mainMenu#{activeMenu == 'prizes' ? ' active' : ''}" ref="prizes">Prizes</div>
+	<div class="clearfix mainMenu#{activeMenu == 'winner' ? ' active' : ''}" ref="winner">Winner</div>
 </div>
 <div class="clearBoth"></div>
 <div id="contentWrapper">
