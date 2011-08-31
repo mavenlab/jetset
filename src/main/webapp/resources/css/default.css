@@ -147,9 +147,6 @@ ul.tncOl li {
 	padding-bottom: 20px;
 }
 
-span#fancy_left_ico {left: 20px;} 
-span#fancy_right_ico {right: 20px;}
-
 .action { cursor: pointer; }
 
 .alignCenter { text-align: center; }
@@ -166,6 +163,7 @@ span#fancy_right_ico {right: 20px;}
 .marginT7 { margin-top: 7px; }
 .marginT10 { margin-top: 10px; }
 .marginT20 { margin-top: 20px; }
+<<<<<<< HEAD
 .marginT30 { margin-top: 30px; }
 .marginT50 { margin-top: 50px; }
 
@@ -193,3 +191,9 @@ img {
 .clearfix {
 	display: block;
 }
+=======
+.marginT50 { margin-top: 50px; }
+
+.paddingTB50 { padding: 50px 0; }
+.paddingTB200 { padding: 200px 0; }
+>>>>>>> 2dca9e556618ebe44f7265bceaad6a179b2fee76

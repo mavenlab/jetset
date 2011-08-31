@@ -33,6 +33,8 @@ public class WebEntryRest {
 	
 	public final static String PATTERN_MOBILE_NUMBER = "^[0-9\\-\\s]+$";
 	public final static String PATTERN_EMAIL = "^[\\w\\-]([\\.\\w])+[\\w]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+	public final static String PATTERN_RECEIPT7 = "^[1-3]\\-[0-9]{6}$";
+	public final static String PATTERN_RECEIPT6 = "^[1-3]\\-[0-9]{5}$";
 	
 	@Inject
 	private EntityManager em;
@@ -99,6 +101,10 @@ public class WebEntryRest {
 			flag = false;
 		}
 		
+		if(email != null && email.trim().length() == 0) {
+			email = null;
+		}
+		
 		if(payment == null || payment.trim().equals("")) {
 			response.addMessage("payment", "Please select a payment method");
 			flag = false;
@@ -126,12 +132,11 @@ public class WebEntryRest {
 		if(receipt == null || receipt.trim().equals("")) {
 			response.addMessage("receipt", "Please enter your receipt number");
 			flag = false;
-		} else if(!receipt.toUpperCase().matches(MOReceiver.PATTERN_RECEIPT)) {
-			response.addMessage("receipt", "Please enter correct receipt number");
-			flag = false;
-		} else if((station.getId() != 14 && receipt.toUpperCase().matches(MOReceiver.PATTERN_RECEIPT14)) ||
-			(station.getId() == 14 && !receipt.toUpperCase().matches(MOReceiver.PATTERN_RECEIPT14))) {
-			response.addMessage("receipt", "Please enter correct receipt number");
+		} else if ((receipt != null && !receipt.toUpperCase().matches(MOReceiver.PATTERN_RECEIPT)) ||
+				(station.getId() == 14 && !receipt.toUpperCase().matches(MOReceiver.PATTERN_RECEIPT14) && payment.equals("Shell Card")) ||
+				(station.getId() == 14 && !receipt.toUpperCase().matches(PATTERN_RECEIPT6) && !payment.equals("Shell Card")) ||
+				(station.getId() != 14 && receipt.toUpperCase().matches(MOReceiver.PATTERN_RECEIPT14))) {
+			response.addMessage("receipt", "Please enter a correct receipt number");
 			flag = false;
 		}
 
