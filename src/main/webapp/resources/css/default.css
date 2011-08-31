@@ -141,9 +141,6 @@ ul.tncOl li {
 	padding-bottom: 20px;
 }
 
-span#fancy_left_ico {left: 20px;} 
-span#fancy_right_ico {right: 20px;}
-
 .action { cursor: pointer; }
 
 .alignCenter { text-align: center; }
@@ -161,3 +158,5 @@ span#fancy_right_ico {right: 20px;}
 .marginT10 { margin-top: 10px; }
 .marginT20 { margin-top: 20px; }
 .marginT50 { margin-top: 50px; }
+
+.paddingTB50 { padding: 50px 0; }
