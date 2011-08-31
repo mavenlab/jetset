@@ -39,12 +39,13 @@ public class MOReceiver {
 	@Category("jetset.MOReceiver")
 	private Logger log;
 	
-	public final static String PATTERN = "^\\s*(TSHELL|S(HELL)?)\\s+[A-Z]?[0-9]{7}[A-Z]?\\s+([1-3]\\-[0-9]{6}|[0-9]{5}|1\\-[0-9]{5})\\s+[0-9]{1,3}\\s+[YN]\\s*$";
+	public final static String PATTERN = "^\\s*(TSHELL|S(HELL)?)\\s+\\w+\\s+([1-3]\\-[0-9]{6}|([1-3]\\-)?[0-9]{5})\\s+[0-9]{1,3}\\s+[YN]\\s*$";
 	
+	public final static String PATTERN_KEYWORD = "^\\s*(TSHELL|S(HELL)?)\\s+";
 	public final static String PATTERN_MEMBER = "\\b[YN]$";
 	public final static String PATTERN_RECEIPT = "\\b([1-3]\\-[0-9]{6}|([1-3]\\-)?[0-9]{5})\\b";
 	public final static String PATTERN_RECEIPT14 = "^([1-3]\\-)?[0-9]{5}$";
-	public final static String PATTERN_NRIC = "\\b[A-Z]?[0-9]{7}[A-Z]?\\b";
+//	public final static String PATTERN_NRIC = "\\b[A-Z]?[0-9]{7}[A-Z]?\\b";
 	public final static String PATTERN_STATION = "\\b[0-9]{1,3}\\b";
 	
 	public final static String INVALID_MESSAGE = "Invalid entry. Pls check ur SMS is sent as <SHELL><NRIC/Passport><Receipt no><Station no><UOB Y/N> & resend.For assistance, call 1800-467-4355 Mon-Fri, 9am-5pm.";
@@ -155,7 +156,7 @@ public class MOReceiver {
 		smsEntry.setMoLog(moLog);
 
 		message = message.trim().toUpperCase();
-		message = message.replace("SHELL", "").trim();
+		message = message.replaceAll(PATTERN_KEYWORD, "").trim();
 
 		String member = StringUtils.substring(message, -1);
 		message = StringUtils.substring(message, 0, -2);
@@ -232,10 +233,9 @@ public class MOReceiver {
 //		String pattern = "^\\s*SHELL\\s+[A-Z]?[0-9]{7}[A-Z]?\\s+([1-3]\\-[0-9]{6}|[0-9]{5}|1\\-[0-9]{5})$";
 		
 		
-		String message = "SHELL 23456 20 N";
+		String message = "Tshell 1234567 2-12345 14 N";
 		System.out.println(message.toUpperCase().matches(PATTERN));
-		
-		message = "Shell s1234567a 1-123457 1 y";
-		System.out.println(message.toUpperCase().matches(PATTERN));
+		message = message.toUpperCase().replaceAll(PATTERN_KEYWORD, "").trim();
+		System.out.println(message);
 	}
 }

@@ -29,7 +29,7 @@ public class EntryController {
 								setParameter("stationId", entry.getStation().getId()).
 								getSingleResult();
 
-		return (count > 1 && !web) || (count > 0);
+		return (!web && count > 1) || (web && count > 0);
 	}
 	
 }
