@@ -17,6 +17,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Index;
+
 @Entity
 @Table(name = "entries")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -38,6 +40,59 @@ import javax.persistence.Table;
 					"LEFT JOIN FETCH entry.prize " +
 					"WHERE entry.id = :id " +
 					"AND entry.status = 'active'"),
+	@NamedQuery(name = "jetset.query.Entry.countAll", 
+			query = "Select COUNT(id) FROM Entry " +
+					"WHERE status != 'inactive'"),
+	@NamedQuery(name = "jetset.query.Entry.findFetchAll", 
+			query = "Select entry FROM Entry entry " +
+					"LEFT JOIN FETCH entry.station " +
+					"LEFT JOIN FETCH entry.prize " +
+					"WHERE entry.status != 'inactive' " +
+					"ORDER BY entry.id"),
+	@NamedQuery(name = "jetset.query.Entry.countByMsisdn", 
+			query = "Select COUNT(id) FROM Entry " +
+					"WHERE status != 'inactive' " +
+					"AND msisdn LIKE '%' || :msisdn || '%'"),
+	@NamedQuery(name = "jetset.query.Entry.findFetchByMsisdn", 
+			query = "Select entry FROM Entry entry " +
+					"LEFT JOIN FETCH entry.station " +
+					"LEFT JOIN FETCH entry.prize " +
+					"WHERE entry.status != 'inactive' " +
+					"AND entry.msisdn LIKE '%' || :msisdn || '%' " +
+					"ORDER BY entry.id"),
+	@NamedQuery(name = "jetset.query.Entry.countByStartDate", 
+			query = "Select COUNT(id) FROM Entry " +
+					"WHERE status != 'inactive' " +
+					"AND createdAt >= :startDate"),
+	@NamedQuery(name = "jetset.query.Entry.findFetchByStartDate", 
+			query = "Select entry FROM Entry entry " +
+					"LEFT JOIN FETCH entry.station " +
+					"LEFT JOIN FETCH entry.prize " +
+					"WHERE entry.status != 'inactive' " +
+					"AND entry.createdAt >= :startDate " +
+					"ORDER BY entry.id"),
+	@NamedQuery(name = "jetset.query.Entry.countByEndDate", 
+			query = "Select COUNT(id) FROM Entry " +
+					"WHERE status != 'inactive' " +
+					"AND createdAt <= :endDate"),
+	@NamedQuery(name = "jetset.query.Entry.findFetchByEndDate", 
+			query = "Select entry FROM Entry entry " +
+					"LEFT JOIN FETCH entry.station " +
+					"LEFT JOIN FETCH entry.prize " +
+					"WHERE entry.status != 'inactive' " +
+					"AND entry.createdAt <= :endDate " +
+					"ORDER BY entry.id"),
+	@NamedQuery(name = "jetset.query.Entry.countByDateRange", 
+			query = "Select COUNT(id) FROM Entry " +
+					"WHERE status != 'inactive' " +
+					"AND createdAt BETWEEN :startDate AND :endDate"),
+	@NamedQuery(name = "jetset.query.Entry.findFetchByDateRange", 
+			query = "Select entry FROM Entry entry " +
+					"LEFT JOIN FETCH entry.station " +
+					"LEFT JOIN FETCH entry.prize " +
+					"WHERE entry.status != 'inactive' " +
+					"AND entry.createdAt BETWEEN :startDate AND :endDate " +
+					"ORDER BY entry.id"),
 	@NamedQuery(name = "jetset.query.Entry.duplicateCheck", 
 				query = "SELECT COUNT(id) FROM Entry " +
 						"WHERE receipt = :receipt AND station.id = :stationId ")
@@ -54,6 +109,7 @@ public class Entry extends EntityBase{
 	private int id;
 	
 	@Column(name = "msisdn", nullable = false)
+	@Index(name = "ix_entries_msisdn")
 	private String msisdn;
 	
 	@Column(name = "nric", nullable = true)

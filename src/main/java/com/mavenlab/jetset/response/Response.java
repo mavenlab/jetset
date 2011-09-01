@@ -1,4 +1,4 @@
-package com.mavenlab.jetset.rest;
+package com.mavenlab.jetset.response;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ import java.util.Map;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "response")
-public class WebEntryResponse implements Serializable {
+public class Response implements Serializable {
 
 	/**
 	 * 
@@ -25,7 +25,7 @@ public class WebEntryResponse implements Serializable {
 	/**
 	 * default constructor
 	 */
-	public WebEntryResponse() {
+	public Response() {
 		status = STATUS_OK;
 		messages = new ArrayList<Map<String,String>>();
 	}

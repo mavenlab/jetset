@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+<title>Shell - Manager</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
+<script src="http://cdn.jquerytools.org/1.2.5/full/jquery.tools.min.js"></script>
+<script type="text/javascript" src="/js/jquery.blockUI.js"></script>
+<script type="text/javascript" src="/js/manager.js"></script>
+   <h:outputStylesheet name="css/manager.css" />
+<link rel="stylesheet" href="/jquery.tools/skin.css" type="text/css" media="screen" />
+</h:head>
+<h:body>
+<div id="msisdnDiv" class="marginT5 clearfix">
+	<div class="formLabel"><label for="msisdn">Mobile Number:</label></div>
+	<input id="msisdn" name="msisdn" type="text"/>
+	<span id="msisdnError" class="error"></span>
+</div>
+<div id="startDateDiv" class="marginT5 clearfix">
+	<div class="formLabel"><label for="startDate">From Date:</label></div>
+	<input id="startDate" name="startDate" type="date" />
+	<span id="startDateError" class="error"></span>
+</div>
+<div id="endDateDiv" class="marginT5 clearfix">
+	<div class="formLabel"><label for="endDate">To Date:</label></div>
+	<input id="endDate" name="endDate" type="date" />
+	<span id="endDateError" class="error"></span>
+</div>
+<div class="marginT10 clearfix">
+	<div class="formLabel">&#160;</div>
+	<a id="searchBtn" href="#" class="myButton">Search</a>
+</div>
+<div class="marginT20">
+	<table id="entryTable">
+	</table>
+</div>
+<div id="paginationDiv">
+	<ul id="pagination-flickr">
+	</ul>
+</div>
+<div class="clearBoth">&#160;</div>
+</h:body>
+</html>
