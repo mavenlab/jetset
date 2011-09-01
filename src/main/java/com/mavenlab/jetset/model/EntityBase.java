@@ -53,7 +53,6 @@ public class EntityBase implements Serializable {
 		updatedAt = createdAt;
 	}
 	
-
 	public Date getCreatedAt() {
 		return createdAt;
 	}

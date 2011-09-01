@@ -40,21 +40,13 @@
 
 	<security-constraint>
 		<web-resource-collection>
-			<web-resource-name>JetSet Rest Manager</web-resource-name>
+			<web-resource-name>JetSet Manager</web-resource-name>
+			<url-pattern>/manager</url-pattern>
 			<url-pattern>/rest/manager/*</url-pattern>
 		</web-resource-collection>
 		<auth-constraint>
 			<role-name>Administrator</role-name>
-		</auth-constraint>
-	</security-constraint>
-
-	<security-constraint>
-		<web-resource-collection>
-			<web-resource-name>JetSet Manager</web-resource-name>
-			<url-pattern>/manager</url-pattern>
-		</web-resource-collection>
-		<auth-constraint>
-			<role-name>Administrator</role-name>
+			<role-name>JetSetManager</role-name>
 		</auth-constraint>
 	</security-constraint>
 
@@ -67,5 +59,9 @@
 	<security-role>
 		<description>Administrator</description>
 		<role-name>Administrator</role-name>
+	</security-role>
+	<security-role>
+		<description>JetSetManager</description>
+		<role-name>JetSetManager</role-name>
 	</security-role>
 </web-app>

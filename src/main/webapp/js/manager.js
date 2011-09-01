@@ -25,12 +25,45 @@ var onPageLinkClicked = function(event) {
 			start : start,
 			end : end
 	};
-	
+	submitSearch(data);
+}
+
+var onPrevPageClicked = function(event) {
+	event.preventDefault();
+	page--;
+	var data = {
+			page : page,
+			msisdn : msisdn,
+			start : start,
+			end : end
+	};
+	submitSearch(data);
+}
+
+var onNextPageClicked = function(event) {
+	event.preventDefault();
+	page++;
+	var data = {
+			page : page,
+			msisdn : msisdn,
+			start : start,
+			end : end
+	};
 	submitSearch(data);
 }
 
 var onSearchClicked = function(event) {
 	event.preventDefault();
+	var data = {
+			page : page,
+			msisdn : $('#msisdn').val(),
+			start : $('#startDate').val(),
+			end : $('#endDate').val()
+	};
+	submitSearch(data);
+};
+
+var submitSearch = function(data) {
 	$.blockUI({ css: { 
 		border: 'none', 
 		padding: '15px', 
@@ -41,18 +74,6 @@ var onSearchClicked = function(event) {
 		color: '#fff' },
 		message: 'Searching ...'
 	});
-	
-	var data = {
-			page : page,
-			msisdn : $('#msisdn').val(),
-			start : $('#startDate').val(),
-			end : $('#endDate').val()
-	};
-
-	submitSearch(data);
-};
-
-var submitSearch = function(data) {
 	$.get("/rest/manager/entry/list", data, onSearchCompleted);
 }
 
@@ -82,6 +103,8 @@ var onSearchCompleted = function(result) {
 		$('#pagination-flickr').append(next);
 		
 		$('a.pageLink').click(onPageLinkClicked);
+		$('a#prevPage').click(onPrevPageClicked);
+		$('a#nextPage').click(onNextPageClicked);
 		
 		$('#entryTable').empty();
 		
@@ -92,8 +115,9 @@ var onSearchCompleted = function(result) {
 			'	<th>Mobile</th>' +
 			'	<th>NRIC/Passport</th>' +
 			'	<th>Station</th>' +
-			'	<th>Receipt</th>' +
+			'	<th class="receipt">Receipt</th>' +
 			'	<th>Prize</th>' +
+			'	<th class="createdAt">Date</th>' +
 			'	<th>Status</th>' +
 			'</tr>'
 
@@ -106,6 +130,7 @@ var onSearchCompleted = function(result) {
 			if(entry.prize != null) {
 				prize = entry.prize.name;
 			}
+			var createdAt = new Date(entry.createdAt);
 			var row = '<tr>' +
 					'<td class="alignRight">' + entry.id + '</td>' +
 					'<td>' + channel + '</td>' +
@@ -114,6 +139,7 @@ var onSearchCompleted = function(result) {
 					'<td>' + entry.station.name + '</td>' +
 					'<td>' + entry.receipt + '</td>' +
 					'<td>' + prize + '</td>' +
+					'<td>' + $.format.date(createdAt.toString(), "dd MMMM yyyy HH:mm") + '</td>' +
 					'<td>' + entry.status + '</td>' +
 					'</tr>';
 			

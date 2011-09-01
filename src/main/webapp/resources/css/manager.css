@@ -78,6 +78,14 @@ th.id, th.channel {
 	width: 75px;
 }
 
+th.receipt {
+	width: 100px;
+}
+
+th.createdAt {
+	width: 150px;
+}
+
 ul{border:0; margin:0; padding:0;}
 
 div#paginationDiv {
