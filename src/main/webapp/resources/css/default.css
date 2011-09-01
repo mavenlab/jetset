@@ -45,7 +45,7 @@ div.redTitle {
 
 div.blackSubTitle {
 	color: #000000;
-	font-size: 15px;
+	font-size: 14px;
 	font-weight: bold;
 }
 
@@ -112,6 +112,7 @@ ul.squareBullet {
 
 ul.squareBullet li {
 	margin-top: 10px;
+	font-size: 11px;
 }
 
 ul.squareBullet table, ul.tncOl table {
@@ -164,8 +165,11 @@ div.tnc {
 .clearBoth { clear: both; }
 
 .floatLeft { float: left; }
+.floatRight { float: right; }
 
 .hidden { display: none; }
+
+.underline { text-decoration: underline; }
 
 .marginL10 { margin-left: 10px; }
 .marginR10 { margin-right: 10px; }

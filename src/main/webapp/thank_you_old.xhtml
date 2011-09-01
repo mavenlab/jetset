@@ -17,7 +17,16 @@
 	<ui:param name="prize" value="#{thankYouController.entry.prize}"/>
 	<ui:param name="station" value="#{thankYouController.entry.station}"/>
 	
-	<ui:include src="/WEB-INF/templates/prize#{prize.id}tnc.xhtml"/>
+	<div class="redTitle">
+		#{prize.webMessage} 
+	</div>
+	<div class="thankyouBox">
+		<div class="tytitle">Terms and Conditions:</div>
+		<ui:include src="/WEB-INF/templates/prize#{prize.id}tnc.xhtml"/>
+	</div>
+	<div class="marginT20">
+		<p>Shortlisted winners will be contacted at this number between 10:30am - 4pm, Mon to Fri to verify your details and get a copy of your fuel receipt.</p>
+	</div>
 	<div class="marginT20">
 		<div class="marginT20">
 			<div class="formLabel2">Full Name as in NRIC/Passport:</div>
@@ -61,13 +70,14 @@
 			<div class="marginT7 floatLeft">#{entry.member ? 'Yes' : 'No'}</div>
 			<div class="clearBoth"/>
 		</div>
-		<div class="marginT30 clearfix">
-			<div class="marginT7 alignCenter"><img class="action" src="/img/print.png" onclick="window.print();"/></div>
+		<div class="marginT20">
+			<div class="formLabel2">&#160;</div>
+			<div class="marginT7 floatLeft"><img class="action" src="/img/print.png" onclick="window.print();"/></div>
 			<div class="clearBoth"/>
 	</div>
 	</div>
 	<div class="marginT50">
-		<img src="/img/bottom_logos.png"/>
+		<img src="/img/bottom_logos.jpg"/>
 	</div>
 	
 </ui:define>
