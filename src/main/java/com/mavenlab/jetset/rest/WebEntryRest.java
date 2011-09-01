@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -134,13 +135,25 @@ public class WebEntryRest {
 		if(receipt == null || receipt.trim().equals("")) {
 			response.addMessage("receipt", "Please enter your receipt number");
 			flag = false;
-		} else if ((receipt != null && !receipt.toUpperCase().matches(MOReceiver.PATTERN_RECEIPT)) ||
-				(station.getId() == 14 && !receipt.toUpperCase().matches(MOReceiver.PATTERN_RECEIPT14) && payment.equals("Shell Card")) ||
-				(station.getId() == 14 && !receipt.toUpperCase().matches(PATTERN_RECEIPT6) && !payment.equals("Shell Card")) ||
-				(station.getId() != 14 && receipt.toUpperCase().matches(PATTERN_RECEIPT_NON_14) && payment.equals("Shell Card")) ||
-				(station.getId() != 14 && receipt.toUpperCase().matches(PATTERN_RECEIPT7) && !payment.equals("Shell Card"))) {
+		} else if(receipt != null && !receipt.toUpperCase().matches(MOReceiver.PATTERN_RECEIPT)) {
 			response.addMessage("receipt", "Please enter a correct receipt number");
 			flag = false;
+		} else if(station.getId() == 14) {
+			if(payment.equals("Shell Card") && !receipt.toUpperCase().matches(PATTERN_RECEIPT6) && !receipt.toUpperCase().matches(PATTERN_RECEIPT5)) {
+				response.addMessage("receipt", "Please enter a correct receipt number");
+				flag = false;
+			} else if(!payment.equals("Shell Card") && !receipt.toUpperCase().matches(PATTERN_RECEIPT6)) {
+				response.addMessage("receipt", "Please enter a correct receipt number");
+				flag = false;
+			}
+		} else if(station.getId() != 14) {
+			if(payment.equals("Shell Card") && !receipt.toUpperCase().matches(PATTERN_RECEIPT7) && !receipt.toUpperCase().matches(PATTERN_RECEIPT5)) {
+				response.addMessage("receipt", "Please enter a correct receipt number");
+				flag = false;
+			} else if(!payment.equals("Shell Card") && !receipt.toUpperCase().matches(PATTERN_RECEIPT7)) {
+				response.addMessage("receipt", "Please enter a correct receipt number");
+				flag = false;
+			}
 		}
 
 		if(grade == null || grade.trim().equals("")) {
@@ -219,5 +232,25 @@ public class WebEntryRest {
 		
 		return response;
 	}
-}
 
+	@Path("/init")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public String init() {
+		prizeController.createPrize("Purchase a 250ml bottle of Sunkist juice at $1", 
+				"Thank you for participating. Purchase a 250ml Sunkist no sugar added juice at $1 at any 7E@Shell by 31/10/11 with this SMS and Shell Escape Card. T&C apply.", 
+				"Thank you for participating. Print out this page and purchase a 250ml bottle of Sunkist no sugar added orange juice at only $1 at any 7Eleven@Shell by 31/10/11 with your Shell Escape Card. T&Cs apply.",
+				30000);
+
+		prizeController.createPrize("Complimentary Hydrating Face Spa at Body Contours",
+				"Thank you for participating. Enjoy a complimentary Hydrating Face Spa at Body Contours by 30/10/11 with this SMS and Shell Escape Card. T&C apply. Call 68411141",
+				"Thank you for participating. Print out this page and redeem for a complimentary Hydrating Face Spa (60mins/$180) at Body Contours by 30/10/11 with your Shell Escape Card. T&C apply. Call 6841 1141 to book.",
+				40000);
+
+		prizeController.createPrize("Donut",
+				"Thank you for participating. Purchase 8 donuts at Donut Factory and get 4 more FREE at $12.50 by 31/10/11 with this SMS and Shell Escape Card. T&C apply.",
+				"Thank you for participating. Print out this page and purchase 8 donuts at Donut Factory and get 4 more FREE at $12.50 by 31/10/11 with your Shell Escape Card. T&C apply.",
+				40000);
+		return "ok";
+	}
+}

@@ -17,6 +17,16 @@ $(function() {
 		'overlayShow'	:	true,
 		'showNavArrows'	:	true
 	});
+	
+	$("a.fbiframe").fancybox({
+		'transitionIn'	:	'elastic',
+		'transitionOut'	:	'elastic',
+		'speedIn'		:	600, 
+		'speedOut'		:	200, 
+		'height'		:	400,
+		'width'			:	640,
+		'autoDimensions':	false
+	});
 });
 
 var submitForm = function() {

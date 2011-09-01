@@ -8,7 +8,7 @@ div#menuWrapper {
 	margin-top: 10px;
 }
 
-div#menuWrapper div {
+div#menuWrapper div.mainMenu {
 	margin-right: 3px;
 	padding: 20px;
 	display: inline-block;
@@ -147,6 +147,14 @@ ul.tncOl li {
 	padding-bottom: 20px;
 }
 
+.receiptImg {
+	margin-right: 10px;
+}
+
+div.tnc {
+	font-size: 0.85em;
+}
+
 .action { cursor: pointer; }
 
 .alignCenter { text-align: center; }
@@ -160,6 +168,7 @@ ul.tncOl li {
 .hidden { display: none; }
 
 .marginL10 { margin-left: 10px; }
+.marginR10 { margin-right: 10px; }
 .marginT7 { margin-top: 7px; }
 .marginT10 { margin-top: 10px; }
 .marginT20 { margin-top: 20px; }
@@ -169,10 +178,14 @@ ul.tncOl li {
 .paddingTB50 { padding: 50px 0; }
 .paddingTB200 { padding: 200px 0; }
 
+.border0 { border: none; }
+
+/*
 img {
     vertical-align: middle;
     height: 100%;
 }
+*/
 
 .clearfix:after {
 	content: ".";
