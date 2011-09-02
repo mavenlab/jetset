@@ -165,6 +165,7 @@ var onSearchCompleted = function(result) {
 			'	<th>Status</th>' +
 			'</tr>'
 		);
+//			'	<th>Action</th>' +
 		
 		$.each(result.entries, function(key, entryMap) {
 			var entry = entryMap.entry;
@@ -178,7 +179,7 @@ var onSearchCompleted = function(result) {
 				station = entry.station.name + " (" + entry.station.id + ")";
 			}
 			var createdAt = new Date(entry.createdAt);
-			var row = '<tr class="entryRow" rel="' + entry.id + '">' +
+			var row = '<tr class="entryRow" rel="' + entry.id + '" href="/tnc">' +
 					'<td class="alignRight">' + entry.id + '</td>' +
 					'<td>' + channel + '</td>' +
 					'<td>' + entry.msisdn + '</td>' +
@@ -189,23 +190,26 @@ var onSearchCompleted = function(result) {
 					'<td>' + $.format.date(createdAt.toString(), "dd MMMM yyyy HH:mm") + '</td>' +
 					'<td>' + entry.status + '</td>' +
 					'</tr>';
+//					'<td><a class="viewEntry" rel="#overlay" href="/tnc">view</a></td>' +
 			
 			$('#entryTable').append(row);
 		});
-		/*
-		$('.entryRow').hover(function() {
-			$(this).addClass('entryRowHover');
-		});
 		
-		$('.entryRow').mouseout(function() {
-			$(this).removeClass('entryRowHover');
-		});
-		*/
+		$("a.viewEntry").overlay({
 
-		$('.entryRow').click(function() {
-			alert($(this).attr('rel'));
-		});
+			mask: '#555',
+			effect: 'apple',
 
+			onBeforeLoad: function() {
+
+				// grab wrapper element inside content
+				var wrap = this.getOverlay().find(".contentWrap");
+
+				// load the page specified in the trigger
+				wrap.load(this.getTrigger().attr("href"));
+			}
+
+		});
 	} else {
 		$.each(result.messages, function(key, val) {
 			$('#' + val.name + 'Error').text('* ' + val.message);

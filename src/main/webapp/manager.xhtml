@@ -10,8 +10,9 @@
 <script type="text/javascript" src="/js/jquery.blockUI.js"></script>
 <script type="text/javascript" src="/js/jquery.dateFormat-1.0.js"></script>
 <script type="text/javascript" src="/js/manager.js"></script>
-   <h:outputStylesheet name="css/manager.css" />
+<h:outputStylesheet name="css/manager.css" />
 <link rel="stylesheet" href="/jquery.tools/skin.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="http://static.flowplayer.org/tools/css/overlay-apple.css" type="text/css" media="screen" />
 </h:head>
 <h:body>
 <div id="msisdnDiv" class="marginT5 clearfix">
@@ -42,5 +43,11 @@
 	</ul>
 </div>
 <div class="clearBoth">&#160;</div>
+
+<!-- overlayed element -->
+<div class="apple_overlay" id="overlay">
+	<!-- the external content is loaded inside this tag -->
+	<div class="contentWrap"></div>
+</div>
 </h:body>
 </html>
