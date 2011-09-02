@@ -34,10 +34,10 @@ public class WebEntryRest {
 	
 	public final static String PATTERN_MOBILE_NUMBER = "^[0-9\\-\\s]+$";
 	public final static String PATTERN_EMAIL = "^[\\w\\-]([\\.\\w])+[\\w]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
-	public final static String PATTERN_RECEIPT_NON_14 = "^([1-3]\\-[0-9]{6}|[0-9]{5})$";
-	public final static String PATTERN_RECEIPT7 = "^[1-3]\\-[0-9]{6}$";
-	public final static String PATTERN_RECEIPT6 = "^[1-3]\\-[0-9]{5}$";
-	public final static String PATTERN_RECEIPT5 = "^[0-9]{5}$";
+//	public final static String PATTERN_RECEIPT_NON_14 = "^([1-3]\\-[0-9]{6}|[0-9]{5})$";
+//	public final static String PATTERN_RECEIPT7 = "^[1-3]\\-[0-9]{6}$";
+//	public final static String PATTERN_RECEIPT6 = "^[1-3]\\-[0-9]{5}$";
+//	public final static String PATTERN_RECEIPT5 = "^[0-9]{5}$";
 	
 	@Inject
 	private EntityManager em;
@@ -138,22 +138,22 @@ public class WebEntryRest {
 		} else if(receipt != null && !receipt.toUpperCase().matches(MOReceiver.PATTERN_RECEIPT)) {
 			response.addMessage("receipt", "Please enter a correct receipt number");
 			flag = false;
-		} else if(station.getId() == 14) {
-			if(payment.equals("Shell Card") && !receipt.toUpperCase().matches(PATTERN_RECEIPT6) && !receipt.toUpperCase().matches(PATTERN_RECEIPT5)) {
-				response.addMessage("receipt", "Please enter a correct receipt number");
-				flag = false;
-			} else if(!payment.equals("Shell Card") && !receipt.toUpperCase().matches(PATTERN_RECEIPT6)) {
-				response.addMessage("receipt", "Please enter a correct receipt number");
-				flag = false;
-			}
-		} else if(station.getId() != 14) {
-			if(payment.equals("Shell Card") && !receipt.toUpperCase().matches(PATTERN_RECEIPT7) && !receipt.toUpperCase().matches(PATTERN_RECEIPT5)) {
-				response.addMessage("receipt", "Please enter a correct receipt number");
-				flag = false;
-			} else if(!payment.equals("Shell Card") && !receipt.toUpperCase().matches(PATTERN_RECEIPT7)) {
-				response.addMessage("receipt", "Please enter a correct receipt number");
-				flag = false;
-			}
+//		} else if(station.getId() == 14) {
+//			if(payment.equals("Shell Card") && !receipt.toUpperCase().matches(PATTERN_RECEIPT6) && !receipt.toUpperCase().matches(PATTERN_RECEIPT5)) {
+//				response.addMessage("receipt", "Please enter a correct receipt number");
+//				flag = false;
+//			} else if(!payment.equals("Shell Card") && !receipt.toUpperCase().matches(PATTERN_RECEIPT6)) {
+//				response.addMessage("receipt", "Please enter a correct receipt number");
+//				flag = false;
+//			}
+//		} else if(station.getId() != 14) {
+//			if(payment.equals("Shell Card") && !receipt.toUpperCase().matches(PATTERN_RECEIPT7) && !receipt.toUpperCase().matches(PATTERN_RECEIPT5)) {
+//				response.addMessage("receipt", "Please enter a correct receipt number");
+//				flag = false;
+//			} else if(!payment.equals("Shell Card") && !receipt.toUpperCase().matches(PATTERN_RECEIPT7)) {
+//				response.addMessage("receipt", "Please enter a correct receipt number");
+//				flag = false;
+//			}
 		}
 
 		if(grade == null || grade.trim().equals("")) {
