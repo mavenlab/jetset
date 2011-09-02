@@ -26,7 +26,7 @@ import com.mavenlab.jetset.util.Pagination;
 @Stateless
 public class EntryRest {
 	
-	private final static String DATE_PATTERN = "dd MMMM yyyy";
+	private final static String DATE_PATTERN = "dd MMMM yyyy HH:mm:ss";
 	
 	@Inject
 	@Category("jetset.EntryRest")
@@ -60,6 +60,7 @@ public class EntryRest {
 		
 		if(start != null && start.trim().length() > 0) {
 			try {
+				start += " 00:00:00";
 				startDate = sdf.parse(start);
 			} catch (ParseException e) {
 				response.setStatus(Response.STATUS_FAILED);
@@ -70,6 +71,7 @@ public class EntryRest {
 
 		if(end != null && end.trim().length() > 0) {
 			try {
+				end += " 23:59:59";
 				endDate = sdf.parse(end);
 			} catch (ParseException e) {
 				response.setStatus(Response.STATUS_FAILED);
@@ -82,7 +84,12 @@ public class EntryRest {
 		
 		List<Entry> entries = null;
 		
-		if(msisdn == null && (startDate != null || endDate != null)) {
+		if(msisdn != null && (startDate != null || endDate != null)) {
+			log.info("QUERY FOR ENTRIES BY DATE: " + startDate + " - " + endDate);
+			pagination.setTotal(entryController.countByMsisdnDate(msisdn, startDate, endDate));
+			pagination.setPage(page);
+			entries = entryController.fetchByMsisdnDate(msisdn, startDate, endDate, pagination.getOffset(), pagination.getLimit());
+		} else if(msisdn == null && (startDate != null || endDate != null)) {
 			log.info("QUERY FOR ENTRIES BY DATE: " + startDate + " - " + endDate);
 			pagination.setTotal(entryController.countByDate(startDate, endDate));
 			pagination.setPage(page);

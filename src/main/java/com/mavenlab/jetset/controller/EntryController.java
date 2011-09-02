@@ -166,7 +166,16 @@ public class EntryController {
 		
 		return 0;
 	}
-	
+
+	/**
+	 * fetch by date
+	 * 
+	 * @param startDate
+	 * @param endDate
+	 * @param offset
+	 * @param limit
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public List<Entry> fetchByDate(Date startDate, Date endDate, int offset, int limit) {
 		if(startDate != null && endDate != null) {
@@ -192,4 +201,72 @@ public class EntryController {
 		
 		return null;
 	}
+	
+	/**
+	 * count by msisdn date
+	 * 
+	 * @param msisdn
+	 * @param startDate
+	 * @param endDate
+	 * @return
+	 */
+	public long countByMsisdnDate(String msisdn, Date startDate, Date endDate) {
+		if(startDate != null && endDate != null) {
+			return (Long) em.createNamedQuery("jetset.query.Entry.countByMsisdnDateRange").
+					setParameter("msisdn", msisdn).
+					setParameter("startDate", startDate).
+					setParameter("endDate", endDate).
+					getSingleResult();
+		} else if(startDate != null) {
+			return (Long) em.createNamedQuery("jetset.query.Entry.countByMsisdnStartDate").
+					setParameter("msisdn", msisdn).
+					setParameter("startDate", startDate).
+					getSingleResult();
+		} else if(endDate != null) {
+			return (Long) em.createNamedQuery("jetset.query.Entry.countByMsisdnEndDate").
+					setParameter("msisdn", msisdn).
+					setParameter("endDate", endDate).
+					getSingleResult();
+		}
+		
+		return 0;
+	}
+	
+	/**
+	 * fetch by msisdn and date
+	 * @param msisdn
+	 * @param startDate
+	 * @param endDate
+	 * @param offset
+	 * @param limit
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Entry> fetchByMsisdnDate(String msisdn, Date startDate, Date endDate, int offset, int limit) {
+		if(startDate != null && endDate != null) {
+			return em.createNamedQuery("jetset.query.Entry.findFetchByMsisdnDateRange").
+					setParameter("msisdn", msisdn).
+					setParameter("startDate", startDate).
+					setParameter("endDate", endDate).
+					setFirstResult(offset).
+					setMaxResults(limit).
+					getResultList();
+		} else if(startDate != null) {
+			return em.createNamedQuery("jetset.query.Entry.findFetchByMsisdnStartDate").
+					setParameter("msisdn", msisdn).
+					setParameter("startDate", startDate).
+					setFirstResult(offset).
+					setMaxResults(limit).
+					getResultList();
+		} else if(endDate != null) {
+			return em.createNamedQuery("jetset.query.Entry.findFetchByMsisdnEndDate").
+					setParameter("msisdn", msisdn).
+					setParameter("endDate", endDate).
+					setFirstResult(offset).
+					setMaxResults(limit).
+					getResultList();
+		}
+		
+		return null;
+	}	
 }

@@ -49,6 +49,46 @@ import org.hibernate.annotations.Index;
 					"LEFT JOIN FETCH entry.prize " +
 					"WHERE entry.status != 'inactive' " +
 					"ORDER BY entry.id"),
+					
+	@NamedQuery(name = "jetset.query.Entry.countByMsisdnDateRange", 
+			query = "Select COUNT(id) FROM Entry " +
+					"WHERE status != 'inactive' " +
+					"AND createdAt BETWEEN :startDate AND :endDate " +
+					"AND msisdn LIKE '%' || :msisdn || '%'"),
+	@NamedQuery(name = "jetset.query.Entry.findFetchByMsisdnDateRange", 
+			query = "Select entry FROM Entry entry " +
+					"LEFT JOIN FETCH entry.station " +
+					"LEFT JOIN FETCH entry.prize " +
+					"WHERE entry.status != 'inactive' " +
+					"AND entry.createdAt BETWEEN :startDate AND :endDate " +
+					"AND entry.msisdn LIKE '%' || :msisdn || '%' " +
+					"ORDER BY entry.id"),
+	@NamedQuery(name = "jetset.query.Entry.countByMsisdnStartDate", 
+			query = "Select COUNT(id) FROM Entry " +
+					"WHERE status != 'inactive' " +
+					"AND createdAt >= :startDate " +
+					"AND msisdn LIKE '%' || :msisdn || '%'"),
+	@NamedQuery(name = "jetset.query.Entry.findFetchByMsisdnStartDate", 
+			query = "Select entry FROM Entry entry " +
+					"LEFT JOIN FETCH entry.station " +
+					"LEFT JOIN FETCH entry.prize " +
+					"WHERE entry.status != 'inactive' " +
+					"AND entry.createdAt >= :startDate " +
+					"AND entry.msisdn LIKE '%' || :msisdn || '%' " +
+					"ORDER BY entry.id"),
+	@NamedQuery(name = "jetset.query.Entry.countByMsisdnEndDate", 
+			query = "Select COUNT(id) FROM Entry " +
+					"WHERE status != 'inactive' " +
+					"AND createdAt <= :endDate " +
+					"AND msisdn LIKE '%' || :msisdn || '%'"),
+	@NamedQuery(name = "jetset.query.Entry.findFetchByMsisdnEndDate", 
+			query = "Select entry FROM Entry entry " +
+					"LEFT JOIN FETCH entry.station " +
+					"LEFT JOIN FETCH entry.prize " +
+					"WHERE entry.status != 'inactive' " +
+					"AND entry.createdAt <= :endDate " +
+					"AND entry.msisdn LIKE '%' || :msisdn || '%' " +
+					"ORDER BY entry.id"),
 	@NamedQuery(name = "jetset.query.Entry.countByMsisdn", 
 			query = "Select COUNT(id) FROM Entry " +
 					"WHERE status != 'inactive' " +

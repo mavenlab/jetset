@@ -153,8 +153,8 @@ ul.tncOl li {
 }
 
 div.tnc {
+	padding: 10px;
 	font-size: 0.85em;
-	padding: 5px 10px;
 }
 
 .action { cursor: pointer; }
