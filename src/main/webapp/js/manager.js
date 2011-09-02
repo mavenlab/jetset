@@ -164,7 +164,6 @@ var onSearchCompleted = function(result) {
 			'	<th class="createdAt">Date</th>' +
 			'	<th>Status</th>' +
 			'</tr>'
-
 		);
 		
 		$.each(result.entries, function(key, entryMap) {
@@ -176,10 +175,10 @@ var onSearchCompleted = function(result) {
 				prize = entry.prize.name;
 			}
 			if(entry.station != null) {
-				station = entry.station.name;
+				station = entry.station.name + " (" + entry.station.id + ")";
 			}
 			var createdAt = new Date(entry.createdAt);
-			var row = '<tr>' +
+			var row = '<tr class="entryRow" rel="' + entry.id + '">' +
 					'<td class="alignRight">' + entry.id + '</td>' +
 					'<td>' + channel + '</td>' +
 					'<td>' + entry.msisdn + '</td>' +
@@ -193,7 +192,20 @@ var onSearchCompleted = function(result) {
 			
 			$('#entryTable').append(row);
 		});
+		/*
+		$('.entryRow').hover(function() {
+			$(this).addClass('entryRowHover');
+		});
 		
+		$('.entryRow').mouseout(function() {
+			$(this).removeClass('entryRowHover');
+		});
+		*/
+
+		$('.entryRow').click(function() {
+			alert($(this).attr('rel'));
+		});
+
 	} else {
 		$.each(result.messages, function(key, val) {
 			$('#' + val.name + 'Error').text('* ' + val.message);
