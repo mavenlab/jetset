@@ -39,12 +39,14 @@ public class MOReceiver {
 	@Category("jetset.MOReceiver")
 	private Logger log;
 	
-	public final static String PATTERN = "^\\s*(TSHELL|S(HELL)?)\\s+\\w+\\s+([1-3]\\-[0-9]{6}|([1-3]\\-)?[0-9]{5})\\s+[0-9]{1,2}\\s+[YN]\\s*$";
+	//public final static String PATTERN = "^\\s*(TSHELL|S(HELL)?)\\s+\\w+\\s+([1-3]\\-[0-9]{6}|([1-3]\\-)?[0-9]{5})\\s+[0-9]{1,2}\\s+[YN]\\s*$";
+	public final static String PATTERN = "^\\s*(TSHELL|S(HELL)?)\\s+\\w+\\s+([1-3]\\-[0-9]{5,6}|[0-9]{5})\\s+[0-9]{1,2}\\s+[YN]\\s*$";
 	
 	public final static String PATTERN_KEYWORD = "^\\s*(TSHELL|S(HELL)?)\\s+";
 	public final static String PATTERN_MEMBER = "\\b[YN]$";
-	public final static String PATTERN_RECEIPT = "\\b([1-3]\\-[0-9]{6}|([1-3]\\-)?[0-9]{5})\\b";
-	public final static String PATTERN_RECEIPT14 = "^([1-3]\\-)?[0-9]{5}$";
+	//public final static String PATTERN_RECEIPT = "\\b([1-3]\\-[0-9]{6}|([1-3]\\-)?[0-9]{5})\\b";
+	public final static String PATTERN_RECEIPT = "\\b([1-3]\\-[0-9]{5,6}|[0-9]{5})\\b";
+	//public final static String PATTERN_RECEIPT14 = "^([1-3]\\-)?[0-9]{5}$";
 //	public final static String PATTERN_NRIC = "\\b[A-Z]?[0-9]{7}[A-Z]?\\b";
 	public final static String PATTERN_STATION = "\\b[0-9]{1,2}\\b";
 	
@@ -190,11 +192,11 @@ public class MOReceiver {
 			Station station = stationController.getStationById(Integer.parseInt(stationId));
 			if(station != null) {
 				smsEntry.setStation(station);
-				if((station.getId() != 14 && smsEntry.getReceipt().matches(PATTERN_RECEIPT14)) ||
-						(station.getId() == 14 && !smsEntry.getReceipt().matches(PATTERN_RECEIPT14))) {
-					log.info("INVALID RECEIPT 14");
-					smsEntry.setStatus("invalid");
-				}
+//				if((station.getId() != 14 && smsEntry.getReceipt().matches(PATTERN_RECEIPT14)) ||
+//						(station.getId() == 14 && !smsEntry.getReceipt().matches(PATTERN_RECEIPT14))) {
+//					log.info("INVALID RECEIPT 14");
+//					smsEntry.setStatus("invalid");
+//				}
 			} else {
 				smsEntry.setStatus("invalid");
 			}
