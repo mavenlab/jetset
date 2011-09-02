@@ -27,6 +27,10 @@
 		<from>^/thankyou/(.*)$</from>
 		<to type="forward">/thank_you.mvn?id=$1</to>
 	</rule>
+	<rule>
+		<from>^/manager$</from>
+		<to type="forward">/manager.mvn</to>
+	</rule>
 <!-- 
 	<rule>
 		<from>^/login$</from>

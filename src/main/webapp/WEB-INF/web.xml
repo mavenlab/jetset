@@ -27,4 +27,41 @@
 		<servlet-name>Faces Servlet</servlet-name>
 		<url-pattern>*.mvn</url-pattern>
 	</servlet-mapping>
+	
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>JetSet Admin</web-resource-name>
+			<url-pattern>/rest/admin/*</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>Administrator</role-name>
+		</auth-constraint>
+	</security-constraint>
+
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>JetSet Manager</web-resource-name>
+			<url-pattern>/manager</url-pattern>
+			<url-pattern>/rest/manager/*</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>Administrator</role-name>
+			<role-name>JetSetManager</role-name>
+		</auth-constraint>
+	</security-constraint>
+
+	<!-- This application uses BASIC authentication -->
+	<login-config>
+		<auth-method>BASIC</auth-method>
+		<realm-name>Raah</realm-name>
+	</login-config>
+
+	<security-role>
+		<description>Administrator</description>
+		<role-name>Administrator</role-name>
+	</security-role>
+	<security-role>
+		<description>JetSetManager</description>
+		<role-name>JetSetManager</role-name>
+	</security-role>
 </web-app>
