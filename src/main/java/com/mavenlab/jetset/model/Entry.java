@@ -139,7 +139,7 @@ import org.hibernate.annotations.Index;
 	@NamedQuery(name = "jetset.query.Entry.duplicateCheckRange", 
 				query = "SELECT COUNT(id) FROM Entry " +
 						"WHERE receipt = :receipt AND station.id = :stationId " +
-						"AND createdAt BETWEEN :start AND :end")						
+						"AND createdAt BETWEEN :start AND :end AND status != 'inactive'")						
 })
 public class Entry extends EntityBase{
 
