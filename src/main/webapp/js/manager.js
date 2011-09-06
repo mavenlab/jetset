@@ -163,9 +163,9 @@ var onSearchCompleted = function(result) {
 			'	<th>Prize</th>' +
 			'	<th class="createdAt">Date</th>' +
 			'	<th>Status</th>' +
+			'	<th>Action</th>' +
 			'</tr>'
 		);
-//			'	<th>Action</th>' +
 		
 		$.each(result.entries, function(key, entryMap) {
 			var entry = entryMap.entry;
@@ -189,8 +189,8 @@ var onSearchCompleted = function(result) {
 					'<td>' + prize + '</td>' +
 					'<td>' + $.format.date(createdAt.toString(), "dd MMMM yyyy HH:mm") + '</td>' +
 					'<td>' + entry.status + '</td>' +
+					'<td><a class="viewEntry" rel="#overlay" href="/tnc">view</a></td>' +
 					'</tr>';
-//					'<td><a class="viewEntry" rel="#overlay" href="/tnc">view</a></td>' +
 			
 			$('#entryTable').append(row);
 		});
