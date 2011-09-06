@@ -163,8 +163,8 @@ var onSearchCompleted = function(result) {
 			'	<th>Prize</th>' +
 			'	<th class="createdAt">Date</th>' +
 			'	<th>Status</th>' +
+			'	<th>Action</th>' +
 			'</tr>'
-
 		);
 		
 		$.each(result.entries, function(key, entryMap) {
@@ -176,10 +176,10 @@ var onSearchCompleted = function(result) {
 				prize = entry.prize.name;
 			}
 			if(entry.station != null) {
-				station = entry.station.name;
+				station = entry.station.name + " (" + entry.station.id + ")";
 			}
 			var createdAt = new Date(entry.createdAt);
-			var row = '<tr>' +
+			var row = '<tr class="entryRow" rel="' + entry.id + '" href="/tnc">' +
 					'<td class="alignRight">' + entry.id + '</td>' +
 					'<td>' + channel + '</td>' +
 					'<td>' + entry.msisdn + '</td>' +
@@ -189,11 +189,27 @@ var onSearchCompleted = function(result) {
 					'<td>' + prize + '</td>' +
 					'<td>' + $.format.date(createdAt.toString(), "dd MMMM yyyy HH:mm") + '</td>' +
 					'<td>' + entry.status + '</td>' +
+					'<td><a class="viewEntry" rel="#overlay" href="/tnc">view</a></td>' +
 					'</tr>';
 			
 			$('#entryTable').append(row);
 		});
 		
+		$("a.viewEntry").overlay({
+
+			mask: '#555',
+			effect: 'apple',
+
+			onBeforeLoad: function() {
+
+				// grab wrapper element inside content
+				var wrap = this.getOverlay().find(".contentWrap");
+
+				// load the page specified in the trigger
+				wrap.load(this.getTrigger().attr("href"));
+			}
+
+		});
 	} else {
 		$.each(result.messages, function(key, val) {
 			$('#' + val.name + 'Error').text('* ' + val.message);

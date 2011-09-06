@@ -61,12 +61,20 @@ table {
 	width: 100%;
 }
 
+table tr.entryRow {
+	background-color: #FFF;
+	cursor: pointer;
+}
+
+table tr.entryRow:hover {
+	background-color: rgb(232,242,252);
+}
+
 table td, table th {
 	border-width: 1px;
 	padding: 5px;
 	border-style: solid;
 	border-color: gray;
-	background-color: white;
 	text-align: center;
 }
 
@@ -178,6 +186,12 @@ text-decoration:none;
 }
 #pagination-digg a:hover{
 border:solid 1px #0e509e
+}
+
+/* container for external content. uses vertical scrollbar, if needed */
+div.contentWrap {
+	height:441px;
+	overflow-y:auto;
 }
 
 .action { cursor: pointer; }
