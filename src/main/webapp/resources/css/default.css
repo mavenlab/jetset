@@ -35,10 +35,17 @@ div#menuWrapper div a {
 div#contentWrapper {
 	border: 3px solid #D7251C;
 	padding: 10px;
-	min-height: 800px;
-	height: 800px;
+	max-height: 800px;
 	overflow: auto;
 }
+
+* html div#contentWrapper { 
+   	height: expression( this.scrollHeight > 799 ? "800px" : "auto" ); /* sets max-height for IE */
+	border: 3px solid #D7251C;
+	padding: 10px;
+	overflow: auto;
+}
+
 
 div.redTitle {
 	color: #D7251C;
