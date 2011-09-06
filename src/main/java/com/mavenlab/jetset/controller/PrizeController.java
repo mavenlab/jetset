@@ -1,5 +1,7 @@
 package com.mavenlab.jetset.controller;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import javax.ejb.Stateless;
@@ -72,5 +74,15 @@ public class PrizeController {
 			log.error("PRIZE WITH ID NOT FOUND: " + prizeId);
 		}
 		return null;
+	}
+	
+	/**
+	 * get prizes
+	 * 
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Map<String, Object>> getPrizes() {
+		return em.createNamedQuery("jetset.query.Prize.findNameQuantity").getResultList();
 	}
 }

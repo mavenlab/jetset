@@ -20,7 +20,9 @@ import javax.persistence.Table;
 )
 @NamedQueries({
 	@NamedQuery(name = "jetset.query.Prize.findById", 
-			query = "FROM Prize WHERE id = :id AND status = 'active' ")
+			query = "FROM Prize WHERE id = :id AND status = 'active' "),
+	@NamedQuery(name = "jetset.query.Prize.findNameQuantity", 
+		query = "SELECT NEW MAP(name AS name, quantity AS tot) FROM Prize WHERE status = 'active' ")
 })
 public class Prize extends EntityBase {
 	

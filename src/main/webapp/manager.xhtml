@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:head>
 <title>Shell - Manager</title>
@@ -15,6 +16,16 @@
 <link rel="stylesheet" href="http://static.flowplayer.org/tools/css/overlay-apple.css" type="text/css" media="screen" />
 </h:head>
 <h:body>
+<div class="topBanner">
+	Prizes Count:
+	<ui:repeat value="#{prizeController.prizes}" var="prize">
+		#{prize.name} (#{prize.tot})
+		<ui:fragment rendered="#{(prizeController.prizes.indexOf(prize) + 1) lt fn:length(prizeController.prizes)}">
+			,&#160;
+		</ui:fragment>
+	</ui:repeat>
+</div>
+<div class="padding10">
 <div id="msisdnDiv" class="marginT5 clearfix">
 	<div class="formLabel"><label for="msisdn">Mobile Number:</label></div>
 	<input id="msisdn" name="msisdn" type="text"/>
@@ -43,6 +54,7 @@
 	</ul>
 </div>
 <div class="clearBoth">&#160;</div>
+</div>
 
 <!-- overlayed element -->
 <div class="apple_overlay" id="overlay">
