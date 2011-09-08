@@ -65,4 +65,18 @@
 		<description>JetSetManager</description>
 		<role-name>JetSetManager</role-name>
 	</security-role>
+	
+	<!-- Servlets -->
+	
+	<!-- Servlet Name -->
+	<servlet>
+		<servlet-name>DownloadEntriesServlet</servlet-name>
+		<servlet-class>com.mavenlab.jetset.web.DownloadEntriesServlet</servlet-class>
+	</servlet>
+
+	<!-- Servlet Mapping -->
+	<servlet-mapping>
+		<servlet-name>DownloadEntriesServlet</servlet-name>
+		<url-pattern>/download/entries</url-pattern>
+	</servlet-mapping>
 </web-app>

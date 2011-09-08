@@ -3,9 +3,105 @@ package com.mavenlab.jetset.model;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 @Entity
 @DiscriminatorValue("WEB")
+@NamedQueries({
+	@NamedQuery(name = "jetset.query.WebEntry.findFetchByMsisdnDateRange", 
+			query = "Select entry FROM WebEntry entry " +
+					"LEFT JOIN FETCH entry.station " +
+					"LEFT JOIN FETCH entry.prize " +
+					"WHERE entry.status != 'inactive' " +
+					"AND entry.createdAt BETWEEN :startDate AND :endDate " +
+					"AND entry.msisdn LIKE '%' || :msisdn || '%' " +
+					"ORDER BY entry.id"),
+	@NamedQuery(name = "jetset.query.WebEntry.findFetchByMsisdnStartDate", 
+			query = "Select entry FROM WebEntry entry " +
+					"LEFT JOIN FETCH entry.station " +
+					"LEFT JOIN FETCH entry.prize " +
+					"WHERE entry.status != 'inactive' " +
+					"AND entry.createdAt >= :startDate " +
+					"AND entry.msisdn LIKE '%' || :msisdn || '%' " +
+					"ORDER BY entry.id"),
+	@NamedQuery(name = "jetset.query.WebEntry.findFetchByMsisdnEndDate", 
+			query = "Select entry FROM WebEntry entry " +
+					"LEFT JOIN FETCH entry.station " +
+					"LEFT JOIN FETCH entry.prize " +
+					"WHERE entry.status != 'inactive' " +
+					"AND entry.createdAt <= :endDate " +
+					"AND entry.msisdn LIKE '%' || :msisdn || '%' " +
+					"ORDER BY entry.id"),
+	@NamedQuery(name = "jetset.query.WebEntry.countByMsisdnDateRange", 
+			query = "Select COUNT(id) FROM WebEntry " +
+					"WHERE status != 'inactive' " +
+					"AND createdAt BETWEEN :startDate AND :endDate " +
+					"AND msisdn LIKE '%' || :msisdn || '%'"),
+	@NamedQuery(name = "jetset.query.WebEntry.countByMsisdnStartDate", 
+			query = "Select COUNT(id) FROM WebEntry " +
+					"WHERE status != 'inactive' " +
+					"AND createdAt >= :startDate " +
+					"AND msisdn LIKE '%' || :msisdn || '%'"),
+	@NamedQuery(name = "jetset.query.WebEntry.countByMsisdnEndDate", 
+			query = "Select COUNT(id) FROM WebEntry " +
+					"WHERE status != 'inactive' " +
+					"AND createdAt <= :endDate " +
+					"AND msisdn LIKE '%' || :msisdn || '%'"),
+	@NamedQuery(name = "jetset.query.WebEntry.countByDateRange", 
+			query = "Select COUNT(id) FROM WebEntry " +
+					"WHERE status != 'inactive' " +
+					"AND createdAt BETWEEN :startDate AND :endDate"),
+	@NamedQuery(name = "jetset.query.WebEntry.countByStartDate", 
+			query = "Select COUNT(id) FROM WebEntry " +
+					"WHERE status != 'inactive' " +
+					"AND createdAt >= :startDate"),
+	@NamedQuery(name = "jetset.query.WebEntry.countByEndDate", 
+			query = "Select COUNT(id) FROM WebEntry " +
+					"WHERE status != 'inactive' " +
+					"AND createdAt <= :endDate"),
+	@NamedQuery(name = "jetset.query.WebEntry.findFetchByDateRange", 
+			query = "Select entry FROM WebEntry entry " +
+					"LEFT JOIN FETCH entry.station " +
+					"LEFT JOIN FETCH entry.prize " +
+					"WHERE entry.status != 'inactive' " +
+					"AND entry.createdAt BETWEEN :startDate AND :endDate " +
+					"ORDER BY entry.id"),
+	@NamedQuery(name = "jetset.query.WebEntry.findFetchByStartDate", 
+			query = "Select entry FROM WebEntry entry " +
+					"LEFT JOIN FETCH entry.station " +
+					"LEFT JOIN FETCH entry.prize " +
+					"WHERE entry.status != 'inactive' " +
+					"AND entry.createdAt >= :startDate " +
+					"ORDER BY entry.id"),
+	@NamedQuery(name = "jetset.query.WebEntry.findFetchByEndDate", 
+			query = "Select entry FROM WebEntry entry " +
+					"LEFT JOIN FETCH entry.station " +
+					"LEFT JOIN FETCH entry.prize " +
+					"WHERE entry.status != 'inactive' " +
+					"AND entry.createdAt <= :endDate " +
+					"ORDER BY entry.id"),
+	@NamedQuery(name = "jetset.query.WebEntry.countByMsisdn", 
+			query = "Select COUNT(id) FROM WebEntry " +
+					"WHERE status != 'inactive' " +
+					"AND msisdn LIKE '%' || :msisdn || '%'"),
+	@NamedQuery(name = "jetset.query.WebEntry.findFetchByMsisdn", 
+			query = "Select entry FROM WebEntry entry " +
+					"LEFT JOIN FETCH entry.station " +
+					"LEFT JOIN FETCH entry.prize " +
+					"WHERE entry.status != 'inactive' " +
+					"AND entry.msisdn LIKE '%' || :msisdn || '%' " +
+					"ORDER BY entry.id"),
+	@NamedQuery(name = "jetset.query.WebEntry.countAll", 
+			query = "Select COUNT(id) FROM WebEntry " +
+					"WHERE status != 'inactive'"),
+	@NamedQuery(name = "jetset.query.WebEntry.findFetchAll", 
+			query = "Select entry FROM WebEntry entry " +
+					"LEFT JOIN FETCH entry.station " +
+					"LEFT JOIN FETCH entry.prize " +
+					"WHERE entry.status != 'inactive' " +
+					"ORDER BY entry.id")
+})
 public class WebEntry extends Entry {
 
 	/**

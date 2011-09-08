@@ -229,7 +229,7 @@ public class Entry extends EntityBase{
 	/**
 	 * @return the chance
 	 */
-	public int isChance() {
+	public int getChance() {
 		return chance;
 	}
 

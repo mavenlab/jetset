@@ -39,7 +39,7 @@ public class EntryRest {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public EntriesResponse getEntries(@QueryParam("msisdn") String msisdn, @QueryParam("start") String start,
-			@QueryParam("end") String end, @QueryParam("page") int page) {
+			@QueryParam("end") String end, @QueryParam("page") int page, @QueryParam("type") String type) {
 		EntriesResponse response = new EntriesResponse();
 
 		Date startDate = null;
@@ -85,27 +85,27 @@ public class EntryRest {
 		List<Entry> entries = null;
 		
 		if(msisdn != null && (startDate != null || endDate != null)) {
-			log.info("QUERY FOR ENTRIES BY DATE: " + startDate + " - " + endDate);
-			pagination.setTotal(entryController.countByMsisdnDate(msisdn, startDate, endDate));
+			log.info("QUERY FOR ENTRIES BY MSISDN DATE: " + startDate + " - " + endDate + " - " + msisdn);
+			pagination.setTotal(entryController.countByTypeMsisdnDate(type, msisdn, startDate, endDate));
 			pagination.setPage(page);
-			entries = entryController.fetchByMsisdnDate(msisdn, startDate, endDate, pagination.getOffset(), pagination.getLimit());
+			entries = entryController.fetchByTypeMsisdnDate(type, msisdn, startDate, endDate, pagination.getOffset(), pagination.getLimit());
 		} else if(msisdn == null && (startDate != null || endDate != null)) {
 			log.info("QUERY FOR ENTRIES BY DATE: " + startDate + " - " + endDate);
-			pagination.setTotal(entryController.countByDate(startDate, endDate));
+			pagination.setTotal(entryController.countByTypeDate(type, startDate, endDate));
 			pagination.setPage(page);
-			entries = entryController.fetchByDate(startDate, endDate, pagination.getOffset(), pagination.getLimit());
+			entries = entryController.fetchByTypeDate(type, startDate, endDate, pagination.getOffset(), pagination.getLimit());
 		} else if(msisdn != null && startDate == null && endDate == null) {
 			log.info("QUERY FOR ENTRIES BY MSISDN: " + msisdn);
 			
-			pagination.setTotal(entryController.countByMsisdn(msisdn));
+			pagination.setTotal(entryController.countByTypeMsisdn(type, msisdn));
 			pagination.setPage(page);
-			entries = entryController.fetchByMsisdn(msisdn, pagination.getOffset(), pagination.getLimit());
+			entries = entryController.fetchByTypeMsisdn(type, msisdn, pagination.getOffset(), pagination.getLimit());
 		} else {
 			log.info("QUERY FOR ALL ENTRIES");
 
-			pagination.setTotal(entryController.countAll());
+			pagination.setTotal(entryController.countAllByType(type));
 			pagination.setPage(page);
-			entries = entryController.fetchAll(pagination.getOffset(), pagination.getLimit());
+			entries = entryController.fetchAllByType(type, pagination.getOffset(), pagination.getLimit());
 		}
 
 		if(entries != null) { 
@@ -116,5 +116,4 @@ public class EntryRest {
 
 		return response;
 	}
-	
 }

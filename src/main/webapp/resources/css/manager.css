@@ -15,6 +15,44 @@ div.topBanner {
 	background-color:#000;
 }
 
+div#menuWrapper {
+	margin-top: 10px;
+}
+
+div#menuWrapper div.mainMenu {
+	margin-right: 3px;
+	padding: 20px;
+	display: inline-block;
+	width: 130px;
+	background-color: #DFDFDF;
+	color: #000;
+	text-align: center;
+	font-weight: bold;
+	cursor: pointer;
+	float:left;
+}
+
+div#menuWrapper div.active {
+	background-color: #000000;
+	color: #FFF;
+	cursor: default;
+}
+
+div#menuWrapper div a {
+	text-decoration: none;
+	color: #000;
+}
+
+div#contentWrapper {
+	border: 3px solid #000000;
+	padding: 10px;
+}
+
+* html div#contentWrapper { 
+	border: 3px solid #000000;
+	padding: 10px;
+}
+
 div.formLabel {
 	clear: left;
 	width: 150px;

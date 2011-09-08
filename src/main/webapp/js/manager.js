@@ -3,9 +3,9 @@ var page = 1;
 var msisdn;
 var start;
 var end;
+var type = 'ALL';
 
 $(function() {
-	
 	$(":date").dateinput({ trigger: true, format: 'dd mmmm yyyy' });
 	
 	$(":date:first").data("dateinput").change(function() {
@@ -14,6 +14,17 @@ $(function() {
 	});
 	
 	$('#searchBtn').click(onSearchClicked);
+	$('#downloadBtn').click(onDownloadClicked);
+	
+	$(".mainMenu").click(function() {
+		var ref = $(this).attr('ref');
+		if(ref == 'home') {
+			ref = "";
+		}
+		//if(ref != 'prizes') {
+			window.location = "/" + ref;
+		//}
+	});
 });
 
 var onPageLinkClicked = function(event) {
@@ -23,7 +34,8 @@ var onPageLinkClicked = function(event) {
 			page : page,
 			msisdn : msisdn,
 			start : start,
-			end : end
+			end : end,
+			type: type
 	};
 	submitSearch(data);
 };
@@ -35,7 +47,8 @@ var onPrevPageClicked = function(event) {
 			page : page,
 			msisdn : msisdn,
 			start : start,
-			end : end
+			end : end,
+			type: type
 	};
 	submitSearch(data);
 };
@@ -47,7 +60,8 @@ var onNextPageClicked = function(event) {
 			page : page,
 			msisdn : msisdn,
 			start : start,
-			end : end
+			end : end,
+			type: type
 	};
 	submitSearch(data);
 };
@@ -59,7 +73,8 @@ var onfirstPageClicked = function(event) {
 			page : page,
 			msisdn : msisdn,
 			start : start,
-			end : end
+			end : end,
+			type: type
 	};
 	submitSearch(data);
 };
@@ -71,7 +86,8 @@ var onlastPageClicked = function(event) {
 			page : page,
 			msisdn : msisdn,
 			start : start,
-			end : end
+			end : end,
+			type: type
 	};
 	submitSearch(data);
 };
@@ -82,9 +98,33 @@ var onSearchClicked = function(event) {
 			page : page,
 			msisdn : $('#msisdn').val(),
 			start : $('#startDate').val(),
-			end : $('#endDate').val()
+			end : $('#endDate').val(),
+			type: type
 	};
 	submitSearch(data);
+};
+
+var onDownloadClicked = function(event) {
+	event.preventDefault();
+	
+	msisdn = $('#msisdn').val();
+	start = $('#startDate').val();
+	end = $('#endDate').val();
+	
+	$.blockUI({ css: { 
+		border: 'none', 
+		padding: '15px', 
+		backgroundColor: '#000', 
+		'-webkit-border-radius': '10px', 
+		'-moz-border-radius': '10px', 
+		opacity: .5,
+		color: '#fff' },
+		message: 'Downloading ...'
+	});
+	
+	var servletUrl = '/download/entries?type=' + type + '&start=' + start + '&end=' + end + '&msisdn=' + msisdn;
+	window.open (servletUrl,"Download");
+	$.unblockUI();
 };
 
 var submitSearch = function(data) {
@@ -210,6 +250,11 @@ var onSearchCompleted = function(result) {
 			}
 
 		});
+		if(result.entries != null && result.entries.length > 0) {
+			$('#downloadBtn').removeClass("hidden");
+		} else {
+			$('#downloadBtn').addClass("hidden");
+		}
 	} else {
 		$.each(result.messages, function(key, val) {
 			$('#' + val.name + 'Error').text('* ' + val.message);
