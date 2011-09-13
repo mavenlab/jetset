@@ -19,8 +19,6 @@ import javax.persistence.NoResultException;
 
 import jxl.Workbook;
 import jxl.WorkbookSettings;
-import jxl.write.DateFormats;
-import jxl.write.DateTime;
 import jxl.write.Label;
 import jxl.write.Number;
 import jxl.write.WritableCellFormat;
@@ -817,5 +815,25 @@ public class EntryController {
 			e.printStackTrace();
 			throw new Exception(e.getMessage());
 		}
+	}
+	
+	public SMSEntry getSMSEntry(int entryId) {
+		try {
+			return (SMSEntry) em.createNamedQuery("jetset.query.SMSEntry.findById").setParameter("id", entryId).getSingleResult();
+		} catch(NoResultException e) {
+			log.info("Can't find SMSEntry with ID: " + entryId);
+		}
+		
+		return null;
+	}
+	
+	public WebEntry getWebEntry(int entryId) {
+		try {
+			return (WebEntry) em.createNamedQuery("jetset.query.SMSEntry.findById").setParameter("id", entryId).getSingleResult();
+		} catch(NoResultException e) {
+			log.info("Can't find SMSEntry with ID: " + entryId);
+		}
+		
+		return null;
 	}
 }
