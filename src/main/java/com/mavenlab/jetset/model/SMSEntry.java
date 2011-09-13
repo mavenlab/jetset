@@ -105,7 +105,11 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 					"LEFT JOIN FETCH entry.station " +
 					"LEFT JOIN FETCH entry.prize " +
 					"WHERE entry.status != 'inactive' " +
-					"ORDER BY entry.id")
+					"ORDER BY entry.id"),
+	@NamedQuery(name = "jetset.query.SMSEntry.findById", 
+			query = "FROM SMSEntry " +
+					"WHERE status != 'inactive' " +
+					"AND id = :id")
 })
 public class SMSEntry extends Entry {
 

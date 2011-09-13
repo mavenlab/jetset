@@ -9,6 +9,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -18,6 +19,8 @@ import org.jboss.seam.solder.logging.Category;
 
 import com.mavenlab.jetset.controller.EntryController;
 import com.mavenlab.jetset.model.Entry;
+import com.mavenlab.jetset.model.SMSEntry;
+import com.mavenlab.jetset.model.WebEntry;
 import com.mavenlab.jetset.response.EntriesResponse;
 import com.mavenlab.jetset.response.Response;
 import com.mavenlab.jetset.util.Pagination;
@@ -115,5 +118,19 @@ public class EntryRest {
 		}
 
 		return response;
+	}
+	
+	@Path("/entry/sms/{entryId}")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public SMSEntry getSMSEntry(@PathParam("entryId") int entryId) {
+		return entryController.getSMSEntry(entryId);
+	}
+	
+	@Path("/entry/web/{entryId}")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public WebEntry getWebEntry(@PathParam("entryId") int entryId) {
+		return entryController.getWebEntry(entryId);
 	}
 }
