@@ -7,8 +7,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -31,6 +33,7 @@ import org.jboss.seam.solder.logging.Category;
 import com.mavenlab.jetset.model.Entry;
 import com.mavenlab.jetset.model.SMSEntry;
 import com.mavenlab.jetset.model.WebEntry;
+import com.mavenlab.jetset.rest.MOReceiver;
 import com.mavenlab.jetset.util.Pagination;
 
 @Stateless
@@ -691,6 +694,7 @@ public class EntryController {
 				sheetPrize.addCell(new Label(7, 0, "Date", cf));
 				sheetPrize.addCell(new Label(8, 0, "Chance", cf));
 				
+				Map<String,String> map = new HashMap<String, String>();
 				int row = 1;
 				int rowPrize = 1;
 				for(Entry entry : entries) {
@@ -711,18 +715,22 @@ public class EntryController {
 						webEntries.add((WebEntry) entry);
 					}
 					
-					if(entry.getStatus().equals("active")) {
-						sheetPrize.addCell(new Number(0, rowPrize, entry.getId(), cf));
-						sheetPrize.addCell(new Label(1, rowPrize, (entry instanceof SMSEntry ? "SMS" : "WEB"), cf));
-						sheetPrize.addCell(new Label(2, rowPrize, entry.getMsisdn(), cf));
-						sheetPrize.addCell(new Label(3, rowPrize, entry.getNric(), cf));
-						sheetPrize.addCell(new Label(4, rowPrize, (entry.getStation() != null ? entry.getStation().getName() + " (" + entry.getStation().getId()+ ")" : ""),cf));
-						sheetPrize.addCell(new Label(5, rowPrize, entry.getReceipt(), cf));
-						sheetPrize.addCell(new Label(6, rowPrize, (entry.getPrize() != null ? entry.getPrize().getName() : ""), cf));
-						sheetPrize.addCell(new Label(7, rowPrize, new SimpleDateFormat(DATE_PATTERN).format(entry.getCreatedAt()), cf));
-						sheetPrize.addCell(new Number(8, rowPrize, entry.getChance(), cf));
+					if(!entry.getStatus().equals("duplicate") && entry.getReceipt().toUpperCase().matches(MOReceiver.PATTERN_RECEIPT) && entry.getStation()!= null) {
+						String key = entry.getStation().getId() + "|" + entry.getReceipt();
+						if(!map.containsKey(key)) {
+							sheetPrize.addCell(new Number(0, rowPrize, entry.getId(), cf));
+							sheetPrize.addCell(new Label(1, rowPrize, (entry instanceof SMSEntry ? "SMS" : "WEB"), cf));
+							sheetPrize.addCell(new Label(2, rowPrize, entry.getMsisdn(), cf));
+							sheetPrize.addCell(new Label(3, rowPrize, entry.getNric(), cf));
+							sheetPrize.addCell(new Label(4, rowPrize, (entry.getStation() != null ? entry.getStation().getName() + " (" + entry.getStation().getId()+ ")" : ""),cf));
+							sheetPrize.addCell(new Label(5, rowPrize, entry.getReceipt(), cf));
+							sheetPrize.addCell(new Label(6, rowPrize, (entry.getPrize() != null ? entry.getPrize().getName() : ""), cf));
+							sheetPrize.addCell(new Label(7, rowPrize, new SimpleDateFormat(DATE_PATTERN).format(entry.getCreatedAt()), cf));
+							sheetPrize.addCell(new Number(8, rowPrize, entry.getChance(), cf));
 						
-						rowPrize++;
+							rowPrize++;
+							map.put(key, key);
+						}
 					}
 				}
 				
