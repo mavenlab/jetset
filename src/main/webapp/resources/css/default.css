@@ -10,7 +10,7 @@ div#menuWrapper {
 
 div#menuWrapper div.mainMenu {
 	margin-right: 3px;
-	padding: 20px;
+	padding: 10px;
 	display: inline-block;
 	width: 130px;
 	background-color: #F7D046;
@@ -34,7 +34,7 @@ div#menuWrapper div a {
 }
 
 div#contentWrapper {
-	border: 3px solid #D7251C;
+/* 	border: 3px solid #D7251C; */
 	padding: 10px;
 	max-height: 800px;
 	overflow: auto;
@@ -42,15 +42,47 @@ div#contentWrapper {
 
 * html div#contentWrapper { 
    	height: expression( this.scrollHeight > 799 ? "800px" : "auto" ); /* sets max-height for IE */
-	border: 3px solid #D7251C;
+/* 	border: 3px solid #D7251C; */
 	padding: 10px;
 	overflow: auto;
 }
 
+div#contentWrapperPrizes {
+/* 	border: 3px solid #D7251C; */
+	padding: 10px;
+	max-height: 270px;
+	overflow: auto;
+}
+
+* html div#contentWrapperPrizes { 
+   	height: expression( this.scrollHeight > 269 ? "270px" : "auto" ); /* sets max-height for IE */
+/* 	border: 3px solid #D7251C; */
+	padding: 10px;
+	overflow: auto;
+}
+
+div#minHeightContent {
+	min-height: 660px;
+}
+
+* html div#minHeightContent {
+	min-height: 660px;
+}
+
+div.content {
+	padding-left: 10px;
+	padding-right: 10px;
+}
 
 div.redTitle {
 	color: #D7251C;
 	font-size: 14px;
+	font-weight: bold;
+}
+
+div.redTitleBig {
+	color: #D7251C;
+	font-size: 16px;
 	font-weight: bold;
 }
 
@@ -196,8 +228,10 @@ div.tnc {
 
 .paddingTB50 { padding: 50px 0; }
 .paddingTB200 { padding: 200px 0; }
+.paddingTB150 { padding: 150px 0; }
 
 .border0 { border: none; }
+.font14 { font-size: 14px; }
 
 /*
 img {

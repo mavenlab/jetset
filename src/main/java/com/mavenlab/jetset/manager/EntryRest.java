@@ -120,14 +120,14 @@ public class EntryRest {
 		return response;
 	}
 	
-	@Path("/entry/sms/{entryId}")
+	@Path("/sms/{entryId}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public SMSEntry getSMSEntry(@PathParam("entryId") int entryId) {
 		return entryController.getSMSEntry(entryId);
 	}
 	
-	@Path("/entry/web/{entryId}")
+	@Path("/web/{entryId}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public WebEntry getWebEntry(@PathParam("entryId") int entryId) {
