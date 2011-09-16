@@ -5,23 +5,26 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	template="/WEB-INF/templates/default.xhtml">
 
-<ui:param name="pageTitle" value="Winner" />
-<ui:param name="activeMenu" value="winner" />
-	
-<ui:define name="content">
-	<div class="marginT20 paddingTB200 alignCenter redTitleBig">
-		<b style="color: #000000;">Congratulations to all our winners</b><br/>
-		<b>Our lucky winners going on a private holiday to Korea </b><br/><br/> 
-	</div>
-	
-	<div class="marginT20 paddingTB200 alignCenter font14">
-		<b>Week 1 - 1 September to 11 September :</b><br/>
-		CHONG CHEU HSIA<br/>
-		SXXXX377J <br/>
-	</div>
-	<div class="marginT50">
-		<img src="img/bottom_logos.png"/>
-	</div>
-</ui:define>
+	<ui:param name="pageTitle" value="Winner" />
+	<ui:param name="activeMenu" value="winner" />
+
+	<ui:define name="content">
+		<div id="minHeightContent">
+			<div class="marginT20 paddingTB200 alignCenter">
+				<div class="redTitleBig">
+					<div style="color: #000;">Congratulations to all our winners</div>
+					<div>Our lucky winners going on a private holiday to Korea</div>
+				</div>
+				<div class="font14 marginT10">
+					<div class="bold">Week 1 - 1 September to 11 September</div>
+					<div>CHONG CHEU HSIA</div>
+					<div>SXXXX377J</div>
+				</div>
+			</div>
+		</div>
+		<div class="marginT50">
+			<img src="img/bottom_logos.png" />
+		</div>
+	</ui:define>
 
 </ui:composition>

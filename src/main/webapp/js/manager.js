@@ -152,44 +152,45 @@ var submitSearch = function(data) {
 	$.get("/rest/manager/entry/list", data, onSearchCompleted);
 }
 
-var onActionSMSCompleted = function(result) {
+var onActionSMSCompleted = function(response) {
 	$.fancybox.hideActivity();
-	
-	var data = 
-	'<div class="clearfix marginT20">' +
-		'<span class="width200">Mobile Number:</span>' +
-		'<span>' + result.msisdn + '<span>' + 
-	'</div>' +
-	'<div class="clearfix marginT20">' +
-		'<span class="width200">NRIC/Passport</span>' +
-		'<span>' + result.nric + '<span>' + 
-	'</div>' +
-	'<div class="clearfix marginT20">' +
-		'<span class="width200">UOB Member</span>' +
-		'<span>' + (result.uobMember == true ? 'Yes' : 'No') + '<span>' + 
-	'</div>' +
-	'<div class="clearfix marginT20">' +
-		'<span class="width200">Chance:</span>' +
-		'<span>' + result.chance + '<span>' + 
-	'</div>' +
-	'<div class="clearfix marginT20">' +
-		'<span class="width200">Station:</span>' +
-		'<span>' + result.station.name + '<span>' + 
-	'</div>' +
-	'<div class="clearfix marginT20">' +
-		'<span class="width200">Receipt Number:</span>' +
-		'<span>' + result.receipt + '<span>' + 
-	'</div>' +
-	'<div class="clearfix marginT20">' +
-		'<span class="width200">Prize:</span>' +
-		'<span>' + result.prize.name + '<span>' + 
+	var result = response.entry;
+	var data = '<div class="padding10">'
+		'<div class="clearfix marginT20">' +
+			'<span class="width200">Mobile Number: </span>' +
+			'<span>' + result.msisdn + '<span>' + 
+		'</div>' +
+		'<div class="clearfix marginT20">' +
+			'<span class="width200">NRIC/Passport: </span>' +
+			'<span>' + result.nric + '<span>' + 
+		'</div>' +
+		'<div class="clearfix marginT20">' +
+			'<span class="width200">UOB Member: </span>' +
+			'<span>' + (result.uobMember == true ? 'Yes' : 'No') + '<span>' + 
+		'</div>' +
+		'<div class="clearfix marginT20">' +
+			'<span class="width200">Chance: </span>' +
+			'<span>' + result.chance + '<span>' + 
+		'</div>' +
+		'<div class="clearfix marginT20">' +
+			'<span class="width200">Station: </span>' +
+			'<span>' + result.station.name + '<span>' + 
+		'</div>' +
+		'<div class="clearfix marginT20">' +
+			'<span class="width200">Receipt Number: </span>' +
+			'<span>' + result.receipt + '<span>' + 
+		'</div>' +
+		'<div class="clearfix marginT20">' +
+			'<span class="width200">Prize: </span>' +
+			'<span>' + result.prize.name + '<span>' + 
+		'</div>';
 	'</div>';
 	
 	$.fancybox(
 			data,
 			{
 	        	'autoDimensions'	: false,
-				'width'         	: 350,
+				'width'         	: 400,
 				'height'        	: 'auto',
 				'transitionIn'		: 'none',
 				'transitionOut'		: 'none'
@@ -197,28 +198,45 @@ var onActionSMSCompleted = function(result) {
 	);
 }
 
-var onActionWEBCompleted = function(result) {
+var onActionWEBCompleted = function(response) {
 	$.fancybox.hideActivity();
-	var data = '<table>' +
-	'<tr>' +
-	'	<th class="id">ID</th>' +
-	'	<th class="channel">Channel</th>' +
-	'	<th>Mobile</th>' +
-	'	<th>NRIC/Passport</th>' +
-	'	<th>Station</th>' +
-	'	<th class="receipt">Receipt</th>' +
-	'	<th>Prize</th>' +
-	'	<th class="createdAt">Date</th>' +
-	'	<th>Status</th>' +
-	'	<th>Action</th>' +
-	'</tr>' + 
-	'</table>';
+	var result = response.entry;
+	var data = '<div class="padding10">'
+		'<div class="clearfix marginT20">' +
+			'<span class="width200">Mobile Number: </span>' +
+			'<span>' + result.msisdn + '<span>' + 
+		'</div>' +
+		'<div class="clearfix marginT20">' +
+			'<span class="width200">NRIC/Passport: </span>' +
+			'<span>' + result.nric + '<span>' + 
+		'</div>' +
+		'<div class="clearfix marginT20">' +
+			'<span class="width200">UOB Member: </span>' +
+			'<span>' + (result.uobMember == true ? 'Yes' : 'No') + '<span>' + 
+		'</div>' +
+		'<div class="clearfix marginT20">' +
+			'<span class="width200">Chance: </span>' +
+			'<span>' + result.chance + '<span>' + 
+		'</div>' +
+		'<div class="clearfix marginT20">' +
+			'<span class="width200">Station: </span>' +
+			'<span>' + result.station.name + '<span>' + 
+		'</div>' +
+		'<div class="clearfix marginT20">' +
+			'<span class="width200">Receipt Number: </span>' +
+			'<span>' + result.receipt + '<span>' + 
+		'</div>' +
+		'<div class="clearfix marginT20">' +
+			'<span class="width200">Prize: </span>' +
+			'<span>' + result.prize.name + '<span>' + 
+		'</div>';
+	'</div>';
 	
 	$.fancybox(
 			data,
 			{
 	        	'autoDimensions'	: false,
-				'width'         	: 350,
+				'width'         	: 400,
 				'height'        	: 'auto',
 				'transitionIn'		: 'none',
 				'transitionOut'		: 'none'
@@ -288,7 +306,7 @@ var onSearchCompleted = function(result) {
 			'	<th>Prize</th>' +
 			'	<th class="createdAt">Date</th>' +
 			'	<th>Status</th>' +
-			'	<th>Action</th>' +
+//			'	<th>Action</th>' +
 			'</tr>'
 		);
 //			'	<th>Action</th>' +
@@ -315,7 +333,7 @@ var onSearchCompleted = function(result) {
 					'<td>' + prize + '</td>' +
 					'<td>' + $.format.date(createdAt.toString(), "dd MMMM yyyy HH:mm") + '</td>' +
 					'<td>' + entry.status + '</td>' +
-					'<td><span class="viewData" rel="'+ entry.id + '" channel="'+ channel + '">view</span></td>' +
+//					'<td><span class="viewData" rel="'+ entry.id + '" channel="'+ channel + '">view</span></td>' +
 					'</tr>';
 //					'<td><a class="viewEntry" rel="#overlay" href="/tnc">view</a></td>' +
 			
