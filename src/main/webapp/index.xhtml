@@ -8,11 +8,14 @@
 <ui:param name="pageTitle" value="Home"/>	
 <ui:param name="activeMenu" value="home"/>
 
+<ui:define name="head">
+	<script type="text/javascript" src="/js/index.js"></script>
+</ui:define>
 <ui:define name="content">
-	<div class="redTitle">
+	<div class="redTitleBig">
 		Pump at Shell and you may just win a private holiday to 1 of 4 exciting destinations!
 	</div>
-	<div class="marginT20">
+	<div class="marginT20 font14">
 		<p>
 			Win a private holiday for 2 to Korea, Australia or Italy when you pump $50 worth of any Shell fuel!
 			There are new draws every week and a change of holiday destination every month. Additionally,
@@ -21,13 +24,14 @@
 			and enjoy your exclusive holiday. 	
 		</p>
 		<p>
-			What's more, get double the chance to win and save up to 17.6% when you pay with your UOB Card!
+			What's more, get double the chance to win and save up to 17.6% when you pay with your UOB Card!. 
+			Click on the country icons below to find out more.
 		</p>
 	</div>
-	<div class="alignCenter marginT20">
-		<a href="/prizes"><img class="border0" src="img/country.jpg"/></a>
+	<div id="country">
+		
 	</div>
-	<div class="alignCenter marginT20">
+	<div id="enterNow" class="alignCenter marginT20">
 		<a href="/form"><img src="img/enternow.png" class="border0"/></a>
 	</div>
 	<div class="marginT50">

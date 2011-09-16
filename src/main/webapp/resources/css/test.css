@@ -1,0 +1,22 @@
+#wrapper {
+    margin: 10px auto 0;
+    position: relative;
+    width: 960px;
+}
+
+#side_panel.shell {
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 176px;
+    z-index: 9999;
+}
+
+#header.shell, #content.shell {
+    margin-left: 200px;
+    width: 752px;
+}
+
+html[xmlns] .clearfix {
+    display: block;
+}
