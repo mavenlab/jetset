@@ -19,6 +19,7 @@ div#menuWrapper div.mainMenu {
 	font-weight: bold;
 	cursor: pointer;
 	float:left;
+	font-size: 16px;
 }
 
 div#menuWrapper div.active {
