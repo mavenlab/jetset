@@ -301,3 +301,7 @@ img {
 .clearfix {
 	display: block;
 }
+
+.width200 { 
+	width: 200px;
+}

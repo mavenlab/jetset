@@ -102,9 +102,11 @@ import javax.persistence.NamedQuery;
 					"WHERE entry.status != 'inactive' " +
 					"ORDER BY entry.id"),
 	@NamedQuery(name = "jetset.query.WebEntry.findById", 
-			query = "FROM WebEntry " +
-					"WHERE status != 'inactive' " +
-					"AND id = :id")
+			query = "SELECT entry FROM WebEntry entry " +
+			"LEFT JOIN FETCH entry.station " +
+			"LEFT JOIN FETCH entry.prize " +
+			"WHERE entry.status != 'inactive' " +
+			"AND entry.id = :id")
 })
 public class WebEntry extends Entry {
 
