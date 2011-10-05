@@ -43,7 +43,7 @@ public class MOReceiver {
 	//public final static String PATTERN = "^\\s*(TSHELL|S(HELL)?)\\s+\\w+\\s+([1-3]\\-[0-9]{5,6}|[0-9]{5})\\s+[0-9]{1,2}\\s+[YN]\\s*$";
 	public final static String PATTERN = "^\\s*(TSHELL|S(HELL)?)\\s+\\w+\\s+([1-3]\\-[0-9]{1,7}|[0-9]{4,5})\\s+[0-9]{1,2}\\s+[YN]\\s*$";
 	
-	public final static String PATTERN_KEYWORD = "^\\s*(TSHELL|S(HELL)?)\\s+";
+	public final static String PATTERN_KEYWORD = "^\\s*(TSHELL|S(HELL)?)\\s?";
 	public final static String PATTERN_MEMBER = "\\b[YN]$";
 	//public final static String PATTERN_RECEIPT = "\\b([1-3]\\-[0-9]{6}|([1-3]\\-)?[0-9]{5})\\b";
 	//public final static String PATTERN_RECEIPT = "\\b([1-3]\\-[0-9]{5,6}|[0-9]{5})\\b";
@@ -100,12 +100,12 @@ public class MOReceiver {
 			mtLog.setOutrouteId(outrouteId);
 			mtLog.setMoLog(moLog);
 			
-			if(!message.toUpperCase().matches(PATTERN)) {
-				log.info("INVALID PATTERN: " + message);
-				mtLog.setMessage(INVALID_MESSAGE);
-				replyMessage(mtLog);
-				return "Invalid Message";
-			}
+//			if(!message.toUpperCase().matches(PATTERN_KEYWORD)) {
+//				log.info("INVALID PATTERN: " + message);
+//				mtLog.setMessage(INVALID_MESSAGE);
+//				replyMessage(mtLog);
+//				return "Invalid Message";
+//			}
 
 			
 			SMSEntry smsEntry = parseMessage(moLog);
@@ -140,9 +140,6 @@ public class MOReceiver {
 			mtLog.setMessage(prize.getSmsMessage());
 			replyMessage(mtLog);
 			smsEntry.setMtLog(mtLog);
-
-			log.info("PERSIST SMS ENTRY");
-			em.persist(smsEntry);
 
 			return "OK";
 		} catch (Exception e) {
@@ -186,11 +183,15 @@ public class MOReceiver {
 		}
 		index++;
 		
+		
 		try {
+			int id = Integer.parseInt(messages[lastIndex]);
 			Station station = (Station) em.createNamedQuery("jetset.query.Station.findById")
-					.setParameter("id", messages[lastIndex]).getSingleResult();
+					.setParameter("id", id).getSingleResult();
 			smsEntry.setStation(station);
 		} catch(NoResultException e) {
+			smsEntry.setStatus("invalid");
+		} catch(NumberFormatException e) {
 			smsEntry.setStatus("invalid");
 		}
 		lastIndex--;
@@ -200,7 +201,10 @@ public class MOReceiver {
 		} else {
 			smsEntry.setReceipt(messages[index]);
 		}
+//		log.info(smsEntry.getNric() +" "+ smsEntry.getReceipt() +" "+ smsEntry.getChance() +" "+ smsEntry.getStation().getName());
 		
+		log.info("PERSIST SMS ENTRY");
+		em.persist(smsEntry);
 		
 //		message = message.replaceAll(PATTERN_KEYWORD, "").trim();
 
