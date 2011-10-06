@@ -38,13 +38,13 @@ public class MOReceiver {
 	
 	//public final static String PATTERN = "^\\s*(TSHELL|S(HELL)?)\\s+\\w+\\s+([1-3]\\-[0-9]{6}|([1-3]\\-)?[0-9]{5})\\s+[0-9]{1,2}\\s+[YN]\\s*$";
 	//public final static String PATTERN = "^\\s*(TSHELL|S(HELL)?)\\s+\\w+\\s+([1-3]\\-[0-9]{5,6}|[0-9]{5})\\s+[0-9]{1,2}\\s+[YN]\\s*$";
-	public final static String PATTERN = "^\\s*(TSHELL|S(HELL)?)\\s+\\w+\\s+([1-3]\\-[0-9]{1,7}|[0-9]{1,5})\\s+[0-9]{1,2}\\s+[YN]\\s*$";
+	public final static String PATTERN = "^\\s*(TSHELL|S(HELL)?)\\s+\\w+\\s+([1-3]\\-[0-9]{1,7}|[0-9]{1,7})\\s+[0-9]{1,2}\\s+[YN]\\s*$";
 	
 	public final static String PATTERN_KEYWORD = "^\\s*(TSHELL|S(HELL)?)\\s?";
 	public final static String PATTERN_MEMBER = "\\b[YN]$";
 	//public final static String PATTERN_RECEIPT = "\\b([1-3]\\-[0-9]{6}|([1-3]\\-)?[0-9]{5})\\b";
 	//public final static String PATTERN_RECEIPT = "\\b([1-3]\\-[0-9]{5,6}|[0-9]{5})\\b";
-	public final static String PATTERN_RECEIPT = "\\b([1-3]\\-[0-9]{1,7}|[0-9]{1,5})\\b";
+	public final static String PATTERN_RECEIPT = "\\b([1-3]\\-[0-9]{1,7}|[0-9]{1,7})\\b";
 	//public final static String PATTERN_RECEIPT14 = "^([1-3]\\-)?[0-9]{5}$";
 	public final static String PATTERN_NRIC = "\\b[A-Z]?[0-9]{7}[A-Z]?\\b";
 	public final static String PATTERN_STATION = "\\b[0-9]{1,2}\\b";
@@ -66,7 +66,7 @@ public class MOReceiver {
 	
 	public static Lock lock = new ReentrantLock();
 
-	private final static int outrouteId = -1;//59;
+	private final static int outrouteId = 59;
 	private final static String username = "mvnprojects2";
 	private final static String password = "92279545ff";
 	private final static String orga = "SHELL";
