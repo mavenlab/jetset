@@ -41,7 +41,7 @@ public class MOReceiver {
 	
 	//public final static String PATTERN = "^\\s*(TSHELL|S(HELL)?)\\s+\\w+\\s+([1-3]\\-[0-9]{6}|([1-3]\\-)?[0-9]{5})\\s+[0-9]{1,2}\\s+[YN]\\s*$";
 	//public final static String PATTERN = "^\\s*(TSHELL|S(HELL)?)\\s+\\w+\\s+([1-3]\\-[0-9]{5,6}|[0-9]{5})\\s+[0-9]{1,2}\\s+[YN]\\s*$";
-	public final static String PATTERN = "^\\s*(TSHELL|S(HELL)?)\\s+\\w+\\s+([1-3]\\-[0-9]{1,7}|[0-9]{4,5})\\s+[0-9]{1,2}\\s+[YN]\\s*$";
+	public final static String PATTERN = "^\\s*(TSHELL|S(HELL)?)\\s+\\w+\\s+([1-3]\\-[0-9]{1,7}|[0-9]{1,5})\\s+[0-9]{1,2}\\s+[YN]\\s*$";
 	
 	public final static String PATTERN_KEYWORD = "^\\s*(TSHELL|S(HELL)?)\\s?";
 	public final static String PATTERN_MEMBER = "\\b[YN]$";
@@ -100,12 +100,12 @@ public class MOReceiver {
 			mtLog.setOutrouteId(outrouteId);
 			mtLog.setMoLog(moLog);
 			
-//			if(!message.toUpperCase().matches(PATTERN_KEYWORD)) {
-//				log.info("INVALID PATTERN: " + message);
-//				mtLog.setMessage(INVALID_MESSAGE);
-//				replyMessage(mtLog);
-//				return "Invalid Message";
-//			}
+			if(!message.toUpperCase().matches(PATTERN)) {
+				log.info("INVALID PATTERN: " + message);
+				mtLog.setMessage(INVALID_MESSAGE);
+				replyMessage(mtLog);
+				return "Invalid Message";
+			}
 
 			
 			SMSEntry smsEntry = parseMessage(moLog);
@@ -169,20 +169,12 @@ public class MOReceiver {
 		member = messages[lastIndex];
 		
 		if (member.length() == 1) {
-			smsEntry.setChance(member.equals("Y") ? 1 : 2);
+			smsEntry.setChance(member.equals("Y") ? 2 : 1);
 			smsEntry.setUobMember(member.equals("Y") ? true : false);
 		} else {
 			smsEntry.setStatus("invalid");
 		}
 		lastIndex--;
-		
-		if (!messages[index].matches(PATTERN_NRIC) || messages[index] == null) {
-			smsEntry.setStatus("invalid");
-		} else {
-			smsEntry.setNric(messages[index]);
-		}
-		index++;
-		
 		
 		try {
 			int id = Integer.parseInt(messages[lastIndex]);
@@ -196,11 +188,21 @@ public class MOReceiver {
 		}
 		lastIndex--;
 		
-		if (!messages[index].matches(PATTERN_RECEIPT) || messages[index] == null) {
+		if (!messages[lastIndex].matches(PATTERN_RECEIPT) || messages[lastIndex] == null) {
 			smsEntry.setStatus("invalid");
 		} else {
-			smsEntry.setReceipt(messages[index]);
+			smsEntry.setReceipt(messages[lastIndex]);
 		}
+		lastIndex--;
+		
+		if (!messages[index].matches(PATTERN_NRIC) || messages[lastIndex] == null) {
+			smsEntry.setStatus("invalid");
+		} else {
+			smsEntry.setNric(messages[lastIndex]);
+		}
+		index++;
+		
+		
 //		log.info(smsEntry.getNric() +" "+ smsEntry.getReceipt() +" "+ smsEntry.getChance() +" "+ smsEntry.getStation().getName());
 		
 		log.info("PERSIST SMS ENTRY");

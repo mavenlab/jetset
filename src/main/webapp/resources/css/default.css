@@ -219,6 +219,7 @@ div.tnc {
 .underline { text-decoration: underline; }
 
 .marginL10 { margin-left: 10px; }
+.marginL20 { margin-left: 20px; }
 .marginR10 { margin-right: 10px; }
 .marginT7 { margin-top: 7px; }
 .marginT10 { margin-top: 10px; }
@@ -229,6 +230,7 @@ div.tnc {
 .paddingTB50 { padding: 50px 0; }
 .paddingTB200 { padding: 200px 0; }
 .paddingTB150 { padding: 150px 0; }
+.paddingTB100 { padding: 100px 0; }
 
 .border0 { border: none; }
 .font14 { font-size: 14px; }
