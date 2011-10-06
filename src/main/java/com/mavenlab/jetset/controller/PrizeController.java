@@ -66,6 +66,7 @@ public class PrizeController {
 		Random rnd = new Random(System.currentTimeMillis());
 		int prizeId = rnd.nextInt(3) + 1;
 		try {
+			@SuppressWarnings("unchecked")
 			List<Prize> prizes = em.createNamedQuery("jetset.query.Prize.findByActive").getResultList();
 			//Prize prize = (Prize) em.createNamedQuery("jetset.query.Prize.findById").setParameter("id", prizeId).getSingleResult();
 			Prize prize = prizes.get(prizeId - 1);
