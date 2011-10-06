@@ -7,6 +7,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
@@ -107,10 +108,13 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 					"WHERE entry.status != 'inactive' " +
 					"ORDER BY entry.id"),
 	@NamedQuery(name = "jetset.query.SMSEntry.findById", 
-			query = "FROM SMSEntry " +
-					"WHERE status != 'inactive' " +
-					"AND id = :id")
+			query = "SELECT entry FROM SMSEntry entry " +
+					"LEFT JOIN FETCH entry.station " +
+					"LEFT JOIN FETCH entry.prize " +
+					"WHERE entry.status != 'inactive' " +
+					"AND entry.id = :id")
 })
+@XmlRootElement(name = "sms")
 public class SMSEntry extends Entry {
 
 	/**

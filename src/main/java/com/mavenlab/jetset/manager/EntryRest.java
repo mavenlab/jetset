@@ -22,6 +22,7 @@ import com.mavenlab.jetset.model.Entry;
 import com.mavenlab.jetset.model.SMSEntry;
 import com.mavenlab.jetset.model.WebEntry;
 import com.mavenlab.jetset.response.EntriesResponse;
+import com.mavenlab.jetset.response.EntryResponse;
 import com.mavenlab.jetset.response.Response;
 import com.mavenlab.jetset.util.Pagination;
 
@@ -120,17 +121,17 @@ public class EntryRest {
 		return response;
 	}
 	
-	@Path("/entry/sms/{entryId}")
+	@Path("/sms/{entryId}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public SMSEntry getSMSEntry(@PathParam("entryId") int entryId) {
-		return entryController.getSMSEntry(entryId);
+	public EntryResponse getSMSEntry(@PathParam("entryId") int entryId) {
+		return new EntryResponse(entryController.getSMSEntry(entryId));
 	}
 	
-	@Path("/entry/web/{entryId}")
+	@Path("/web/{entryId}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public WebEntry getWebEntry(@PathParam("entryId") int entryId) {
-		return entryController.getWebEntry(entryId);
+	public EntryResponse getWebEntry(@PathParam("entryId") int entryId) {
+		return new EntryResponse(entryController.getWebEntry(entryId));
 	}
 }
