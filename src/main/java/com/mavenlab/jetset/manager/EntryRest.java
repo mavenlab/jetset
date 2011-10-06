@@ -19,8 +19,6 @@ import org.jboss.seam.solder.logging.Category;
 
 import com.mavenlab.jetset.controller.EntryController;
 import com.mavenlab.jetset.model.Entry;
-import com.mavenlab.jetset.model.SMSEntry;
-import com.mavenlab.jetset.model.WebEntry;
 import com.mavenlab.jetset.response.EntriesResponse;
 import com.mavenlab.jetset.response.EntryResponse;
 import com.mavenlab.jetset.response.Response;
