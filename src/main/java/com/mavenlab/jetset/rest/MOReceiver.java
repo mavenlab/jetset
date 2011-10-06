@@ -12,12 +12,12 @@ import java.util.regex.Pattern;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
-import org.apache.commons.lang.StringUtils;
 import org.jboss.logging.Logger;
 import org.jboss.seam.solder.logging.Category;
 
@@ -43,13 +43,13 @@ public class MOReceiver {
 	//public final static String PATTERN = "^\\s*(TSHELL|S(HELL)?)\\s+\\w+\\s+([1-3]\\-[0-9]{5,6}|[0-9]{5})\\s+[0-9]{1,2}\\s+[YN]\\s*$";
 	public final static String PATTERN = "^\\s*(TSHELL|S(HELL)?)\\s+\\w+\\s+([1-3]\\-[0-9]{1,7}|[0-9]{4,5})\\s+[0-9]{1,2}\\s+[YN]\\s*$";
 	
-	public final static String PATTERN_KEYWORD = "^\\s*(TSHELL|S(HELL)?)\\s+";
+	public final static String PATTERN_KEYWORD = "^\\s*(TSHELL|S(HELL)?)\\s?";
 	public final static String PATTERN_MEMBER = "\\b[YN]$";
 	//public final static String PATTERN_RECEIPT = "\\b([1-3]\\-[0-9]{6}|([1-3]\\-)?[0-9]{5})\\b";
 	//public final static String PATTERN_RECEIPT = "\\b([1-3]\\-[0-9]{5,6}|[0-9]{5})\\b";
-	public final static String PATTERN_RECEIPT = "\\b([1-3]\\-[0-9]{1,7}|[0-9]{4,5})\\b";
+	public final static String PATTERN_RECEIPT = "\\b([1-3]\\-[0-9]{1,7}|[0-9]{1,5})\\b";
 	//public final static String PATTERN_RECEIPT14 = "^([1-3]\\-)?[0-9]{5}$";
-//	public final static String PATTERN_NRIC = "\\b[A-Z]?[0-9]{7}[A-Z]?\\b";
+	public final static String PATTERN_NRIC = "\\b[A-Z]?[0-9]{7}[A-Z]?\\b";
 	public final static String PATTERN_STATION = "\\b[0-9]{1,2}\\b";
 	
 	public final static String INVALID_MESSAGE = "Invalid entry. Pls check ur SMS is sent as <S><NRIC/Passport><Receipt no><Station no><UOB Y/N> & resend.For assistance, call 1800-467-4355 Mon-Fri, 9am-5pm.";
@@ -69,7 +69,7 @@ public class MOReceiver {
 	
 	public static Lock lock = new ReentrantLock();
 
-	private final static int outrouteId = 59;
+	private final static int outrouteId = -1;//59;
 	private final static String username = "mvnprojects2";
 	private final static String password = "92279545ff";
 	private final static String orga = "SHELL";
@@ -100,12 +100,12 @@ public class MOReceiver {
 			mtLog.setOutrouteId(outrouteId);
 			mtLog.setMoLog(moLog);
 			
-			if(!message.toUpperCase().matches(PATTERN)) {
-				log.info("INVALID PATTERN: " + message);
-				mtLog.setMessage(INVALID_MESSAGE);
-				replyMessage(mtLog);
-				return "Invalid Message";
-			}
+//			if(!message.toUpperCase().matches(PATTERN_KEYWORD)) {
+//				log.info("INVALID PATTERN: " + message);
+//				mtLog.setMessage(INVALID_MESSAGE);
+//				replyMessage(mtLog);
+//				return "Invalid Message";
+//			}
 
 			
 			SMSEntry smsEntry = parseMessage(moLog);
@@ -160,22 +160,68 @@ public class MOReceiver {
 		smsEntry.setMoLog(moLog);
 
 		message = message.trim().toUpperCase();
-		message = message.replaceAll(PATTERN_KEYWORD, "").trim();
-
-		String member = StringUtils.substring(message, -1);
-		message = StringUtils.substring(message, 0, -2);
-		smsEntry.setUobMember(member.equals("Y"));
-		int chance = member.equals("Y") ? 1 : 2;
-		smsEntry.setChance(chance);
+		String messages[] = message.split("\\s+");
 		
-		Pattern receiptPattern = Pattern.compile(PATTERN_RECEIPT);
-		Matcher receiptMatcher = receiptPattern.matcher(message);
-
-		if(receiptMatcher.find()) {
-			String receipt = receiptMatcher.group();
-			smsEntry.setReceipt(receipt);
-			message = receiptMatcher.replaceFirst("");
+		String member;
+		
+		int index = 1;
+		int lastIndex = messages.length - 1;
+		member = messages[lastIndex];
+		
+		if (member.length() == 1) {
+			smsEntry.setChance(member.equals("Y") ? 1 : 2);
+			smsEntry.setUobMember(member.equals("Y") ? true : false);
+		} else {
+			smsEntry.setStatus("invalid");
 		}
+		lastIndex--;
+		
+		if (!messages[index].matches(PATTERN_NRIC) || messages[index] == null) {
+			smsEntry.setStatus("invalid");
+		} else {
+			smsEntry.setNric(messages[index]);
+		}
+		index++;
+		
+		
+		try {
+			int id = Integer.parseInt(messages[lastIndex]);
+			Station station = (Station) em.createNamedQuery("jetset.query.Station.findById")
+					.setParameter("id", id).getSingleResult();
+			smsEntry.setStation(station);
+		} catch(NoResultException e) {
+			smsEntry.setStatus("invalid");
+		} catch(NumberFormatException e) {
+			smsEntry.setStatus("invalid");
+		}
+		lastIndex--;
+		
+		if (!messages[index].matches(PATTERN_RECEIPT) || messages[index] == null) {
+			smsEntry.setStatus("invalid");
+		} else {
+			smsEntry.setReceipt(messages[index]);
+		}
+//		log.info(smsEntry.getNric() +" "+ smsEntry.getReceipt() +" "+ smsEntry.getChance() +" "+ smsEntry.getStation().getName());
+		
+		log.info("PERSIST SMS ENTRY");
+		em.persist(smsEntry);
+		
+//		message = message.replaceAll(PATTERN_KEYWORD, "").trim();
+
+//		String member = StringUtils.substring(message, -1);
+//		message = StringUtils.substring(message, 0, -2);
+//		smsEntry.setUobMember(member.equals("Y"));
+//		
+//		smsEntry.setChance(chance);
+		
+//		Pattern receiptPattern = Pattern.compile(PATTERN_RECEIPT);
+//		Matcher receiptMatcher = receiptPattern.matcher(message);
+
+//		if(receiptMatcher.find()) {
+//			String receipt = receiptMatcher.group();
+//			smsEntry.setReceipt(receipt);
+//			message = receiptMatcher.replaceFirst("");
+//		}
 
 //		Pattern nricPattern = Pattern.compile(PATTERN_NRIC);
 //		Matcher nricMatcher = nricPattern.matcher(message);
@@ -186,37 +232,35 @@ public class MOReceiver {
 //			message = nricMatcher.replaceFirst("");
 //		}
 
-		Pattern stationPattern = Pattern.compile(PATTERN_STATION);
-		Matcher stationMatcher = stationPattern.matcher(message);
-
-		if(stationMatcher.find()) {
-			String stationId = stationMatcher.group();
-			Station station = stationController.getStationById(Integer.parseInt(stationId));
-			if(station != null) {
-				smsEntry.setStation(station);
+//		Pattern stationPattern = Pattern.compile(PATTERN_STATION);
+//		Matcher stationMatcher = stationPattern.matcher(message);
+//
+//		if(stationMatcher.find()) {
+//			String stationId = stationMatcher.group();
+//			Station station = stationController.getStationById(Integer.parseInt(stationId));
+//			if(station != null) {
+//				smsEntry.setStation(station);
 //				if((station.getId() != 14 && smsEntry.getReceipt().matches(PATTERN_RECEIPT14)) ||
 //						(station.getId() == 14 && !smsEntry.getReceipt().matches(PATTERN_RECEIPT14))) {
 //					log.info("INVALID RECEIPT 14");
 //					smsEntry.setStatus("invalid");
 //				}
-			} else {
-				smsEntry.setStatus("invalid");
-			}
+//			} else {
+//				smsEntry.setStatus("invalid");
+//			}
 
-			message = stationMatcher.replaceFirst("");
-		}
+//			message = stationMatcher.replaceFirst("");
+//		}
 
-		String nric = message.trim();
+//		String nric = message.trim();
+//		
+//		if(nric.equals("")) {
+//			smsEntry.setNric(null);
+//			smsEntry.setStatus("invalid");
+//		} else{
+//			smsEntry.setNric(nric);
+//		}
 		
-		if(nric.equals("")) {
-			smsEntry.setNric(null);
-			smsEntry.setStatus("invalid");
-		} else{
-			smsEntry.setNric(nric);
-		}
-		
-		log.info("PERSIST SMS ENTRY");
-		em.persist(smsEntry);
 		
 		return smsEntry;
 	}
