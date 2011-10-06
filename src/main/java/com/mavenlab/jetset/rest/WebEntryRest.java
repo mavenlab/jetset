@@ -138,22 +138,6 @@ public class WebEntryRest {
 		} else if(receipt != null && !receipt.toUpperCase().matches(MOReceiver.PATTERN_RECEIPT)) {
 			response.addMessage("receipt", "Please enter a correct receipt number");
 			flag = false;
-//		} else if(station.getId() == 14) {
-//			if(payment.equals("Shell Card") && !receipt.toUpperCase().matches(PATTERN_RECEIPT6) && !receipt.toUpperCase().matches(PATTERN_RECEIPT5)) {
-//				response.addMessage("receipt", "Please enter a correct receipt number");
-//				flag = false;
-//			} else if(!payment.equals("Shell Card") && !receipt.toUpperCase().matches(PATTERN_RECEIPT6)) {
-//				response.addMessage("receipt", "Please enter a correct receipt number");
-//				flag = false;
-//			}
-//		} else if(station.getId() != 14) {
-//			if(payment.equals("Shell Card") && !receipt.toUpperCase().matches(PATTERN_RECEIPT7) && !receipt.toUpperCase().matches(PATTERN_RECEIPT5)) {
-//				response.addMessage("receipt", "Please enter a correct receipt number");
-//				flag = false;
-//			} else if(!payment.equals("Shell Card") && !receipt.toUpperCase().matches(PATTERN_RECEIPT7)) {
-//				response.addMessage("receipt", "Please enter a correct receipt number");
-//				flag = false;
-//			}
 		}
 
 		if(grade == null || grade.trim().equals("")) {
@@ -165,11 +149,6 @@ public class WebEntryRest {
 			response.addMessage("member", "Please select if you are a member");
 			flag = false;
 		}
-
-//		if(subscribe == null || !subscribe) {
-//			response.addMessage("subscribe", "Please check to subscribe");
-//			flag = false;
-//		}
 
 		if(agree == null || !agree) {
 			response.addMessage("agree", "Please check to agree to Shell Terms and Conditions");

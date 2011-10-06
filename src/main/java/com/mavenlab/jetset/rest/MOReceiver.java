@@ -6,8 +6,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -23,7 +21,6 @@ import org.jboss.seam.solder.logging.Category;
 
 import com.mavenlab.jetset.controller.EntryController;
 import com.mavenlab.jetset.controller.PrizeController;
-import com.mavenlab.jetset.controller.StationController;
 import com.mavenlab.jetset.model.MOLog;
 import com.mavenlab.jetset.model.MTLog;
 import com.mavenlab.jetset.model.Prize;
@@ -64,8 +61,8 @@ public class MOReceiver {
 	@Inject
 	private PrizeController prizeController;
 	
-	@Inject
-	private StationController stationController;
+//	@Inject
+//	private StationController stationController;
 	
 	public static Lock lock = new ReentrantLock();
 
@@ -188,82 +185,22 @@ public class MOReceiver {
 		}
 		lastIndex--;
 		
-		if (!messages[lastIndex].matches(PATTERN_RECEIPT) || messages[lastIndex] == null) {
+		if (messages[lastIndex] == null || !messages[lastIndex].matches(PATTERN_RECEIPT)) {
 			smsEntry.setStatus("invalid");
 		} else {
 			smsEntry.setReceipt(messages[lastIndex]);
 		}
 		lastIndex--;
 		
-		if (!messages[index].matches(PATTERN_NRIC) || messages[lastIndex] == null) {
+		if (messages[lastIndex] == null || !messages[index].matches(PATTERN_NRIC)) {
 			smsEntry.setStatus("invalid");
 		} else {
 			smsEntry.setNric(messages[lastIndex]);
 		}
 		index++;
 		
-		
-//		log.info(smsEntry.getNric() +" "+ smsEntry.getReceipt() +" "+ smsEntry.getChance() +" "+ smsEntry.getStation().getName());
-		
 		log.info("PERSIST SMS ENTRY");
-		em.persist(smsEntry);
-		
-//		message = message.replaceAll(PATTERN_KEYWORD, "").trim();
-
-//		String member = StringUtils.substring(message, -1);
-//		message = StringUtils.substring(message, 0, -2);
-//		smsEntry.setUobMember(member.equals("Y"));
-//		
-//		smsEntry.setChance(chance);
-		
-//		Pattern receiptPattern = Pattern.compile(PATTERN_RECEIPT);
-//		Matcher receiptMatcher = receiptPattern.matcher(message);
-
-//		if(receiptMatcher.find()) {
-//			String receipt = receiptMatcher.group();
-//			smsEntry.setReceipt(receipt);
-//			message = receiptMatcher.replaceFirst("");
-//		}
-
-//		Pattern nricPattern = Pattern.compile(PATTERN_NRIC);
-//		Matcher nricMatcher = nricPattern.matcher(message);
-
-//		if(nricMatcher.find()) {
-//			String nric = nricMatcher.group();
-//			smsEntry.setNric(nric);
-//			message = nricMatcher.replaceFirst("");
-//		}
-
-//		Pattern stationPattern = Pattern.compile(PATTERN_STATION);
-//		Matcher stationMatcher = stationPattern.matcher(message);
-//
-//		if(stationMatcher.find()) {
-//			String stationId = stationMatcher.group();
-//			Station station = stationController.getStationById(Integer.parseInt(stationId));
-//			if(station != null) {
-//				smsEntry.setStation(station);
-//				if((station.getId() != 14 && smsEntry.getReceipt().matches(PATTERN_RECEIPT14)) ||
-//						(station.getId() == 14 && !smsEntry.getReceipt().matches(PATTERN_RECEIPT14))) {
-//					log.info("INVALID RECEIPT 14");
-//					smsEntry.setStatus("invalid");
-//				}
-//			} else {
-//				smsEntry.setStatus("invalid");
-//			}
-
-//			message = stationMatcher.replaceFirst("");
-//		}
-
-//		String nric = message.trim();
-//		
-//		if(nric.equals("")) {
-//			smsEntry.setNric(null);
-//			smsEntry.setStatus("invalid");
-//		} else{
-//			smsEntry.setNric(nric);
-//		}
-		
-		
+		em.persist(smsEntry);		
 		return smsEntry;
 	}
 
