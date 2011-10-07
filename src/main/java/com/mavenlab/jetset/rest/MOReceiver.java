@@ -192,7 +192,7 @@ public class MOReceiver {
 		}
 		lastIndex--;
 		
-		if (messages[lastIndex] == null || !messages[index].matches(PATTERN_NRIC)) {
+		if (messages[lastIndex] == null) { //|| !messages[index].matches(PATTERN_NRIC)) {
 			smsEntry.setStatus("invalid");
 		} else {
 			smsEntry.setNric(messages[lastIndex]);
