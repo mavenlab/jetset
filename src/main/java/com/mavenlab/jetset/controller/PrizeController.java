@@ -64,11 +64,12 @@ public class PrizeController {
 	 */
 	public Prize getRandomPrize() {
 		Random rnd = new Random(System.currentTimeMillis());
-		int prizeId = rnd.nextInt(3) + 1;
+		int prizeId=0;
 		try {
 			@SuppressWarnings("unchecked")
 			List<Prize> prizes = em.createNamedQuery("jetset.query.Prize.findByActive").getResultList();
 			//Prize prize = (Prize) em.createNamedQuery("jetset.query.Prize.findById").setParameter("id", prizeId).getSingleResult();
+			prizeId = rnd.nextInt(prizes.size()) + 1;
 			Prize prize = prizes.get(prizeId - 1);
 			int quantity = prize.getQuantity() - 1;
 			prize.setQuantity(quantity);
